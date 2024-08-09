@@ -92,37 +92,17 @@ async def download_parallel(urls: Dict[str, UrlConfig]):
     return results
 
 
-async def download_content(urls: Dict[str, UrlConfig]) -> Dict[str, Content]:
-    out = {}
-    disk_urls = {}
-    s3_urls = {}
-    http_urls = {}
-    gs_urls = {}
-    for task_id, url_config in urls.items():
-        if url_config.url.startswith("file://"):
-            disk_urls[task_id] = url_config.url
-        elif url_config.url.startswith("s3://"):
-            s3_urls[task_id] = url_config.url
-        elif url_config.url.startswith("https://") or url_config.url.startswith(
-            "http://"
-        ):
-            http_urls[task_id] = url_config
-        elif url_config.url.startswith("gs://"):
-            gs_urls[task_id] = url_config.url
-        else:
-            out[task_id] = Exception(f"unsupported storage url {url_config.url}")
-    for task_id, url in gs_urls.items():
-        out[task_id] = gcp_storage_loader(url)
-    for task_id, url in s3_urls.items():
-        out[task_id] = s3_loader(url)
-    for task_id, url in disk_urls.items():
-        out[task_id] = disk_loader(url)
-
-    result = await download_parallel(http_urls)
-    for task_id, b in result:
-        out[task_id] = b
-
-    return out
+async def download_content(task_id: str, url_config: UrlConfig) -> tuple[str, bytes]:
+    if url_config.url.startswith("file://"):
+        return (task_id, disk_loader(url_config.url))
+    elif url_config.url.startswith("s3://"):
+        return (task_id, s3_loader(url_config.url))
+    elif url_config.url.startswith("https://") or url_config.url.startswith("http://"):
+        return await fetch_url(task_id, url_config)
+    elif url_config.url.startswith("gs://"):
+        return (task_id, gcp_storage_loader(url_config.url))
+    else:
+        return (task_id, Exception(f"unsupported storage url {url_config.url}"))
 
 
 def create_content(bytes, task: coordinator_service_pb2.Task) -> Content:
