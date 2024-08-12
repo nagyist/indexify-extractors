@@ -1,27 +1,15 @@
 # Embedding Extractors
 
-To begin utilizing these extractors install the indexify-extractor CLI.
+## Model Rankings and Performance Summary
 
-```bash
-pip install indexify-extractor-sdk
-```
-
-## Download and Run
-```bash
-indexify-extractor download <download-link>
-indexify-extractor join-server
-```
-
-| Name     | Download link                    | Extractor Module Name                             |
-|----------|----------------------------------|---------------------------------------------------|
-| clip     | hub://embedding/clip_embedding   | openai_clip_extractor:ClipEmbeddingExtractor      |
-| Colbert  | hub://embedding/colbert          | colbertv2:ColBERTv2Base                           |
-| e5       | hub://embedding/e5_embedding     | e5_small_v2:E5SmallEmbeddings                     |
-| flag     | hub://embedding/flag_embedding   | bge_base:BGEBase                                  |
-| hash     | hub://embedding/hash-embedding   | identity_hash_embedding:IdentityHashEmbedding     |
-| jina     | hub://embedding/jina_base_en     | jina_base_en:JinaEmbeddingsBase                   |
-| MiniLML6 | hub://embedding/minilm-l6        | minilm_l6:MiniLML6Extractor                       |
-| mpnet    | hub://embedding/mpnet            | mpnet_base_v2:MPNetV2                             |
-| openai   | hub://embedding/openai-embedding | openai_embedding:OpenAIEmbeddingExtractor         |
-| scibert  | hub://embedding/scibert          | scibert_uncased:SciBERTExtractor                  |
-| arctic   | hub://embedding/arctic           | arctic:ArcticExtractor                            |
+| Rank | Model                      | Model Size (Million Parameters) | Memory Usage (GB, fp32) | Embedding Dimensions | Max Tokens | Average (56 datasets) | Classification Average (12 datasets) | Clustering Average (11 datasets) | PairClassification Average (3 datasets) | Reranking Average (4 datasets) | Retrieval Average (15 datasets) | STS Average (10 datasets) | Summarization Average (1 dataset) |
+|------|----------------------------|---------------------------------|-------------------------|----------------------|------------|-----------------------|--------------------------------------|-----------------------------------|------------------------------------------|-------------------------------|---------------------------------|----------------------------|-----------------------------------|
+| 5    | stella_en_400M_v5           | 435                             | 1.62                    | 8192                 | 8192       | 70.11                 | 86.67                                | 56.7                             | 87.74                                    | 60.16                         | 58.97                           | 84.22                      | 31.66                             |
+| 20   | gte-large-en-v1.5           | 434                             | 1.62                    | 1024                 | 8192       | 65.39                 | 77.75                                | 47.96                            | 84.53                                    | 58.5                          | 57.91                           | 81.43                      | 30.91                             |
+| 24   | mxbai-embed-large-v1        | 335                             | 1.25                    | 1024                 | 512        | 64.68                 | 75.64                                | 46.71                            | 87.2                                     | 60.11                         | 54.39                           | 85                         | 32.71                             |
+| 25   | UAE-Large-V1                | 335                             | 1.25                    | 1024                 | 512        | 64.64                 | 75.58                                | 46.73                            | 87.25                                    | 59.88                         | 54.66                           | 84.54                      | 32.03                             |
+| 31   | GIST-large-Embedding-v0     | 335                             | 1.25                    | 1024                 | 512        | 64.34                 | 76.01                                | 46.55                            | 86.7                                     | 60.05                         | 53.44                           | 84.59                      | 30.96                             |
+| 32   | bge-large-en-v1.5           | 335                             | 1.25                    | 1024                 | 512        | 64.23                 | 75.97                                | 46.08                            | 87.12                                    | 60.03                         | 54.29                           | 83.11                      | 31.61                             |
+| 36   | gte-base-en-v1.5            | 137                             | 0.51                    | 768                  | 8192       | 64.11                 | 77.17                                | 46.82                            | 85.33                                    | 57.66                         | 54.09                           | 81.97                      | 31.17                             |
+| 38   | GIST-Embedding-v0           | 109                             | 0.41                    | 768                  | 512        | 63.71                 | 76.03                                | 46.21                            | 86.32                                    | 59.37                         | 52.31                           | 83.51                      | 30.87                             |
+| 39   | bge-base-en-v1.5            | 438                             | 1.63                    | 768                  | 512        | 63.56                 | 75.53                                | 45.81                            | 86.55                                    | 58.86                         | 53.25                           | 82.4                       | 31.07                             |
