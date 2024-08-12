@@ -13,7 +13,13 @@ class SchemaExtractorConfig(BaseModel):
     api_key: Optional[str] = Field(default=None)
     system_prompt: str = Field(default='Extract the information.')
     user_prompt: Optional[str] = Field(default=None)
-    response_format: Optional[Dict[str, Any]] = None  # Dict for JSON schema
+    response_format: Optional[Dict[str, Any]] = Field(
+        default={'properties': {'name': {'title': 'Name', 'type': 'string'}},
+                 'required': ['name'],
+                 'title': 'Event',
+                 'type': 'object',
+                 'additionalProperties': False}
+    )
 
 class SchemaExtractor(Extractor):
     name = "tensorlake/schema"
