@@ -6,7 +6,7 @@ from .base_extractor import Content, EXTRACTOR_MODULE_PATH
 import nanoid
 import json
 from .extractor_worker import ExtractorModule, create_executor, describe
-from .agent import ExtractorAgent
+from .agent import ExtractorAgent, DEFAULT_BATCH_SIZE
 import os
 from .coordinator_service_pb2 import Extractor
 from .downloader import save_extractor_description, create_extractor_db
@@ -46,6 +46,7 @@ def join(
     config_path: Optional[str] = None,
     extractor: Optional[str] = None,
     download_method: str = "direct",
+    batch_size: int = DEFAULT_BATCH_SIZE,
 ):
     print(
         f"joining {coordinator_addr} and sending extracted content to {ingestion_addr}"
@@ -95,6 +96,7 @@ def join(
         advertise_addr=advertise_addr,
         config_path=config_path,
         download_method=download_method,
+        batch_size=batch_size,
     )
 
     try:

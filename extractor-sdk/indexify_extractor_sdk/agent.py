@@ -48,7 +48,7 @@ CONTENT_FRAME_SIZE = 1024 * 1024
 MAX_MESSAGE_LENGTH = 16 * 1024 * 1024
 
 # maximum number of content in extractor call
-MAX_BATCH = 10
+DEFAULT_BATCH_SIZE = 10
 
 
 def begin_message(task_outcome, task: coordinator_service_pb2.Task, _executor_id):
@@ -213,6 +213,7 @@ class ExtractorAgent:
         ingestion_addr: str = "localhost:8900",
         config_path: Optional[str] = None,
         download_method: str = "direct",
+        batch_size: int = DEFAULT_BATCH_SIZE,
     ):
         self.num_workers = num_workers
         self.extractor_arg = extractor_arg
@@ -251,6 +252,7 @@ class ExtractorAgent:
         self._advertise_addr = advertise_addr
         self._executor = executor
         self._download_method = download_method
+        self._batch_size = batch_size
 
     async def ticker(self):
         while True:
@@ -404,7 +406,7 @@ class ExtractorAgent:
                     state = extractor_states.setdefault(
                         task.extractor, extractor_state_new(task.extractor)
                     )
-                    if len(state.new_batches[-1].content_list) == MAX_BATCH:
+                    if len(state.new_batches[-1].content_list) == self._batch_size:
                         state.new_batches.append(ContentBatch(extractor=task.extractor))
                     content_batch = state.new_batches[-1]
                     content_batch.content_list[task_id] = create_content(bytes, task)

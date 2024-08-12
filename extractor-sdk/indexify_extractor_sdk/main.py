@@ -8,6 +8,7 @@ from .list_extractors import list_extractors
 import sys
 from .downloader import get_db_path
 from .base_extractor import EXTRACTORS_PATH
+from .agent import DEFAULT_BATCH_SIZE
 from enum import Enum
 
 import multiprocessing
@@ -95,6 +96,9 @@ def join_server(
     workers: Annotated[
         int, typer.Option(help="number of worker processes for extraction")
     ] = 1,
+    batch_size: Annotated[
+        int, typer.Option(help="number of items to process in a batch")
+    ] = DEFAULT_BATCH_SIZE,
     config_path: Optional[str] = typer.Option(
         None, help="Path to the TLS configuration file"
     ),
@@ -119,6 +123,7 @@ def join_server(
         advertise_addr=advertise_addr,
         config_path=config_path,
         extractor=extractor,
+        batch_size=batch_size,
     )
 
 
