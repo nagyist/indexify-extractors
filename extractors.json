@@ -1,5 +1,6 @@
 [
   {"type": "embedding", "module_name": "arctic.arctic:ArcticExtractor", "name": "tensorlake/arctic", "path": "embedding/arctic"},
+  {"type": "embedding", "module_name": "text.embeddings:EmbeddingExtractor", "name": "tensorlake/embeddings", "path": "embedding/text"},
   {"type": "embedding", "module_name": "clip_embedding.openai_clip_extractor:ClipEmbeddingExtractor", "name": "tensorlake/clip-extractor", "path": "embedding/clip_embedding"},
   {"type": "embedding", "module_name": "colbert.colbertv2:ColBERTv2Base", "name": "tensorlake/colbert", "path": "embedding/colbert"},
   {"type": "embedding", "module_name": "e5_embedding.e5_small_v2:E5SmallEmbeddings", "name": "tensorlake/e5_small_embedding", "path": "embedding/e5_embedding"},
