@@ -1,4 +1,0 @@
-openai
-transformers
-google-generativeai
-sentencepiece
