@@ -6,7 +6,7 @@ from .base_extractor import Content, EXTRACTOR_MODULE_PATH
 import nanoid
 import json
 from .extractor_worker import ExtractorModule, create_executor, describe
-from .agent import ExtractorAgent
+from .agent import ExtractorAgent, DEFAULT_BATCH_SIZE
 import os
 from .coordinator_service_pb2 import Extractor
 from .downloader import save_extractor_description, create_extractor_db
@@ -46,22 +46,22 @@ def join(
     config_path: Optional[str] = None,
     extractor: Optional[str] = None,
     download_method: str = "direct",
+    batch_size: int = DEFAULT_BATCH_SIZE,
 ):
     print(
         f"joining {coordinator_addr} and sending extracted content to {ingestion_addr}"
     )
     executor = create_executor(workers=workers, extractor_id=extractor)
     asyncio.set_event_loop(asyncio.new_event_loop())
-    descriptions: List[
-        ExtractorDescription
-    ] = asyncio.get_event_loop().run_until_complete(
+    descriptions = asyncio.get_event_loop().run_until_complete(
         describe(asyncio.get_event_loop(), executor)
     )
+    print(descriptions)
 
     # Available extractors locally.
     extractors: List[Extractor] = []
 
-    for description in descriptions:
+    for name, description in descriptions.items():
         embedding_schemas = {}
         for name, embedding_schema in description.embedding_schemas.items():
             embedding_schemas[name] = embedding_schema.model_dump_json()
@@ -96,6 +96,7 @@ def join(
         advertise_addr=advertise_addr,
         config_path=config_path,
         download_method=download_method,
+        batch_size=batch_size,
     )
 
     try:
@@ -134,6 +135,9 @@ def install_local(extractor, install_system_dependencies=False):
     save_extractor_description(extractor_id, description)
 
     print("extractor ready for testing. Run: indexify-extractor join-server")
-    print(f"The module name for the extractor is: indexify_extractors.{parent_dir}.{module}:{cls}")
-    print(f"To package the extractor in a docker container: indexify-extractor package indexify_extractors.{parent_dir}.{module}:{cls}")
-
+    print(
+        f"The module name for the extractor is: indexify_extractors.{parent_dir}.{module}:{cls}"
+    )
+    print(
+        f"To package the extractor in a docker container: indexify-extractor package indexify_extractors.{parent_dir}.{module}:{cls}"
+    )

@@ -1,5 +1,12 @@
 from typing import List, Union, Dict, Optional
-from .base_extractor import Content, ExtractorWrapper, Feature, ExtractorDescription, EmbeddingSchema, EXTRACTORS_PATH
+from .base_extractor import (
+    Content,
+    ExtractorWrapper,
+    Feature,
+    ExtractorDescription,
+    EmbeddingSchema,
+    EXTRACTORS_PATH,
+)
 from pydantic import Json, BaseModel
 import concurrent
 from .downloader import get_db_path
@@ -13,12 +20,14 @@ class ExtractorModule(BaseModel):
     module_name: str
     class_name: str
 
+
 # str here is ExtractorDescription.name
 extractor_wrapper_map: Dict[str, ExtractorWrapper] = {}
 
 # List of ExtractorDescription
 # This is used to report the available extractors to the coordinator
-extractor_descriptions: List[ExtractorDescription] = []
+extractor_descriptions: Dict[str, ExtractorDescription] = {}
+
 
 def load_extractors(name: str):
     """Load an extractor to the memory: extractor_wrapper_map."""
@@ -55,7 +64,7 @@ def create_extractor_wrapper_map(id: Optional[str] = None):
         extractor_wrapper = create_extractor_wrapper(extractor)
         description = extractor_wrapper.describe()
         name = description.name
-        extractor_descriptions.append(description)
+        extractor_descriptions[name] = description
         extractor_wrapper_map[name] = extractor_wrapper
     else:
         conn = sqlite3.connect(get_db_path())
@@ -91,8 +100,8 @@ def get_local_extractor(module: str):
         extractor_wrapper = create_extractor_wrapper(module)
         description = extractor_wrapper.describe()
         name = description.name
-        extractor_descriptions.append(description)
-        
+        extractor_descriptions[name] = description
+
     extractor_wrapper_map[name] = extractor_wrapper
 
 
@@ -100,7 +109,7 @@ def load_extractor_description(record) -> ExtractorDescription:
     """Load the description of an extractor from SQLite database record."""
 
     # Rebuild the embedding schemas.
-    _embedding_schemas =  json.loads(record[6])
+    _embedding_schemas = json.loads(record[6])
     embedding_schemas = {}
     for name, schema in _embedding_schemas.items():
         schema = json.loads(schema)
@@ -118,10 +127,10 @@ def load_extractor_description(record) -> ExtractorDescription:
         input_params=record[3],
         input_mime_types=json.loads(record[4]),
         metadata_schemas=json.loads(record[5]),
-        embedding_schemas=embedding_schemas
+        embedding_schemas=embedding_schemas,
     )
 
-    extractor_descriptions.append(description)
+    extractor_descriptions[description.name] = description
     return description
 
 
@@ -135,7 +144,7 @@ def create_executor(workers: int, extractor_id: Optional[str] = None):
     return concurrent.futures.ProcessPoolExecutor(
         initializer=create_extractor_wrapper_map,
         max_workers=workers,
-        initargs=(extractor_id,)
+        initargs=(extractor_id,),
     )
 
 
@@ -168,7 +177,7 @@ def _extract_content(
         for task_id in task_ids:
             task_contents[task_id] = task_content_map[task_id]
 
-        params =  {}
+        params = {}
         for task_id in task_ids:
             params[task_id] = task_params_map[task_id]
 
@@ -182,23 +191,19 @@ def _extract_content(
     return result
 
 
-def _describe() -> List[ExtractorDescription]:
+def _describe() -> Dict[str, ExtractorDescription]:
     return extractor_descriptions
 
 
 async def extract_content(
-    loop, 
-    executor, 
-    content_list: Dict[str, Content], 
+    loop,
+    executor,
+    content_list: Dict[str, Content],
     params: Dict[str, Json],
-    extractors: Dict[str, str] # task ID -> extractor name
+    extractors: Dict[str, str],  # task ID -> extractor name
 ) -> Dict[str, List[Union[Feature, Content]]]:
     return await loop.run_in_executor(
-        executor, 
-        _extract_content, 
-        content_list, 
-        params,
-        extractors
+        executor, _extract_content, content_list, params, extractors
     )
 
 
