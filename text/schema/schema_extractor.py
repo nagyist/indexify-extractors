@@ -4,8 +4,8 @@ from pydantic import BaseModel, Field
 import os
 import base64
 from openai import OpenAI
-from pdf2image import convert_from_path
-import tempfile
+from pdf2image import convert_from_bytes
+import io
 import mimetypes
 
 class SchemaExtractorConfig(BaseModel):
@@ -33,28 +33,20 @@ class SchemaExtractor(Extractor):
         response_format = params.response_format
 
         if content.content_type == "application/pdf":
-            with tempfile.NamedTemporaryFile(delete=False, suffix=".pdf") as temp_file:
-                temp_file.write(content.data)
-                file_path = temp_file.name
-                images = convert_from_path(file_path)
-                
-                all_responses = []
-                for image in images:
-                    with tempfile.NamedTemporaryFile(delete=False, suffix=".jpg") as temp_image_file:
-                        image.save(temp_image_file.name, 'JPEG')
-                        response = self._process_image(temp_image_file.name, model_name, key, prompt, query, response_format)
-                        all_responses.append(response)
-                    os.unlink(temp_image_file.name)
-                
-                response_content = "\n\n".join(all_responses)
-                os.unlink(file_path)
+            images = convert_from_bytes(content.data)
+            
+            all_responses = []
+            for image in images:
+                img_byte_arr = io.BytesIO()
+                image.save(img_byte_arr, format='JPEG')
+                img_byte_arr = img_byte_arr.getvalue()
+                response = self._process_image(img_byte_arr, model_name, key, prompt, query, response_format)
+                all_responses.append(response)
+            
+            response_content = "\n\n".join(all_responses)
         
         elif content.content_type in ["image/jpeg", "image/png"]:
-            suffix = mimetypes.guess_extension(content.content_type)
-            with tempfile.NamedTemporaryFile(delete=False, suffix=suffix) as temp_image_file:
-                temp_image_file.write(content.data)
-                response_content = self._process_image(temp_image_file.name, model_name, key, prompt, query, response_format)
-            os.unlink(temp_image_file.name)
+            response_content = self._process_image(content.data, model_name, key, prompt, query, response_format)
         
         else:
             text = content.data.decode("utf-8")
@@ -65,11 +57,10 @@ class SchemaExtractor(Extractor):
         contents.append(Content.from_text(response_content))
         return contents
 
-    def _process_image(self, image_path, model_name, key, prompt, query, response_format):
+    def _process_image(self, image_data, model_name, key, prompt, query, response_format):
         client = self._get_client(key)
 
-        with open(image_path, "rb") as image_file:
-            encoded_image = base64.b64encode(image_file.read()).decode('utf-8')
+        encoded_image = base64.b64encode(image_data).decode('utf-8')
 
         messages_content = [
             {"role": "system", "content": prompt},
