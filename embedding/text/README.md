@@ -1,3 +1,4 @@
+Some popular Embedding Models we recommend and their scores in MTEB can be found here:
 
 ## Model Rankings and Performance Summary
 
