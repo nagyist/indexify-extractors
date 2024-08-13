@@ -21,7 +21,7 @@ class EmbeddingExtractor(BaseEmbeddingExtractor):
     description = "Extractor supporting multiple embedding models"
     system_dependencies = []
 
-    def __init__(self, config: EmbeddingConfig):
+    def __init__(self, config: EmbeddingConfig = EmbeddingConfig()):
         super(EmbeddingExtractor, self).__init__(max_context_length=1024)
         self.model = SentenceTransformer(config.model)
 
@@ -30,5 +30,4 @@ class EmbeddingExtractor(BaseEmbeddingExtractor):
 
 if __name__ == "__main__":
     # Example usage
-    config = EmbeddingConfig(model_name="BAAI/bge-base-en-v1.5")
-    EmbeddingExtractor(config).extract_embeddings(["What are some ways to reduce stress?", "These are the benefits of drinking green tea."])
+    EmbeddingExtractor().extract_embeddings(["What are some ways to reduce stress?", "These are the benefits of drinking green tea."])
