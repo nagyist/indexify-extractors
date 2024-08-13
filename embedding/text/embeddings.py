@@ -29,7 +29,7 @@ if __name__ == "__main__":
 
     # Example usage with custom settings
     custom_config = EmbeddingConfig(
-        model="BAAI/bge-base-en-v1.5",
+        model="avsolatorio/GIST-Embedding-v0",
         normalize_embeddings=True,
         trust_remote_code=True
     )
