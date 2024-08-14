@@ -9,6 +9,7 @@ class ModelConfig(BaseModel):
     filename: str = Field(default='*q4.gguf')
     system_prompt: str = Field(default='You are a helpful assistant.')
     max_tokens: int = Field(default=4000)
+    n_ctx: int = Field(default=2048)
 
 class LlamaCppExtractor(Extractor):
     name = "tensorlake/llama_cpp"
@@ -26,7 +27,7 @@ class LlamaCppExtractor(Extractor):
         user_input = content.data.decode("utf-8")
 
         if model not in self._models:
-            self._models[model] = Llama.from_pretrained(repo_id=model, filename=filename, verbose=False)
+            self._models[model] = Llama.from_pretrained(repo_id=model, filename=filename, verbose=False, n_ctx=params.n_ctx)
 
         messages = [
             {"role": "system", "content": system_prompt},
