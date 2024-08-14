@@ -260,6 +260,7 @@ class ExtractorAgent:
             yield coordinator_service_pb2.HeartbeatRequest(
                 executor_id=self._executor_id,
                 pending_tasks=self._task_store.num_pending_tasks(),
+                max_pending_tasks=self._batch_size * 2,
             )
 
     async def register(self):
