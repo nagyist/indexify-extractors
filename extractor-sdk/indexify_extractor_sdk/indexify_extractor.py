@@ -56,7 +56,6 @@ def join(
     descriptions = asyncio.get_event_loop().run_until_complete(
         describe(asyncio.get_event_loop(), executor)
     )
-    print(descriptions)
 
     # Available extractors locally.
     extractors: List[Extractor] = []

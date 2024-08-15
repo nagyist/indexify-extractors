@@ -150,7 +150,6 @@ async def process_task_outcome(
 
             response = await ws.recv()
             response_data = json.loads(response)
-            print(f"response: {response_data}")
             if "Error" in response_data:
                 raise TaskReportError(task_outcome.task_id, response_data["Error"])
 
