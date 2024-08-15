@@ -33,8 +33,18 @@ class PDFExtractor(Extractor):
                     contents.append(Content.from_text(md_text))
                 else:
                     with pymupdf.open(inputtmpfile.name) as doc:
-                        for page_num, page in enumerate(doc):
-                            text = page.get_text()
+                        # Iterate over each page
+                        for page_num in range(len(doc)):
+                            page = doc[page_num]
+                            # Extract text by blocks, which are sorted top to bottom
+                            blocks = page.get_text("blocks")
+                            # Sort blocks by their top-left y-coordinate (blocks[1])
+                            blocks = sorted(blocks, key=lambda b: (b[1], b[0]))
+                    
+                            text = ""
+                            for block in blocks:
+                                # Each block has coordinates and text; print the text
+                                text += block[4]
                             contents.append(Content.from_text(text, features=[Feature.metadata({"page_num": page_num})]))
 
             if "image" in params.output_types:
