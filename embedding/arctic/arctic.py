@@ -13,7 +13,7 @@ class ArcticExtractor(BaseEmbeddingExtractor):
         self.model = SentenceTransformer("Snowflake/snowflake-arctic-embed-m")
 
     def extract_embeddings(self, texts: List[str]) -> List[List[float]]:
-        return self.model.encode(texts)
+        return self.model.encode(texts).tolist()
 
 
 if __name__ == "__main__":
