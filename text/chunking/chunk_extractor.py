@@ -48,7 +48,7 @@ class ChunkExtractor(Extractor):
                     chunk_content.features.append(Feature.metadata(chunk.metadata))
             elif content.content_type == "application/json":
                 chunk_content = Content.from_json(
-                    json.dumps(chunk),
+                    chunk,
                     features=content.features,
                     labels=content.labels
                 )
