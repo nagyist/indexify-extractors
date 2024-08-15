@@ -2,6 +2,7 @@ from pydantic import BaseModel
 from langchain import text_splitter
 from langchain.docstore.document import Document
 from typing import Callable, List, Literal
+import json
 
 from indexify_extractor_sdk import Content, Extractor, Feature
 
@@ -18,7 +19,7 @@ class ChunkExtractor(Extractor):
     description = "Text Chunk Extractor"
     python_dependencies = ["langchain", "lxml"]
     system_dependencies = []
-
+    input_mime_types = ["text/plain", "application/json"]
 
     def __init__(self):
         super().__init__()
@@ -28,8 +29,13 @@ class ChunkExtractor(Extractor):
     ) -> List[Content]:
 
         splitter = self._create_splitter(params)
-        text = content.data.decode("utf-8")
+        if content.content_type == "application/json":
+            text = json.loads(content.data.decode("utf-8"))
+        else:
+            text = content.data.decode("utf-8")
+        
         chunks = splitter(text)
+        
         chunk_contents = []
         for chunk in chunks:
             if type(chunk) == Document:
@@ -40,6 +46,12 @@ class ChunkExtractor(Extractor):
                 )
                 if chunk.metadata:
                     chunk_content.features.append(Feature.metadata(chunk.metadata))
+            elif content.content_type == "application/json":
+                chunk_content = Content.from_json(
+                    chunk,
+                    features=content.features,
+                    labels=content.labels
+                )
             else:
                 chunk_content = Content.from_text(
                     chunk,
