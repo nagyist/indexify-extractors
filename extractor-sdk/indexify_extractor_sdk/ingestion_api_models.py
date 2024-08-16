@@ -1,8 +1,7 @@
 from pydantic import BaseModel, Json
 from typing import List, Dict, Any
 import json
-from .base_extractor import Feature, Content
-
+from indexify import Content, Feature
 
 class ApiFeature(BaseModel):
     feature_type: str
@@ -33,7 +32,7 @@ class ApiContent(BaseModel):
             content_type=content.content_type,
             bytes=list(content.data),
             features=content_features,
-            labels=content.labels,
+            labels={},
         )
 
 

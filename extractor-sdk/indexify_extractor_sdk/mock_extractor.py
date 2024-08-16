@@ -1,4 +1,4 @@
-from indexify_extractor_sdk.base_extractor import Extractor, Content, Feature
+from indexify import Extractor, Content, Feature
 
 from typing import List, Tuple
 

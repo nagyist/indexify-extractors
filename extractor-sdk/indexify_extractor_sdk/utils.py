@@ -23,13 +23,8 @@ def log_event(event, value):
         # fail silently
         pass
 
-def read_extractors_json_file(filename):
-    # # debug
-    # with open(filename, "r") as file:
-    #     json_content = json.load(file)
-    # return json_content
-
-    file_path = f's3://indexifyextractors/indexify-extractors/{filename}'
+def read_extractors_json_file():
+    file_path = f's3://indexifyextractors/indexify-extractors/extractors.json'
 
     fs = fsspec.filesystem('s3', anon=True)
 
@@ -39,3 +34,9 @@ def read_extractors_json_file(filename):
 
     return json_content
 
+def extractors_by_name():
+    extractors_info_list = read_extractors_json_file()
+    result = {}
+    for extractor_info in extractors_info_list:
+        result[extractor_info["name"]] = extractor_info
+    return result

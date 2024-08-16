@@ -1,10 +1,6 @@
 from typing import List, Union, Dict, Optional
 from .base_extractor import (
-    Content,
     ExtractorWrapper,
-    Feature,
-    ExtractorDescription,
-    EmbeddingSchema,
     EXTRACTORS_PATH,
 )
 from pydantic import Json, BaseModel
@@ -12,8 +8,8 @@ import concurrent
 from .downloader import get_db_path
 import sqlite3
 import os
-import sys
 import json
+from indexify import ExtractorMetadata, Content, Feature, EmbeddingSchema
 
 
 class ExtractorModule(BaseModel):
@@ -26,8 +22,7 @@ extractor_wrapper_map: Dict[str, ExtractorWrapper] = {}
 
 # List of ExtractorDescription
 # This is used to report the available extractors to the coordinator
-extractor_descriptions: Dict[str, ExtractorDescription] = {}
-
+extractor_descriptions: Dict[str, ExtractorMetadata] = {}
 
 def load_extractors(name: str):
     """Load an extractor to the memory: extractor_wrapper_map."""
@@ -105,7 +100,7 @@ def get_local_extractor(module: str):
     extractor_wrapper_map[name] = extractor_wrapper
 
 
-def load_extractor_description(record) -> ExtractorDescription:
+def load_extractor_description(record) -> ExtractorMetadata:
     """Load the description of an extractor from SQLite database record."""
 
     # Rebuild the embedding schemas.
@@ -118,13 +113,15 @@ def load_extractor_description(record) -> ExtractorDescription:
             distance=schema["distance"],
         )
 
-    description = ExtractorDescription(
+    input_params = json.loads(record[3]) if record[3] else None
+
+    description = ExtractorMetadata(
         name=record[1],
         version="",
         description=record[2],
         python_dependencies=[],
         system_dependencies=[],
-        input_params=record[3],
+        input_params=input_params,
         input_mime_types=json.loads(record[4]),
         metadata_schemas=json.loads(record[5]),
         embedding_schemas=embedding_schemas,
@@ -191,7 +188,7 @@ def _extract_content(
     return result
 
 
-def _describe() -> Dict[str, ExtractorDescription]:
+def _describe() -> Dict[str, ExtractorMetadata]:
     return extractor_descriptions
 
 

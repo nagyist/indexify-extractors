@@ -4,10 +4,6 @@ import sys
 from .base_extractor import (
     EXTRACTOR_MODULE_PATH,
     EXTRACTORS_PATH,
-    Content,
-    EmbeddingSchema,
-    Extractor,
-    Feature,
     load_extractor,
 )
 from .decorator import extractor
@@ -25,6 +21,7 @@ if not os.path.exists(EXTRACTOR_MODULE_PATH):
 
 load_indexify_extractors(EXTRACTOR_MODULE_PATH)
 
+from indexify import Content, EmbeddingSchema, Feature, extractor, Extractor
 
 __all__ = [
     "Content",

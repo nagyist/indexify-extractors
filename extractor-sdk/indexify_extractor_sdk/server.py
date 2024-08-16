@@ -1,11 +1,10 @@
 from pydantic import BaseModel, Json
 from typing import Dict, Optional, List
 from .ingestion_api_models import ApiContent, ApiFeature
-from .base_extractor import Content, Feature
-from .extractor_worker import extract_content, ExtractorModule
+from .extractor_worker import extract_content
+from indexify import Content, Feature
 import uvicorn
 import asyncio
-import json
 import netifaces
 import concurrent
 
@@ -36,6 +35,7 @@ class ServerRouter:
     async def extract(self, request: ExtractionRequest):
         loop = asyncio.get_event_loop()
         content = Content(
+            id=None,
             content_type=request.content.content_type,
             data=bytes(request.content.bytes),
             features=[],

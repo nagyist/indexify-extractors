@@ -20,6 +20,10 @@ class ChunkExtractor(Extractor):
     python_dependencies = ["langchain", "lxml"]
     system_dependencies = []
     input_mime_types = ["text/plain", "application/json"]
+<<<<<<< HEAD
+=======
+
+>>>>>>> a74a410 (update to use indexify client)
 
     def __init__(self):
         super().__init__()
@@ -29,16 +33,23 @@ class ChunkExtractor(Extractor):
     ) -> List[Content]:
 
         splitter = self._create_splitter(params)
+<<<<<<< HEAD
         if content.content_type == "application/json":
             text = json.loads(content.data.decode("utf-8"))
         else:
             text = content.data.decode("utf-8")
         
+=======
+        text = content.data.decode("utf-8")
+        if content.content_type == "application/json":
+            text = json.loads(text)
+>>>>>>> a74a410 (update to use indexify client)
         chunks = splitter(text)
         
         chunk_contents = []
         for chunk in chunks:
             if type(chunk) == Document:
+<<<<<<< HEAD
                 chunk_content = Content.from_text(
                     chunk.page_content,
                     features=content.features,
@@ -52,12 +63,11 @@ class ChunkExtractor(Extractor):
                     features=content.features,
                     labels=content.labels
                 )
+=======
+                chunk_content = Content.from_text(chunk.page_content)
+>>>>>>> a74a410 (update to use indexify client)
             else:
-                chunk_content = Content.from_text(
-                    chunk,
-                    features=content.features,
-                    labels=content.labels
-                )
+                chunk_content = Content.from_text(chunk)
 
             chunk_contents.append(chunk_content)
 

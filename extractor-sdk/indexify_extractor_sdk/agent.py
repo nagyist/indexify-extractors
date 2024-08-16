@@ -6,8 +6,6 @@ from .coordinator_service_pb2_grpc import CoordinatorServiceStub
 import grpc
 import json
 from typing import List, Dict, Union, Optional
-from .base_extractor import ExtractorDescription
-from .base_extractor import Content, Feature, Embedding
 from .content_downloader import (
     create_content,
     download_content,
@@ -35,6 +33,7 @@ from .ingestion_api_models import (
     MultipartContentFrame,
     FinishMultipartContent,
 )
+from indexify import Content, Feature
 from .utils import batched
 from .server import http_server, ServerRouter, get_server_advertise_addr
 import concurrent

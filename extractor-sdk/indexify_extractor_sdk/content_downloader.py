@@ -1,6 +1,6 @@
 import boto3
 
-from .base_extractor import Content
+from indexify import Content
 from . import coordinator_service_pb2
 from urllib.parse import urlparse
 from azure.storage.blob import BlobServiceClient
@@ -112,6 +112,7 @@ def create_content(bytes, task: coordinator_service_pb2.Task) -> Content:
         labels[key] = MessageToDict(value)
 
     return Content(
+        id=metadata.id,
         content_type=metadata.mime,
         data=bytes,
         features=[],

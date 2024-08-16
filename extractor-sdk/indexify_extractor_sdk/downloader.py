@@ -8,8 +8,9 @@ import subprocess
 from rich.console import Console
 from rich.panel import Panel
 from .extractor_worker import ExtractorWrapper
-from .base_extractor import ExtractorDescription, EXTRACTORS_PATH, EXTRACTOR_MODULE_PATH
-from .utils import log_event, read_extractors_json_file
+from .base_extractor import EXTRACTORS_PATH, EXTRACTOR_MODULE_PATH
+from indexify import ExtractorMetadata
+from .utils import log_event, extractors_by_name
 console = Console()
 
 VENV_PATH = os.path.join(EXTRACTORS_PATH, "ve")
@@ -141,7 +142,7 @@ def create_extractor_db():
     conn.commit()
     conn.close()
 
-def get_extractor_description(name: str) -> ExtractorDescription:
+def get_extractor_description(name: str) -> ExtractorMetadata:
     module, cls = name.split(":")
     module = f"indexify_extractors.{module}"
     wrapper = ExtractorWrapper(module, cls)
@@ -161,7 +162,7 @@ def serialize_embedding_schemas(embedding_schemas) -> str:
         schemas[name] = embedding_schema.model_dump_json()
     return json.dumps(schemas)
 
-def save_extractor_description(id: str, description: ExtractorDescription):
+def save_extractor_description(id: str, description: ExtractorMetadata):
     db_path = get_db_path()
     conn = sqlite3.connect(db_path)
     cur = conn.cursor()
@@ -182,7 +183,7 @@ def save_extractor_description(id: str, description: ExtractorDescription):
             WHERE id=?
         """, [id])
 
-    input_params: str = description.input_params if description.input_params else None
+    input_params: str = json.dumps(description.input_params) if description.input_params else ""
 
     # Convert the lists to JSON strings
     mime_types = json.dumps(description.input_mime_types)
@@ -200,13 +201,6 @@ def save_extractor_description(id: str, description: ExtractorDescription):
 
     conn.commit()
     conn.close()
-
-def extractors_by_name():
-    extractors_info_list = read_extractors_json_file("extractors.json")
-    result = {}
-    for extractor_info in extractors_info_list:
-        result[extractor_info["name"]] = extractor_info
-    return result
 
 def download_extractor(extractor_name):
     # Create extractor database if not exists

@@ -23,7 +23,7 @@ class ClipEmbeddingExtractor(Extractor):
             with torch.no_grad():
                 image_features = self._model.encode_image(image)
             image_features /= image_features.norm(dim=-1, keepdim=True)
-            embedding = image_features.numpy()[0]
+            embedding = image_features.numpy()[0].tolist()
             return [Feature.embedding(values=embedding)]
         elif "text" in content.content_type:
             txt = content.data.decode("utf-8")
@@ -31,7 +31,7 @@ class ClipEmbeddingExtractor(Extractor):
             with torch.no_grad():
                 text_features = self._model.encode_text(text)
             text_features /= text_features.norm(dim=-1, keepdim=True)
-            embedding = text_features.numpy()[0]
+            embedding = text_features.numpy()[0].tolist()
             return [Feature.embedding(values=embedding)]
         else:
             raise ValueError("Unsupported Content Type")

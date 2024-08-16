@@ -1,15 +1,15 @@
 import asyncio
-from . import coordinator_service_pb2
-from .base_extractor import ExtractorWrapper, ExtractorDescription
+from .base_extractor import ExtractorWrapper 
 from typing import Optional, Tuple, List
 from .base_extractor import Content, EXTRACTOR_MODULE_PATH
 import nanoid
 import json
-from .extractor_worker import ExtractorModule, create_executor, describe
+from .extractor_worker import create_executor, describe
 from .agent import ExtractorAgent, DEFAULT_BATCH_SIZE
 import os
-from .coordinator_service_pb2 import Extractor
+from . import coordinator_service_pb2 
 from .downloader import save_extractor_description, create_extractor_db
+from .utils import extractors_by_name
 
 
 def local(extractor: str, text: Optional[str] = None, file: Optional[str] = None):
@@ -58,7 +58,7 @@ def join(
     )
 
     # Available extractors locally.
-    extractors: List[Extractor] = []
+    extractors: List[coordinator_service_pb2.Extractor] = []
 
     for name, description in descriptions.items():
         embedding_schemas = {}
@@ -69,11 +69,12 @@ def join(
         for name, metadata_schema in description.metadata_schemas.items():
             metadata_schemas[name] = json.dumps(metadata_schema)
 
+        input_params = json.dumps(description.input_params) if description.input_params else json.dumps({})
         extractors.append(
-            Extractor(
+            coordinator_service_pb2.Extractor(
                 name=description.name,
                 description=description.description,
-                input_params=description.input_params,
+                input_params=input_params,
                 input_mime_types=description.input_mime_types,
                 metadata_schemas=metadata_schemas,
                 embedding_schemas=embedding_schemas,
@@ -104,9 +105,13 @@ def join(
         print("exiting gracefully", ex)
 
 
-def describe_sync(extractor):
-    module, cls = extractor.split(":")
-    wrapper = ExtractorWrapper(module, cls)
+def describe_sync(extractor_name: str):
+    extractor_info = extractors_by_name().get(extractor_name)
+    if extractor_info is None:
+        raise ValueError(f"Extractor {extractor_name} not found.")
+    module, cls = extractor_info["module_name"].split(":")
+
+    wrapper = ExtractorWrapper(f"indexify_extractors.{module}", cls)
     print(wrapper.describe())
 
 
