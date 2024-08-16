@@ -2,7 +2,7 @@ from pydantic import BaseModel, Json
 from typing import Dict, Optional, List
 from .ingestion_api_models import ApiContent, ApiFeature
 from .extractor_worker import extract_content
-from indexify import Content, Feature
+from indexify.extractor_sdk import Content, Feature
 import uvicorn
 import asyncio
 import netifaces

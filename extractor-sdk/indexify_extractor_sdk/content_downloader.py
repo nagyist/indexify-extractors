@@ -1,6 +1,6 @@
 import boto3
 
-from indexify import Content
+from indexify.extractor_sdk import Content
 from . import coordinator_service_pb2
 from urllib.parse import urlparse
 from azure.storage.blob import BlobServiceClient

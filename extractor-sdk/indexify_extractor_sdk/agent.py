@@ -33,8 +33,7 @@ from .ingestion_api_models import (
     MultipartContentFrame,
     FinishMultipartContent,
 )
-from indexify import Content, Feature
-from .utils import batched
+from indexify.extractor_sdk import Content, Feature
 from .server import http_server, ServerRouter, get_server_advertise_addr
 import concurrent
 import websockets

@@ -9,7 +9,7 @@ from rich.console import Console
 from rich.panel import Panel
 from .extractor_worker import ExtractorWrapper
 from .base_extractor import EXTRACTORS_PATH, EXTRACTOR_MODULE_PATH
-from indexify import ExtractorMetadata
+from indexify.extractor_sdk import ExtractorMetadata
 from .utils import log_event, extractors_by_name
 console = Console()
 

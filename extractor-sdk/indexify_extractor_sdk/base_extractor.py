@@ -1,16 +1,11 @@
 import json
 import os
-from abc import ABC, abstractmethod
 from importlib import import_module
-from types import ModuleType
 import logging
-from indexify import Content, Feature, Extractor, ExtractorMetadata, EmbeddingSchema
+from indexify.extractor_sdk import Content, Feature, Extractor, ExtractorMetadata, EmbeddingSchema
 from typing import (
-    Any,
     Dict,
     List,
-    Literal,
-    Optional,
     Tuple,
     Type,
     Union,

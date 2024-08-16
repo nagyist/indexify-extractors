@@ -9,7 +9,7 @@ from .downloader import get_db_path
 import sqlite3
 import os
 import json
-from indexify import ExtractorMetadata, Content, Feature, EmbeddingSchema
+from indexify.extractor_sdk import ExtractorMetadata, Content, Feature, EmbeddingSchema
 
 
 class ExtractorModule(BaseModel):
