@@ -55,7 +55,10 @@ def print_version():
 
 @typer_app.command(help="Describe the extractor")
 def describe(extractor: str):
-    indexify_extractor.describe_sync(extractor)
+    try:
+        indexify_extractor.describe_sync(extractor)
+    except Exception as e:
+        print(f"{e}")
 
 
 @typer_app.command(help="Run the extractor locally on the given text or file")

@@ -1,11 +1,6 @@
-from indexify_extractor_sdk.extractor_worker import (
-    extract_content,
-    ExtractorModule,
-    create_executor,
-)
-from indexify_extractor_sdk.base_extractor import Content
+from indexify_extractor_sdk.extractor_worker import ExtractorWorker
+from indexify_extractor_sdk.base_extractor import ExtractorPayload
 import unittest
-import asyncio
 
 from unittest import IsolatedAsyncioTestCase
 
@@ -15,28 +10,20 @@ class TestExtractorWorker(IsolatedAsyncioTestCase):
         super(TestExtractorWorker, self).__init__(*args, **kwargs)
 
     async def test_extract(self):
-        extactor_module = ExtractorModule(
-            module_name="indexify_extractor_sdk.mock_extractor",
-            class_name="MockExtractor",
+        extractor_worker = ExtractorWorker()
+        out = await extractor_worker.async_submit(
+            "tensorlake/mock",
+            "indexify_extractor_sdk.mock_extractor:MockExtractor",
+            {
+                "task1": ExtractorPayload(
+                    data=b"hello world",
+                    content_type="text/plain",
+                    extract_args={"a": 1, "b": "foo"},
+                )
+            },
         )
-        executor = create_executor(extactor_module)
-        content = Content.from_text("hello world")
-        content1 = Content.from_text("pipe baz")
-        loop = asyncio.get_event_loop()
-        extracted_content = await extract_content(
-            loop=loop,
-            executor=executor,
-            content=content,
-            params='{"a": 1, "b": "foo"}',
-        )
-        self.assertEqual(len(extracted_content), 2)
-
-        extracted_content1 = await extract_content(
-            loop=loop,
-            executor=executor,
-            content=content1,
-            params='{"a": 1, "b": "foo"}',
-        )
+        self.assertEqual(len(out), 1)
+        self.assertEqual(len(out["task1"]), 2)
 
 
 if __name__ == "__main__":

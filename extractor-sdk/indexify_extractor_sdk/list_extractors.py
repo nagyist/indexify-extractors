@@ -10,7 +10,6 @@ from .utils import ExtractorIndex
 def list_extractors(extractor_type: Optional[str] = None):
     extractors_index = ExtractorIndex()
 
-
     table = Table(title="[bold]Extractor List[/bold]", title_justify="left")
 
     print(

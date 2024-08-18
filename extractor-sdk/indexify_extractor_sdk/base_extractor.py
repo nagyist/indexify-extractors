@@ -1,125 +1,132 @@
-import json
 import os
 from importlib import import_module
 import logging
+from typing import (
+    Any,
+    Dict,
+    List,
+    Union,
+    Type,
+    get_type_hints,
+)
+
+from pydantic import BaseModel
 from indexify.extractor_sdk import (
     Content,
     Feature,
     Extractor,
     ExtractorMetadata,
-    EmbeddingSchema,
-)
-from typing import (
-    Dict,
-    List,
-    Union,
-    get_type_hints,
 )
 
-import requests
-from genson import SchemaBuilder
-from pydantic import BaseModel, Field, Json
+
+class ExtractorPayload(BaseModel):
+    data: bytes
+    content_type: str
+    extract_args: Dict = None
+    class_args: Dict = None
+
 
 EXTRACTORS_PATH = os.path.join(os.path.expanduser("~"), ".indexify-extractors")
 EXTRACTORS_MODULE = "indexify_extractors"
 EXTRACTOR_MODULE_PATH = os.path.join(EXTRACTORS_PATH, EXTRACTORS_MODULE)
 
+import inspect
+from typing import get_type_hints
+from pydantic import create_model
+
+
+def create_pydantic_model_from_class_init_args(cls):
+    signature = inspect.signature(cls.__init__)
+
+    type_hints = get_type_hints(cls.__init__)
+
+    fields = {}
+    for param_name, param in signature.parameters.items():
+        # Skip 'self' parameter
+        if param_name == "self":
+            continue
+        param_type = type_hints.get(
+            param_name,
+            type(param.default) if param.default is not param.empty else None,
+        )
+        if param_type is None:
+            param_type = Any
+        default_value = ... if param.default is param.empty else param.default
+        fields[param_name] = (param_type, default_value)
+
+    return create_model(f"{cls.__name__}Model", **fields)
+
 
 class ExtractorWrapper:
     def __init__(self, module_name: str, class_name: str):
         module = import_module(module_name)
-        cls = getattr(module, class_name)
-        self._instance: Extractor = cls()
-        self._param_cls = get_type_hints(cls.extract).get("params", None)
-        extract_batch = getattr(self._instance, "extract_batch", None)
+        self._cls: Type[Extractor] = getattr(module, class_name)
+        self._instance: Extractor = None
+        self._class_args: Type[BaseModel] = create_pydantic_model_from_class_init_args(
+            self._cls
+        )
+        extract_batch = getattr(self._cls, "extract_batch", None)
         self._has_batch_extract = True if callable(extract_batch) else False
+        self._extractor_args_cls: Type[BaseModel] = get_type_hints(
+            self._cls.extract
+        ).get("params", None)
 
     @classmethod
     def from_name(cls, full_module_name: str):
         module_name, class_name = full_module_name.split(":")
         return cls(module_name, class_name)
 
-    def _param_from_json(self, param: Json) -> BaseModel:
-        if self._param_cls is None:
-            return {}
-
-        param_dict = {}
-        if param is not None and param != "null":
-            param_dict = json.loads(param)
-
-        try:
-            return self._param_cls.model_validate(param_dict)
-        except Exception as e:
-            print(f"Error validating input params: {e}")
-
-        return {}
-
     def extract_batch(
-        self, content_list: Dict[str, Content], input_params: Dict[str, Json]
+        self, content_list: Dict[str, ExtractorPayload]
     ) -> Dict[str, List[Union[Feature, Content]]]:
+        if self._instance is None:
+            self._instance = self._cls()
+        task_ids = []
+        task_contents = []
+        args = []
+        out: Dict[str, List[Union[Feature, Content]]] = {}
+        for task_id, payload in content_list.items():
+            content = Content(
+                id=None,
+                data=payload.data,
+                content_type=payload.content_type,
+                features=[],
+            )
+            extractor_args = None
+            if self._extractor_args_cls:
+                extractor_args = self._extractor_args_cls.model_validate(
+                    payload.extract_args
+                )
+            args.append(extractor_args)
+            task_ids.append(task_id)
+            task_contents.append(content)
         if self._has_batch_extract:
-            task_ids = []
-            task_contents = []
-            params = []
-            for task_id, content in content_list.items():
-                param_instance = self._param_from_json(input_params.get(task_id, None))
-                params.append(param_instance)
-                task_ids.append(task_id)
-                task_contents.append(content)
-
             try:
-                result = self._instance.extract_batch(task_contents, params)
+                result = self._instance.extract_batch(task_contents, args)
             except Exception as e:
                 logging.error(f"Error extracting content: {e}")
                 raise e
-            out: Dict[str, List[Union[Feature, Content]]] = {}
             for i, extractor_out in enumerate(result):
                 out[task_ids[i]] = extractor_out
             return out
-        out = {}
-        for task_id, content in content_list.items():
-            param_instance = self._param_from_json(input_params.get(task_id, None))
-            out[task_id] = self._instance.extract(content, param_instance)
+        for task_id, content, extractor_args in zip(task_ids, task_contents, args):
+            out[task_id] = self._instance.extract(content, extractor_args)
         return out
 
     def describe(self) -> ExtractorMetadata:
-        s_input = self._instance.sample_input()
-        input_params = None
-        if type(s_input) == tuple:
-            (s_input, input_params) = s_input
-        # Come back to this when we can support schemas based on user defined input params
-        if input_params is None:
-            input_params = (
-                self._param_cls().model_dump_json()
-                if self._param_cls is not None
-                else None
-            )
-        outputs: Dict[str, List[Union[Feature, Content]]] = self.extract_batch(
-            {"task_id": s_input},
-            {"task_id": input_params},
-        )
-        embedding_schemas = {}
-        json_schema = (
-            self._param_cls.model_json_schema() if self._param_cls is not None else None
-        )
-        output = outputs["task_id"]
-        for out in output:
-            features = out.features if type(out) == Content else [out]
-            for feature in features:
-                if feature.feature_type == "embedding":
-                    embedding_schema = EmbeddingSchema(
-                        dim=len(feature.value["values"]),
-                        distance=feature.value["distance"],
-                    )
-                    embedding_schemas[feature.name] = embedding_schema
+        embeddings_schemas = {}
+        for name, embedding_schema in self._cls.embeddings.items():
+            embeddings_schemas[name] = embedding_schema.model_dump()
         return ExtractorMetadata(
-            name=self._instance.name,
-            version=self._instance.version,
-            description=self._instance.description,
-            python_dependencies=self._instance.python_dependencies,
-            system_dependencies=self._instance.system_dependencies,
-            embedding_schemas=embedding_schemas,
+            name=self._cls.name,
+            version=self._cls.version,
+            description=self._cls.description,
+            python_dependencies=self._cls.python_dependencies,
+            system_dependencies=self._cls.system_dependencies,
+            embedding_schemas=embeddings_schemas,
             metadata_schemas={},
-            input_mime_types=self._instance.input_mime_types,
-            input_params=json_schema,
+            input_mime_types=self._cls.input_mime_types,
+            input_params=self._extractor_args_cls.model_json_schema()
+            if self._extractor_args_cls
+            else None,
         )

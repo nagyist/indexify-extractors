@@ -52,7 +52,7 @@ def join(
         f"joining {coordinator_addr} and sending extracted content to {ingestion_addr}"
     )
     metadata_store = ExtractorMetadataStore()
-    extractor_worker = ExtractorWorker(metadata_store, workers)
+    extractor_worker = ExtractorWorker(workers)
     extractors: List[coordinator_service_pb2.Extractor] = []
     extractor_metadata = metadata_store.all_extractor_metadata()
 
@@ -86,6 +86,7 @@ def join(
 
     server = ExtractorAgent(
         id,
+        metadata_store=metadata_store,
         extractors=extractors,
         extractor_worker=extractor_worker,
         coordinator_addr=coordinator_addr,

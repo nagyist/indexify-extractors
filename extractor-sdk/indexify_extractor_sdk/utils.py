@@ -62,6 +62,6 @@ class ExtractorIndex:
                 f"[bold #f04318]Use command: [yellow]indexify-extractor list[/yellow] to see the list of available extractors[/]"
             )
             raise e
-        
+
     def all_metadata(self):
         return self._index

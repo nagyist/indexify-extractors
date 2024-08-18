@@ -1,8 +1,7 @@
 import traceback
 import json
 import asynctest
-from asynctest.mock import patch, MagicMock
-from unittest.mock import AsyncMock
+from asynctest.mock import MagicMock
 from indexify_extractor_sdk.agent import process_task_outcome
 from indexify_extractor_sdk.ingestion_api_models import (
     ApiContent,
@@ -12,12 +11,9 @@ from indexify_extractor_sdk.ingestion_api_models import (
     ApiMultipartContentFrame,
     ApiMultipartContentFeature,
     ApiBeginMultipartContent,
-    ApiFinishMultipartContent,
     ApiBeginExtractedContentIngest,
     ApiFinishExtractedContentIngest,
-    ApiExtractedFeatures,
 )
-from indexify_extractor_sdk.base_extractor import Embedding
 import websockets
 
 CONTENT_FRAME_SIZE = 2
@@ -27,7 +23,7 @@ class TestProcessTaskOutcome(asynctest.TestCase):
     def setUp(self):
         self.server_exception = None
 
-    async def server(self, websocket, path):
+    async def server(self, websocket):
         try:
             message = await websocket.recv()
 
@@ -134,29 +130,19 @@ class TestProcessTaskOutcome(asynctest.TestCase):
         mock_task.extraction_policy = "test_extraction_policy"
         mock_task.extractor = "test_extractor"
 
-        embedding1 = Embedding(values=[1, 2, 3], distance="cosine")
-        embedding2 = Embedding(values=[4, 5, 6], distance="cosine")
-        # Create Feature objects
-        feature1 = Feature.embedding(
-            name="name1", values=embedding1.values, distance=embedding1.distance
-        )
-        feature2 = Feature.metadata(name="name2", value={"a": 1, "b": "foo"})
-        feature3 = Feature.embedding(
-            name="name3", values=embedding2.values, distance=embedding2.distance
-        )
+        feature1 = Feature.embedding(values=[1, 2, 3], distance="cosine")
+        feature2 = Feature.embedding(values=[4, 5, 6], distance="cosine")
 
         # Create Content objects
         content1 = Content(
             content_type="type1",
             data=bytes([1, 2, 3, 4, 5, 6, 7]),
-            features=[feature1, feature2, feature3],
-            labels={"label1": "value1"},
+            features=[feature1, feature2],
         )
         content2 = Content(
             content_type="type2",
             data=bytes([4, 5, 6, 7, 8, 9]),
-            features=[feature1, feature2, feature3],
-            labels={"label2": "value2"},
+            features=[feature1, feature2],
         )
 
         # Create ApiContent objects from Content objects
