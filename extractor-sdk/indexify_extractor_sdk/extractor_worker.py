@@ -1,20 +1,12 @@
-from typing import List, Union, Dict, Optional
-from .base_extractor import (
-    ExtractorWrapper,
-    EXTRACTORS_PATH,
-)
-from pydantic import Json, BaseModel
+import concurrent.futures
+from typing import List, Dict, Any
+from .base_extractor import ExtractorWrapper
+from pydantic import Json
 import concurrent
-from .downloader import get_db_path
-import sqlite3
-import os
-import json
-from indexify.extractor_sdk import ExtractorMetadata, Content, Feature, EmbeddingSchema
-
-
-class ExtractorModule(BaseModel):
-    module_name: str
-    class_name: str
+from .downloader import ExtractorMetadataStore
+from indexify.extractor_sdk import ExtractorMetadata
+import asyncio
+from concurrent.futures.process import BrokenProcessPool
 
 
 # str here is ExtractorDescription.name
@@ -24,185 +16,61 @@ extractor_wrapper_map: Dict[str, ExtractorWrapper] = {}
 # This is used to report the available extractors to the coordinator
 extractor_descriptions: Dict[str, ExtractorMetadata] = {}
 
-def load_extractors(name: str):
+def load_extractors(name: str, extractor_module_class: str):
     """Load an extractor to the memory: extractor_wrapper_map."""
     global extractor_wrapper_map
-
-    # Return early if the extractor is already loaded
     if name in extractor_wrapper_map:
         return
-
-    conn = sqlite3.connect(get_db_path())
-    cur = conn.cursor()
-    cur.execute("SELECT id FROM extractors WHERE name = ?", (name,))
-    record = cur.fetchone()
-    conn.close()
-
-    if record is None:
-        raise ValueError(f"Extractor {name} not found in the database.")
-
-    extractor_id = f"indexify_extractors.{record[0]}"
-    extractor_wrapper = create_extractor_wrapper(extractor_id)
+    extractor_id = f"indexify_extractors.{extractor_module_class}"
+    extractor_wrapper = ExtractorWrapper.from_name(extractor_id)
     extractor_wrapper_map[name] = extractor_wrapper
 
 
-def create_extractor_wrapper_map(id: Optional[str] = None):
-    # When running the extractor as a Docker container,
-    # the extractor ID is passed as an environment variable.
-    # If there is ID or EXTRACTOR_PATH, load the extractor singularly.
-    if id:
-        get_local_extractor(id)
-    elif os.environ.get("EXTRACTOR_PATH"):
-        extractor = os.environ.get("EXTRACTOR_PATH")
+class ExtractorWorker:
+    def __init__(self, extractor_metadata_store: ExtractorMetadataStore, workers: int=1) -> None:
+        self._extractor_metadata_store = extractor_metadata_store
+        self._extractors = {}
+        self._executor: concurrent.futures.ProcessPoolExecutor = concurrent.futures.ProcessPoolExecutor(max_workers=workers)
 
-        # TODO: Optimize this to load description from the database.
-        extractor_wrapper = create_extractor_wrapper(extractor)
-        description = extractor_wrapper.describe()
-        name = description.name
-        extractor_descriptions[name] = description
-        extractor_wrapper_map[name] = extractor_wrapper
-    else:
-        conn = sqlite3.connect(get_db_path())
-        cur = conn.cursor()
-        cur.execute("SELECT * FROM extractors")
-        records = cur.fetchall()
-        for record in records:
-            print(f"reporting available extractor: {record[1]}")
-            # This only loads the description of the extractor to be reported
-            # to the coordinator. The actual extractor will be loaded when needed.
-            load_extractor_description(record)
-
-        conn.close()
-
-
-def get_local_extractor(module: str):
-    if module.startswith("indexify_extractors"):
-        id = module[20:]
-
-        conn = sqlite3.connect(get_db_path())
-        cur = conn.cursor()
-        cur.execute(f"SELECT * FROM extractors WHERE id = '{id}'")
-
-        record = cur.fetchone()
-        if record is None:
-            raise ValueError(f"Extractor {id} not found locally.")
-
-        load_extractor_description(record)
-        module = f"indexify_extractors.{record[0]}"
-        extractor_wrapper = create_extractor_wrapper(module)
-        name = record[1]
-    else:
-        extractor_wrapper = create_extractor_wrapper(module)
-        description = extractor_wrapper.describe()
-        name = description.name
-        extractor_descriptions[name] = description
-
-    extractor_wrapper_map[name] = extractor_wrapper
-
-
-def load_extractor_description(record) -> ExtractorMetadata:
-    """Load the description of an extractor from SQLite database record."""
-
-    # Rebuild the embedding schemas.
-    _embedding_schemas = json.loads(record[6])
-    embedding_schemas = {}
-    for name, schema in _embedding_schemas.items():
-        schema = json.loads(schema)
-        embedding_schemas[name] = EmbeddingSchema(
-            dim=schema["dim"],
-            distance=schema["distance"],
-        )
-
-    input_params = json.loads(record[3]) if record[3] else None
-
-    description = ExtractorMetadata(
-        name=record[1],
-        version="",
-        description=record[2],
-        python_dependencies=[],
-        system_dependencies=[],
-        input_params=input_params,
-        input_mime_types=json.loads(record[4]),
-        metadata_schemas=json.loads(record[5]),
-        embedding_schemas=embedding_schemas,
-    )
-
-    extractor_descriptions[description.name] = description
-    return description
-
-
-def create_extractor_wrapper(extractor_id: str) -> ExtractorWrapper:
-    module, cls = extractor_id.split(":")
-    extractor_wrapper = ExtractorWrapper(module, cls)
-    return extractor_wrapper
-
-
-def create_executor(workers: int, extractor_id: Optional[str] = None):
-    return concurrent.futures.ProcessPoolExecutor(
-        initializer=create_extractor_wrapper_map,
-        max_workers=workers,
-        initargs=(extractor_id,),
-    )
-
+    def submit(self, extractor: str, inputs: Dict[str, Any], params: Dict[str, Any]) -> Dict[str, List[Any]]:
+        extractor_module_class = self._extractor_metadata_store.extractor_module_class(extractor)
+        return self._executor.submit(_extract_content, extractor, extractor_module_class, inputs, params, extractor)
+    
+    async def async_submit(self, extractor: str, inputs: Dict[str, Any], params: Dict[str, Any]) -> Dict[str, List[Any]]:
+        extractor_module_class = self._extractor_metadata_store.extractor_module_class(extractor)
+        try:
+            resp = await asyncio.get_running_loop().run_in_executor(
+            self._executor,
+            _extract_content,
+            extractor,
+            extractor_module_class,
+            inputs,
+            params,
+            extractor,
+            )
+        except BrokenProcessPool as mp:
+            self._executor.shutdown(wait=True, cancel_futures=True)
+            raise mp
+        return resp
 
 def _extract_content(
-    task_content_map: Dict[str, Content],
-    task_params_map: Dict[str, Json],
-    task_extractor_map: Dict[str, str],
-) -> Dict[str, Union[List[Feature], List[Content]]]:
-    result = {}
+        extractor: str,
+        extractor_module_class: str,
+        inputs: Dict[str, Any],
+        params: Dict[str, Json],
+    ) -> Dict[str, List[Any]]:
+    if extractor not in extractor_wrapper_map:
+        load_extractors(extractor, extractor_module_class)
+        
+    extractor_wrapper: ExtractorWrapper = extractor_wrapper_map[extractor]
+    task_ids, extractor_inputs, extractor_params = [], [], []
+    for task_id, content in inputs.items():
+        task_ids.append(task_id)
+        extractor_inputs.append(content)
+        extractor_params.append(params[task_id])
 
-    # Load extractors depending on the tasks
-    for _, extractor_name in task_extractor_map.items():
-        load_extractors(extractor_name)
-
-    # Iterate over available extractors
-    for extractor_name, extractor_wrapper in extractor_wrapper_map.items():
-        # Get task IDs using the extractor
-        task_ids = [
-            task_id
-            for task_id, task_extractor_name in task_extractor_map.items()
-            if extractor_name == task_extractor_name
-        ]
-
-        # Skip if no tasks are using the extractor
-        if len(task_ids) == 0:
-            continue
-
-        # Filter task contents and params using the task IDs
-        task_contents = {}
-        for task_id in task_ids:
-            task_contents[task_id] = task_content_map[task_id]
-
-        params = {}
-        for task_id in task_ids:
-            params[task_id] = task_params_map[task_id]
-
-        # Extract content using the right extractor
-        extracted = extractor_wrapper.extract_batch(task_contents, params)
-
-        # Add the extracted data to the result
-        for task_id, extracted_data in extracted.items():
-            result[task_id] = extracted_data
-
-    return result
-
-
-def _describe() -> Dict[str, ExtractorMetadata]:
-    return extractor_descriptions
-
-
-async def extract_content(
-    loop,
-    executor,
-    content_list: Dict[str, Content],
-    params: Dict[str, Json],
-    extractors: Dict[str, str],  # task ID -> extractor name
-) -> Dict[str, List[Union[Feature, Content]]]:
-    return await loop.run_in_executor(
-        executor, _extract_content, content_list, params, extractors
-    )
-
-
-async def describe(loop, executor):
-    return await loop.run_in_executor(executor, _describe)
+    results = extractor_wrapper.extract_batch(inputs, params)
+    output = {}
+    for (task_id, output) in zip(task_ids, results):
+        output[task_id] = output
+    return output

@@ -4,12 +4,12 @@ from typing import Optional, Tuple, List
 from .base_extractor import Content, EXTRACTOR_MODULE_PATH
 import nanoid
 import json
-from .extractor_worker import create_executor, describe
 from .agent import ExtractorAgent, DEFAULT_BATCH_SIZE
 import os
 from . import coordinator_service_pb2 
-from .downloader import save_extractor_description, create_extractor_db
+from .metadata_store import ExtractorMetadataStore
 from .utils import extractors_by_name
+from .extractor_worker import ExtractorWorker
 
 
 def local(extractor: str, text: Optional[str] = None, file: Optional[str] = None):
@@ -44,38 +44,33 @@ def join(
     ingestion_addr: str = "localhost:8900",
     advertise_addr: Optional[str] = None,
     config_path: Optional[str] = None,
-    extractor: Optional[str] = None,
     download_method: str = "direct",
     batch_size: int = DEFAULT_BATCH_SIZE,
 ):
     print(
         f"joining {coordinator_addr} and sending extracted content to {ingestion_addr}"
     )
-    executor = create_executor(workers=workers, extractor_id=extractor)
-    asyncio.set_event_loop(asyncio.new_event_loop())
-    descriptions = asyncio.get_event_loop().run_until_complete(
-        describe(asyncio.get_event_loop(), executor)
-    )
-
-    # Available extractors locally.
+    metadata_store = ExtractorMetadataStore()
+    extractor_worker = ExtractorWorker(metadata_store, workers)
     extractors: List[coordinator_service_pb2.Extractor] = []
+    extractor_metadata = metadata_store.all_extractor_metadata()
 
-    for name, description in descriptions.items():
+    for metadata in extractor_metadata:
         embedding_schemas = {}
-        for name, embedding_schema in description.embedding_schemas.items():
+        for name, embedding_schema in metadata.embedding_schemas.items():
             embedding_schemas[name] = embedding_schema.model_dump_json()
 
         metadata_schemas = {}
-        for name, metadata_schema in description.metadata_schemas.items():
+        for name, metadata_schema in metadata.metadata_schemas.items():
             metadata_schemas[name] = json.dumps(metadata_schema)
 
-        input_params = json.dumps(description.input_params) if description.input_params else json.dumps({})
+        input_params = json.dumps(metadata.input_params) if metadata.input_params else json.dumps({})
         extractors.append(
             coordinator_service_pb2.Extractor(
-                name=description.name,
-                description=description.description,
+                name=metadata.name,
+                description=metadata.description,
                 input_params=input_params,
-                input_mime_types=description.input_mime_types,
+                input_mime_types=metadata.input_mime_types,
                 metadata_schemas=metadata_schemas,
                 embedding_schemas=embedding_schemas,
             )
@@ -87,10 +82,9 @@ def join(
     server = ExtractorAgent(
         id,
         extractors=extractors,
-        executor=executor,
+        extractor_worker=extractor_worker,
         coordinator_addr=coordinator_addr,
         num_workers=workers,
-        extractor_arg=extractor,
         listen_port=listen_port,
         ingestion_addr=ingestion_addr,
         advertise_addr=advertise_addr,
@@ -106,13 +100,10 @@ def join(
 
 
 def describe_sync(extractor_name: str):
-    extractor_info = extractors_by_name().get(extractor_name)
-    if extractor_info is None:
-        raise ValueError(f"Extractor {extractor_name} not found.")
-    module, cls = extractor_info["module_name"].split(":")
-
-    wrapper = ExtractorWrapper(f"indexify_extractors.{module}", cls)
-    print(wrapper.describe())
+    metadata_store = ExtractorMetadataStore()
+    module_class_name = metadata_store.extractor_module_class(extractor_name)
+    description = ExtractorWrapper.from_name(module_class_name).describe()
+    print(description)
 
 
 def install_local(extractor, install_system_dependencies=False):

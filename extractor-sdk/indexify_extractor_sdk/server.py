@@ -1,7 +1,7 @@
 from pydantic import BaseModel, Json
 from typing import Dict, Optional, List
 from .ingestion_api_models import ApiContent, ApiFeature
-from .extractor_worker import extract_content
+from .extractor_worker import ExtractorWorker
 from indexify.extractor_sdk import Content, Feature
 import uvicorn
 import asyncio
@@ -23,8 +23,9 @@ class ExtractionResponse(BaseModel):
 
 
 class ServerRouter:
-    def __init__(self, executor: concurrent.futures.ProcessPoolExecutor):
+    def __init__(self, executor: concurrent.futures.ProcessPoolExecutor, extractor_worker: ExtractorWorker):
         self._executor = executor
+        self._extractor_worker = extractor_worker
         self.router = APIRouter()
         self.router.add_api_route("/", self.root, methods=["GET"])
         self.router.add_api_route("/extract", self.extract, methods=["POST"])
@@ -46,7 +47,7 @@ class ServerRouter:
         params_map = {task_id: request.input_params}
         extractor_map = {task_id: request.extractor_name}
 
-        extractor_out: Dict[str, List[Content]] = await extract_content(
+        extractor_out: Dict[str, List[Content]] = await self._extractor_worker.async_submit(
             loop,
             self._executor,
             content_dict,

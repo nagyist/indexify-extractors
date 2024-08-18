@@ -6,8 +6,6 @@ from indexify.extractor_sdk import Content, Feature, Extractor, ExtractorMetadat
 from typing import (
     Dict,
     List,
-    Tuple,
-    Type,
     Union,
     get_type_hints,
 )
@@ -20,13 +18,6 @@ EXTRACTORS_PATH = os.path.join(os.path.expanduser("~"), ".indexify-extractors")
 EXTRACTORS_MODULE = "indexify_extractors"
 EXTRACTOR_MODULE_PATH = os.path.join(EXTRACTORS_PATH, EXTRACTORS_MODULE)
 
-
-def load_extractor(name: str) -> Tuple[Extractor, Type[BaseModel]]:
-    module_name, class_name = name.split(":")
-    wrapper = ExtractorWrapper(module_name, class_name)
-    return (wrapper._instance, wrapper._param_cls)
-
-
 class ExtractorWrapper:
     def __init__(self, module_name: str, class_name: str):
         module = import_module(module_name)
@@ -35,6 +26,11 @@ class ExtractorWrapper:
         self._param_cls = get_type_hints(cls.extract).get("params", None)
         extract_batch = getattr(self._instance, "extract_batch", None)
         self._has_batch_extract = True if callable(extract_batch) else False
+
+    @classmethod
+    def from_name(cls, full_module_name: str):
+        module_name, class_name = full_module_name.split(":")
+        return cls(module_name, class_name)
 
     def _param_from_json(self, param: Json) -> BaseModel:
         if self._param_cls is None:

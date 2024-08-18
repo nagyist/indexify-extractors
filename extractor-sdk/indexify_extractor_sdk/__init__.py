@@ -4,7 +4,6 @@ import sys
 from .base_extractor import (
     EXTRACTOR_MODULE_PATH,
     EXTRACTORS_PATH,
-    load_extractor,
 )
 from .decorator import extractor
 from .module_loader import load_indexify_extractors
@@ -29,5 +28,4 @@ __all__ = [
     "extractor",
     "Extractor",
     "Feature",
-    "load_extractor",
 ]

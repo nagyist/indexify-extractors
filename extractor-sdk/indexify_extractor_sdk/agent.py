@@ -1,3 +1,4 @@
+import concurrent.futures
 import ssl
 import yaml
 import asyncio
@@ -11,11 +12,7 @@ from .content_downloader import (
     download_content,
     UrlConfig,
 )
-from .extractor_worker import (
-    extract_content,
-    create_executor,
-    describe,
-)
+from .extractor_worker import ExtractorWorker
 from concurrent.futures.process import BrokenProcessPool
 from .ingestion_api_models import (
     ApiContent,
@@ -180,19 +177,10 @@ def extractor_state_new(extractor: str) -> ExtractorState:
 
 
 class ExtractTask(asyncio.Task):
-    def __init__(self, *, executor, content_batch: ContentBatch, **kwargs):
+    def __init__(self, *, extractor_worker: ExtractorWorker, content_batch: ContentBatch, **kwargs):
         kwargs["name"] = "extract_content"
         kwargs["loop"] = asyncio.get_event_loop()
-        super().__init__(
-            extract_content(
-                loop=asyncio.get_running_loop(),
-                executor=executor,
-                content_list=content_batch.content_list,
-                params=content_batch.params,
-                extractors=content_batch.extractors,
-            ),
-            **kwargs,
-        )
+        super().__init__(extractor_worker.async_submit(inputs=content_batch.content_list, params=content_batch.params),**kwargs,)
         self.content_batch = content_batch
 
 
@@ -201,8 +189,8 @@ class ExtractorAgent:
         self,
         executor_id: str,
         extractors: List[coordinator_service_pb2.Extractor],
+        extractor_worker:ExtractorWorker,
         coordinator_addr: str,
-        executor: concurrent.futures.ProcessPoolExecutor,
         num_workers,
         extractor_arg,
         listen_port: int,
@@ -247,9 +235,9 @@ class ExtractorAgent:
         self._ingestion_addr = ingestion_addr
         self._listen_port = listen_port
         self._advertise_addr = advertise_addr
-        self._executor = executor
         self._download_method = download_method
         self._batch_size = batch_size
+        self._extractor_worker = extractor_worker
 
     async def ticker(self):
         while True:
@@ -357,7 +345,7 @@ class ExtractorAgent:
                     )
                     async_tasks.append(
                         ExtractTask(
-                            executor=self._executor,
+                            extractor_worker=self._extractor_worker,
                             content_batch=content_batch,
                         )
                     )
@@ -435,12 +423,7 @@ class ExtractorAgent:
                                 features=new_features,
                             )
                             self._task_store.complete(outcome=completed_task)
-                    except BrokenProcessPool as bp:
-                        print(f"failed to execute tasks {bp}, retrying")
-                        self._executor.shutdown(wait=True, cancel_futures=True)
-                        self._executor = create_executor(
-                            workers=self.num_workers, extractor_id=self.extractor_arg
-                        )
+                    except BrokenProcessPool:
                         for task_id in async_task.content_batch.content_list.keys():
                             self._task_store.retriable_failure(task_id)
                         continue
@@ -465,7 +448,7 @@ class ExtractorAgent:
         asyncio.get_event_loop().add_signal_handler(
             signal.SIGINT, self.shutdown, asyncio.get_event_loop()
         )
-        server_router = ServerRouter(self._executor)
+        server_router = ServerRouter(self._extractor_worker)
         self._http_server = http_server(server_router, port=self._listen_port)
         asyncio.create_task(self._http_server.serve())
         if not self._advertise_addr:

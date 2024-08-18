@@ -1,12 +1,14 @@
+from typing import Optional
+
+from rich import print
 from rich.console import Console
 from rich.table import Table
-from rich import print
-from typing import Optional
+
 from .utils import read_extractors_json_file
 
 
 def list_extractors(extractor_type: Optional[str] = None):
-    extractor_data = read_extractors_json_file("extractors.json")
+    extractor_data = read_extractors_json_file()
 
     table = Table(title="[bold]Extractor List[/bold]", title_justify="left")
 
@@ -20,7 +22,6 @@ def list_extractors(extractor_type: Optional[str] = None):
     for extractor in extractor_data:
         if extractor_type and extractor_type != extractor.get("type"):
             continue
-        module_name = extractor.get("module_name")
 
         table.add_row(
             extractor.get("type"),

@@ -6,7 +6,6 @@ import logging
 import os
 from .list_extractors import list_extractors
 import sys
-from .downloader import get_db_path
 from .base_extractor import EXTRACTORS_PATH
 from .agent import DEFAULT_BATCH_SIZE
 from enum import Enum
