@@ -4,11 +4,12 @@ from rich import print
 from rich.console import Console
 from rich.table import Table
 
-from .utils import read_extractors_json_file
+from .utils import ExtractorIndex
 
 
 def list_extractors(extractor_type: Optional[str] = None):
-    extractor_data = read_extractors_json_file()
+    extractors_index = ExtractorIndex()
+
 
     table = Table(title="[bold]Extractor List[/bold]", title_justify="left")
 
@@ -25,7 +26,7 @@ def list_extractors(extractor_type: Optional[str] = None):
     table.add_column("Type", style="magenta")
     table.add_column("Name", style="orange3")
 
-    for extractor in extractor_data:
+    for extractor in extractors_index.all_metadata().values():
         if extractor_type and extractor_type != extractor.get("type"):
             continue
 

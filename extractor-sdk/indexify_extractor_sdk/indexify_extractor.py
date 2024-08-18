@@ -1,14 +1,15 @@
 import asyncio
-from .base_extractor import ExtractorWrapper
 from typing import Optional, Tuple, List
-from .base_extractor import Content, EXTRACTOR_MODULE_PATH
-import nanoid
 import json
-from .agent import ExtractorAgent, DEFAULT_BATCH_SIZE
 import os
+
+import nanoid
+
+from .base_extractor import ExtractorWrapper
+from .base_extractor import Content, EXTRACTOR_MODULE_PATH
+from .agent import ExtractorAgent, DEFAULT_BATCH_SIZE
 from . import coordinator_service_pb2
 from .metadata_store import ExtractorMetadataStore
-from .utils import extractors_by_name
 from .extractor_worker import ExtractorWorker
 
 
@@ -116,6 +117,7 @@ def install_local(extractor, install_system_dependencies=False):
     destination = os.path.join(EXTRACTOR_MODULE_PATH, parent_dir)
     os.system(f"cp -r . {destination}")
     print(f"copied to {destination} for testing")
+    metadata_store = ExtractorMetadataStore()
 
     # Describe the extractor.
     module, cls = extractor.split(":")
@@ -130,8 +132,7 @@ def install_local(extractor, install_system_dependencies=False):
 
     # Create a new extractor description.
     extractor_id = f"{parent_dir}.{module}:{cls}"
-    create_extractor_db()
-    save_extractor_description(extractor_id, description)
+    metadata_store.save_description(extractor_id, description)
 
     print("extractor ready for testing. Run: indexify-extractor join-server")
     print(

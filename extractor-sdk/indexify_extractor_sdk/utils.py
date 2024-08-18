@@ -1,8 +1,9 @@
-from itertools import islice
-import requests
 import platform
-import fsspec
 import json
+from itertools import islice
+
+import requests
+import fsspec
 from rich.console import Console
 
 console = Console()
@@ -34,26 +35,6 @@ def log_event(event, value):
         pass
 
 
-def read_extractors_json_file():
-    file_path = f"s3://indexifyextractors/indexify-extractors/extractors.json"
-
-    fs = fsspec.filesystem("s3", anon=True)
-
-    with fs.open(file_path, "r") as file:
-        # Load the JSON content from the file
-        json_content = json.load(file)
-
-    return json_content
-
-
-def extractors_by_name():
-    extractors_info_list = read_extractors_json_file()
-    result = {}
-    for extractor_info in extractors_info_list:
-        result[extractor_info["name"]] = extractor_info
-    return result
-
-
 class ExtractorIndex:
     def __init__(self) -> None:
         file_path = f"s3://indexifyextractors/indexify-extractors/extractors.json"
@@ -81,3 +62,6 @@ class ExtractorIndex:
                 f"[bold #f04318]Use command: [yellow]indexify-extractor list[/yellow] to see the list of available extractors[/]"
             )
             raise e
+        
+    def all_metadata(self):
+        return self._index
