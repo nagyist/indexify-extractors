@@ -1,13 +1,16 @@
-import fsspec
 import os
 import sys
 import subprocess
+
+import fsspec
 from rich.console import Console
 from rich.panel import Panel
+
 from .extractor_worker import ExtractorWrapper
 from .base_extractor import EXTRACTORS_PATH, EXTRACTOR_MODULE_PATH
 from .metadata_store import ExtractorMetadataStore
 from .utils import log_event, ExtractorIndex
+
 console = Console()
 
 VENV_PATH = os.path.join(EXTRACTORS_PATH, "ve")

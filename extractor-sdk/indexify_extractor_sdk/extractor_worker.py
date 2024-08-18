@@ -52,6 +52,9 @@ class ExtractorWorker:
             self._executor.shutdown(wait=True, cancel_futures=True)
             raise mp
         return resp
+    
+    def shutdown(self):
+        self._executor.shutdown(wait=True, cancel_futures=True)
 
 def _extract_content(
         extractor: str,

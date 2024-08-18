@@ -192,7 +192,6 @@ class ExtractorAgent:
         extractor_worker:ExtractorWorker,
         coordinator_addr: str,
         num_workers,
-        extractor_arg,
         listen_port: int,
         advertise_addr: Optional[str],
         ingestion_addr: str = "localhost:8900",
@@ -201,7 +200,6 @@ class ExtractorAgent:
         batch_size: int = DEFAULT_BATCH_SIZE,
     ):
         self.num_workers = num_workers
-        self.extractor_arg = extractor_arg
         self._use_tls = False
         if config_path:
             with open(config_path, "r") as f:
@@ -486,5 +484,5 @@ class ExtractorAgent:
             task.cancel()
 
     def shutdown(self, loop):
-        self._executor.shutdown(wait=True, cancel_futures=True)
+        self._extractor_worker.shutdown()
         loop.create_task(self._shutdown(loop))

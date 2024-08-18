@@ -6,7 +6,6 @@ from indexify.extractor_sdk import Content, Feature
 import uvicorn
 import asyncio
 import netifaces
-import concurrent
 
 from fastapi import FastAPI, APIRouter
 
@@ -23,8 +22,7 @@ class ExtractionResponse(BaseModel):
 
 
 class ServerRouter:
-    def __init__(self, executor: concurrent.futures.ProcessPoolExecutor, extractor_worker: ExtractorWorker):
-        self._executor = executor
+    def __init__(self, extractor_worker: ExtractorWorker):
         self._extractor_worker = extractor_worker
         self.router = APIRouter()
         self.router.add_api_route("/", self.root, methods=["GET"])
@@ -34,7 +32,6 @@ class ServerRouter:
         return {"Indexify Extractor"}
 
     async def extract(self, request: ExtractionRequest):
-        loop = asyncio.get_event_loop()
         content = Content(
             id=None,
             content_type=request.content.content_type,
@@ -45,15 +42,8 @@ class ServerRouter:
         task_id = "dummy_task_id"
         content_dict: Dict[str, Content] = {task_id: content}
         params_map = {task_id: request.input_params}
-        extractor_map = {task_id: request.extractor_name}
 
-        extractor_out: Dict[str, List[Content]] = await self._extractor_worker.async_submit(
-            loop,
-            self._executor,
-            content_dict,
-            params=params_map,
-            extractors=extractor_map
-        )
+        extractor_out = await self._extractor_worker.async_submit(request.extractor_name, content_dict, params_map)
         api_content: List[ApiContent] = []
         api_features: List[ApiFeature] = []
 
