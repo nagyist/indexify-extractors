@@ -9,8 +9,9 @@ from typing import (
     Type,
     get_type_hints,
 )
+import inspect
 
-from pydantic import BaseModel
+from pydantic import BaseModel, Json, create_model
 from indexify.extractor_sdk import (
     Content,
     Feature,
@@ -19,20 +20,25 @@ from indexify.extractor_sdk import (
 )
 
 
-class ExtractorPayload(BaseModel):
-    data: bytes
-    content_type: str
-    extract_args: Dict = None
-    class_args: Dict = None
+from typing import (
+    Any,
+    Dict,
+    List,
+    Union,
+    get_type_hints,
+)
 
 
 EXTRACTORS_PATH = os.path.join(os.path.expanduser("~"), ".indexify-extractors")
 EXTRACTORS_MODULE = "indexify_extractors"
 EXTRACTOR_MODULE_PATH = os.path.join(EXTRACTORS_PATH, EXTRACTORS_MODULE)
 
-import inspect
-from typing import get_type_hints
-from pydantic import create_model
+
+class ExtractorPayload(BaseModel):
+    data: bytes
+    content_type: str
+    extract_args: Dict = None
+    class_args: Dict = None
 
 
 def create_pydantic_model_from_class_init_args(cls):
