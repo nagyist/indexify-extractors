@@ -7,6 +7,7 @@ from google.protobuf import descriptor as _descriptor
 from google.protobuf import descriptor_pool as _descriptor_pool
 from google.protobuf import symbol_database as _symbol_database
 from google.protobuf.internal import builder as _builder
+
 # @@protoc_insertion_point(imports)
 
 _sym_db = _symbol_database.Default()
@@ -15,321 +16,405 @@ _sym_db = _symbol_database.Default()
 from google.protobuf import struct_pb2 as google_dot_protobuf_dot_struct__pb2
 
 
-DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\x19\x63oordinator_service.proto\x12\x14indexify_coordinator\x1a\x1cgoogle/protobuf/struct.proto\"K\n\x1c\x44\x65leteExtractionGraphRequest\x12\x11\n\tnamespace\x18\x01 \x01(\t\x12\x18\n\x10\x65xtraction_graph\x18\x02 \x01(\t\"u\n\x14\x43ontentStreamRequest\x12\x15\n\rchange_offset\x18\x01 \x01(\x04\x12\x11\n\tnamespace\x18\x02 \x01(\t\x12\x18\n\x10\x65xtraction_graph\x18\x03 \x01(\t\x12\x19\n\x11\x65xtraction_policy\x18\x04 \x01(\t\"1\n\x19GetContentMetadataRequest\x12\x14\n\x0c\x63ontent_list\x18\x01 \x03(\t\"Y\n\x1aGetContentMetadataResponse\x12;\n\x0c\x63ontent_list\x18\x01 \x03(\x0b\x32%.indexify_coordinator.ContentMetadata\"\x80\x01\n\x1dGetContentTreeMetadataRequest\x12\x11\n\tnamespace\x18\x01 \x01(\t\x12\x12\n\ncontent_id\x18\x02 \x01(\t\x12\x1d\n\x15\x65xtraction_graph_name\x18\x03 \x01(\t\x12\x19\n\x11\x65xtraction_policy\x18\x04 \x01(\t\"]\n\x1eGetContentTreeMetadataResponse\x12;\n\x0c\x63ontent_list\x18\x01 \x03(\x0b\x32%.indexify_coordinator.ContentMetadata\"m\n\x11UpdateTaskRequest\x12\x13\n\x0b\x65xecutor_id\x18\x01 \x01(\t\x12\x0f\n\x07task_id\x18\x02 \x01(\t\x12\x32\n\x07outcome\x18\x03 \x01(\x0e\x32!.indexify_coordinator.TaskOutcome\"\x19\n\x17ListStateChangesRequest\"k\n\x0bStateChange\x12\n\n\x02id\x18\x01 \x01(\x04\x12\x11\n\tobject_id\x18\x02 \x01(\t\x12\x13\n\x0b\x63hange_type\x18\x03 \x01(\t\x12\x12\n\ncreated_at\x18\x04 \x01(\x04\x12\x14\n\x0cprocessed_at\x18\x05 \x01(\x04\"N\n\x18ListStateChangesResponse\x12\x32\n\x07\x63hanges\x18\x01 \x03(\x0b\x32!.indexify_coordinator.StateChange\"\xc9\x01\n\x10ListTasksRequest\x12\x11\n\tnamespace\x18\x01 \x01(\t\x12\x19\n\x11\x65xtraction_policy\x18\x02 \x01(\t\x12\x12\n\ncontent_id\x18\x03 \x01(\t\x12\x10\n\x08start_id\x18\x04 \x01(\t\x12\r\n\x05limit\x18\x05 \x01(\x04\x12\x38\n\x07outcome\x18\x07 \x01(\x0e\x32\'.indexify_coordinator.TaskOutcomeFilter\x12\x18\n\x10\x65xtraction_graph\x18\x08 \x01(\t\"M\n\x11ListTasksResponse\x12)\n\x05tasks\x18\x01 \x03(\x0b\x32\x1a.indexify_coordinator.Task\x12\r\n\x05total\x18\x02 \x01(\x04\"\x14\n\x12UpdateTaskResponse\"3\n\x1eGetExtractorCoordinatesRequest\x12\x11\n\textractor\x18\x02 \x01(\t\"0\n\x1fGetExtractorCoordinatesResponse\x12\r\n\x05\x61\x64\x64rs\x18\x01 \x03(\t\"\'\n\x12ListIndexesRequest\x12\x11\n\tnamespace\x18\x01 \x01(\t\"C\n\x13ListIndexesResponse\x12,\n\x07indexes\x18\x01 \x03(\x0b\x32\x1b.indexify_coordinator.Index\"2\n\x0fGetIndexRequest\x12\x11\n\tnamespace\x18\x01 \x01(\t\x12\x0c\n\x04name\x18\x02 \x01(\t\">\n\x10GetIndexResponse\x12*\n\x05index\x18\x01 \x01(\x0b\x32\x1b.indexify_coordinator.Index\"I\n\x19UpdateIndexesStateRequest\x12,\n\x07indexes\x18\x01 \x03(\x0b\x32\x1b.indexify_coordinator.Index\"\x1c\n\x1aUpdateIndexesStateResponse\"\x8e\x01\n\x05Index\x12\x0c\n\x04name\x18\x01 \x01(\t\x12\x11\n\tnamespace\x18\x02 \x01(\t\x12\x12\n\ntable_name\x18\x03 \x01(\t\x12\x0e\n\x06schema\x18\x04 \x01(\t\x12\x19\n\x11\x65xtraction_policy\x18\x05 \x01(\t\x12\x11\n\textractor\x18\x06 \x01(\t\x12\x12\n\ngraph_name\x18\x07 \x01(\t\"\x1e\n\tEmbedding\x12\x11\n\tembedding\x18\x01 \x03(\x02\" \n\nAttributes\x12\x12\n\nattributes\x18\x02 \x01(\t\"\x81\x01\n\x07\x46\x65\x61ture\x12\x0c\n\x04name\x18\x01 \x01(\t\x12\x32\n\tembedding\x18\x02 \x01(\x0b\x32\x1f.indexify_coordinator.Embedding\x12\x34\n\nattributes\x18\x03 \x01(\x0b\x32 .indexify_coordinator.Attributes\"V\n\x07\x43ontent\x12\x0c\n\x04mime\x18\x02 \x01(\t\x12\x0c\n\x04\x64\x61ta\x18\x03 \x01(\x0c\x12/\n\x08\x66\x65\x61tures\x18\x04 \x03(\x0b\x32\x1d.indexify_coordinator.Feature\"q\n\x17RegisterExecutorRequest\x12\x13\n\x0b\x65xecutor_id\x18\x01 \x01(\t\x12\x0c\n\x04\x61\x64\x64r\x18\x02 \x01(\t\x12\x33\n\nextractors\x18\x03 \x03(\x0b\x32\x1f.indexify_coordinator.Extractor\"/\n\x18RegisterExecutorResponse\x12\x13\n\x0b\x65xecutor_id\x18\x01 \x01(\t\"=\n\x1eRegisterIngestionServerRequest\x12\x1b\n\x13ingestion_server_id\x18\x01 \x01(\t\"!\n\x1fRegisterIngestionServerResponse\";\n\x1cRemoveIngestionServerRequest\x12\x1b\n\x13ingestion_server_id\x18\x01 \x01(\t\"\x1f\n\x1dRemoveIngestionServerResponse\"O\n\x14\x43reateGCTasksRequest\x12\x37\n\x0cstate_change\x18\x01 \x01(\x0b\x32!.indexify_coordinator.StateChange\"\x17\n\x15\x43reateGCTasksResponse\"C\n\x12\x43oordinatorCommand\x12-\n\x07gc_task\x18\x01 \x01(\x0b\x32\x1c.indexify_coordinator.GCTask\"X\n\x15GCTaskAcknowledgement\x12\x0f\n\x07task_id\x18\x01 \x01(\t\x12\x11\n\tcompleted\x18\x02 \x01(\x08\x12\x1b\n\x13ingestion_server_id\x18\x03 \x01(\t\"\xa5\x01\n\x06GCTask\x12\x0f\n\x07task_id\x18\x01 \x01(\t\x12\x11\n\tnamespace\x18\x02 \x01(\t\x12\x12\n\ncontent_id\x18\x03 \x01(\t\x12\x15\n\routput_tables\x18\x05 \x03(\t\x12\x17\n\x0f\x62lob_store_path\x18\x06 \x01(\t\x12\x33\n\ttask_type\x18\x07 \x01(\x0e\x32 .indexify_coordinator.GcTaskType\"Y\n\x10HeartbeatRequest\x12\x13\n\x0b\x65xecutor_id\x18\x01 \x01(\t\x12\x15\n\rpending_tasks\x18\x02 \x01(\x03\x12\x19\n\x11max_pending_tasks\x18\x03 \x01(\x04\"Q\n\"GetExtractionGraphAnalyticsRequest\x12\x11\n\tnamespace\x18\x01 \x01(\t\x12\x18\n\x10\x65xtraction_graph\x18\x02 \x01(\t\"B\n\rTaskAnalytics\x12\x0f\n\x07pending\x18\x01 \x01(\x04\x12\x0f\n\x07success\x18\x02 \x01(\x04\x12\x0f\n\x07\x66\x61ilure\x18\x03 \x01(\x04\"\xe6\x01\n#GetExtractionGraphAnalyticsResponse\x12\x64\n\x0etask_analytics\x18\x01 \x03(\x0b\x32L.indexify_coordinator.GetExtractionGraphAnalyticsResponse.TaskAnalyticsEntry\x1aY\n\x12TaskAnalyticsEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12\x32\n\x05value\x18\x02 \x01(\x0b\x32#.indexify_coordinator.TaskAnalytics:\x02\x38\x01\"S\n\x11HeartbeatResponse\x12\x13\n\x0b\x65xecutor_id\x18\x01 \x01(\t\x12)\n\x05tasks\x18\x02 \x03(\x0b\x32\x1a.indexify_coordinator.Task\"\xa3\x03\n\x04Task\x12\n\n\x02id\x18\x01 \x01(\t\x12\x11\n\textractor\x18\x02 \x01(\t\x12\x11\n\tnamespace\x18\x03 \x01(\t\x12?\n\x10\x63ontent_metadata\x18\x04 \x01(\x0b\x32%.indexify_coordinator.ContentMetadata\x12\x14\n\x0cinput_params\x18\x05 \x01(\t\x12\x1c\n\x14\x65xtraction_policy_id\x18\x06 \x01(\t\x12\x1d\n\x15\x65xtraction_graph_name\x18\x07 \x01(\t\x12P\n\x14output_index_mapping\x18\x08 \x03(\x0b\x32\x32.indexify_coordinator.Task.OutputIndexMappingEntry\x12\x32\n\x07outcome\x18\t \x01(\x0e\x32!.indexify_coordinator.TaskOutcome\x12\x14\n\x0cindex_tables\x18\n \x03(\t\x1a\x39\n\x17OutputIndexMappingEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12\r\n\x05value\x18\x02 \x01(\t:\x02\x38\x01\"\x17\n\x15ListExtractorsRequest\"M\n\x16ListExtractorsResponse\x12\x33\n\nextractors\x18\x01 \x03(\x0b\x32\x1f.indexify_coordinator.Extractor\"\xf1\x02\n\tExtractor\x12\x0c\n\x04name\x18\x01 \x01(\t\x12\x13\n\x0b\x64\x65scription\x18\x02 \x01(\t\x12\x14\n\x0cinput_params\x18\x03 \x01(\t\x12P\n\x11\x65mbedding_schemas\x18\x04 \x03(\x0b\x32\x35.indexify_coordinator.Extractor.EmbeddingSchemasEntry\x12N\n\x10metadata_schemas\x18\x05 \x03(\x0b\x32\x34.indexify_coordinator.Extractor.MetadataSchemasEntry\x12\x18\n\x10input_mime_types\x18\x06 \x03(\t\x1a\x37\n\x15\x45mbeddingSchemasEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12\r\n\x05value\x18\x02 \x01(\t:\x02\x38\x01\x1a\x36\n\x14MetadataSchemasEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12\r\n\x05value\x18\x02 \x01(\t:\x02\x38\x01\"#\n\x13GetNamespaceRequest\x12\x0c\n\x04name\x18\x01 \x01(\t\"J\n\x14GetNamespaceResponse\x12\x32\n\tnamespace\x18\x01 \x01(\x0b\x32\x1f.indexify_coordinator.Namespace\"\x07\n\x05\x45mpty\"\x89\x01\n\rContentSource\x12\x10\n\x06policy\x18\x01 \x01(\tH\x00\x12\x30\n\tingestion\x18\x02 \x01(\x0b\x32\x1b.indexify_coordinator.EmptyH\x00\x12+\n\x04none\x18\x03 \x01(\x0b\x32\x1b.indexify_coordinator.EmptyH\x00\x42\x07\n\x05value\"\xd3\x01\n\x12ListContentRequest\x12\x11\n\tnamespace\x18\x01 \x01(\t\x12\x33\n\x06source\x18\x02 \x01(\x0b\x32#.indexify_coordinator.ContentSource\x12\x11\n\tparent_id\x18\x03 \x01(\t\x12\x15\n\rlabels_filter\x18\x04 \x03(\t\x12\r\n\x05limit\x18\x05 \x01(\x04\x12\x10\n\x08start_id\x18\x06 \x01(\t\x12\r\n\x05graph\x18\x08 \x01(\t\x12\x1b\n\x13ingested_content_id\x18\t \x01(\t\"a\n\x13ListContentResponse\x12;\n\x0c\x63ontent_list\x18\x01 \x03(\x0b\x32%.indexify_coordinator.ContentMetadata\x12\r\n\x05total\x18\x02 \x01(\x04\"/\n\x1aListExtractionGraphRequest\x12\x11\n\tnamespace\x18\x01 \x01(\t\"T\n\x1bListExtractionGraphResponse\x12\x35\n\x06graphs\x18\x01 \x03(\x0b\x32%.indexify_coordinator.ExtractionGraph\"&\n\x16\x43reateNamespaceRequest\x12\x0c\n\x04name\x18\x01 \x01(\t\";\n\x17\x43reateNamespaceResponse\x12\x0c\n\x04name\x18\x01 \x01(\t\x12\x12\n\ncreated_at\x18\x02 \x01(\x03\"\x16\n\x14ListNamespaceRequest\"L\n\x15ListNamespaceResponse\x12\x33\n\nnamespaces\x18\x01 \x03(\x0b\x32\x1f.indexify_coordinator.Namespace\"\x98\x01\n\x0f\x45xtractionGraph\x12\n\n\x02id\x18\x01 \x01(\t\x12\x11\n\tnamespace\x18\x02 \x01(\t\x12\x0c\n\x04name\x18\x03 \x01(\t\x12\x43\n\x13\x65xtraction_policies\x18\x04 \x03(\x0b\x32&.indexify_coordinator.ExtractionPolicy\x12\x13\n\x0b\x64\x65scription\x18\x05 \x01(\t\"\xaa\x02\n\x10\x45xtractionPolicy\x12\n\n\x02id\x18\x01 \x01(\t\x12\x11\n\textractor\x18\x02 \x01(\t\x12\x0c\n\x04name\x18\x03 \x01(\t\x12\x14\n\x0cinput_params\x18\x04 \x01(\t\x12\x16\n\x0e\x63ontent_source\x18\x06 \x01(\t\x12\x12\n\ngraph_name\x18\x07 \x01(\t\x12\\\n\x14output_table_mapping\x18\x08 \x03(\x0b\x32>.indexify_coordinator.ExtractionPolicy.OutputTableMappingEntry\x12\x0e\n\x06\x66ilter\x18\t \x03(\t\x1a\x39\n\x17OutputTableMappingEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12\r\n\x05value\x18\x02 \x01(\t:\x02\x38\x01\"\x9f\x01\n\x17\x45xtractionPolicyRequest\x12\x11\n\tnamespace\x18\x01 \x01(\t\x12\x11\n\textractor\x18\x02 \x01(\t\x12\x0c\n\x04name\x18\x03 \x01(\t\x12\x14\n\x0cinput_params\x18\x04 \x01(\t\x12\x16\n\x0e\x63ontent_source\x18\x06 \x01(\t\x12\x12\n\ncreated_at\x18\x07 \x01(\x03\x12\x0e\n\x06\x66ilter\x18\x08 \x03(\t\"\x95\x01\n\x1c\x43reateExtractionGraphRequest\x12\x11\n\tnamespace\x18\x01 \x01(\t\x12\x0c\n\x04name\x18\x02 \x01(\t\x12\x13\n\x0b\x64\x65scription\x18\x04 \x01(\t\x12?\n\x08policies\x18\x03 \x03(\x0b\x32-.indexify_coordinator.ExtractionPolicyRequest\"\xba\x03\n\x1d\x43reateExtractionGraphResponse\x12\x10\n\x08graph_id\x18\x01 \x01(\t\x12W\n\nextractors\x18\x02 \x03(\x0b\x32\x43.indexify_coordinator.CreateExtractionGraphResponse.ExtractorsEntry\x12S\n\x08policies\x18\x03 \x03(\x0b\x32\x41.indexify_coordinator.CreateExtractionGraphResponse.PoliciesEntry\x12,\n\x07indexes\x18\x05 \x03(\x0b\x32\x1b.indexify_coordinator.Index\x1aR\n\x0f\x45xtractorsEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12.\n\x05value\x18\x02 \x01(\x0b\x32\x1f.indexify_coordinator.Extractor:\x02\x38\x01\x1aW\n\rPoliciesEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12\x35\n\x05value\x18\x02 \x01(\x0b\x32&.indexify_coordinator.ExtractionPolicy:\x02\x38\x01\"\xfe\x03\n\x18\x45xtractionPolicyResponse\x12\x12\n\ncreated_at\x18\x01 \x01(\x03\x12\x32\n\textractor\x18\x02 \x01(\x0b\x32\x1f.indexify_coordinator.Extractor\x12\x41\n\x11\x65xtraction_policy\x18\x03 \x01(\x0b\x32&.indexify_coordinator.ExtractionPolicy\x12k\n\x18index_name_table_mapping\x18\x04 \x03(\x0b\x32I.indexify_coordinator.ExtractionPolicyResponse.IndexNameTableMappingEntry\x12m\n\x19output_index_name_mapping\x18\x05 \x03(\x0b\x32J.indexify_coordinator.ExtractionPolicyResponse.OutputIndexNameMappingEntry\x1a<\n\x1aIndexNameTableMappingEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12\r\n\x05value\x18\x02 \x01(\t:\x02\x38\x01\x1a=\n\x1bOutputIndexNameMappingEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12\r\n\x05value\x18\x02 \x01(\t:\x02\x38\x01\"\xb9\x04\n\x0f\x43ontentMetadata\x12\n\n\x02id\x18\x01 \x01(\t\x12\x11\n\tfile_name\x18\x02 \x01(\t\x12\x11\n\tparent_id\x18\x03 \x01(\t\x12\x0c\n\x04mime\x18\x04 \x01(\t\x12\x41\n\x06labels\x18\x05 \x03(\x0b\x32\x31.indexify_coordinator.ContentMetadata.LabelsEntry\x12\x13\n\x0bstorage_url\x18\x06 \x01(\t\x12\x12\n\ncreated_at\x18\x07 \x01(\x03\x12\x11\n\tnamespace\x18\x08 \x01(\t\x12\x0e\n\x06source\x18\t \x01(\t\x12\x12\n\nsize_bytes\x18\n \x01(\x04\x12\x0c\n\x04hash\x18\x0b \x01(\t\x12]\n\x15\x65xtraction_policy_ids\x18\x0c \x03(\x0b\x32>.indexify_coordinator.ContentMetadata.ExtractionPolicyIdsEntry\x12\x17\n\x0froot_content_id\x18\r \x01(\t\x12\x1e\n\x16\x65xtraction_graph_names\x18\x0e \x03(\t\x12\x1a\n\x12\x65xtracted_metadata\x18\x0f \x01(\t\x1a\x45\n\x0bLabelsEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12%\n\x05value\x18\x02 \x01(\x0b\x32\x16.google.protobuf.Value:\x02\x38\x01\x1a:\n\x18\x45xtractionPolicyIdsEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12\r\n\x05value\x18\x02 \x01(\x04:\x02\x38\x01\"b\n\x11\x43ontentStreamItem\x12\x36\n\x07\x63ontent\x18\x01 \x01(\x0b\x32%.indexify_coordinator.ContentMetadata\x12\x15\n\rchange_offset\x18\x02 \x01(\x04\"N\n\x14\x43reateContentRequest\x12\x36\n\x07\x63ontent\x18\x02 \x01(\x0b\x32%.indexify_coordinator.ContentMetadata\"R\n\x15\x43reateContentResponse\x12\x39\n\x06status\x18\x02 \x01(\x0e\x32).indexify_coordinator.CreateContentStatus\"A\n\x17TombstoneContentRequest\x12\x11\n\tnamespace\x18\x01 \x01(\t\x12\x13\n\x0b\x63ontent_ids\x18\x02 \x03(\t\"\x1a\n\x18TombstoneContentResponse\"[\n\tNamespace\x12\x0c\n\x04name\x18\x01 \x01(\t\x12@\n\x11\x65xtraction_graphs\x18\x02 \x03(\x0b\x32%.indexify_coordinator.ExtractionGraph\"D\n\x10GetSchemaRequest\x12\x11\n\tnamespace\x18\x01 \x01(\t\x12\x1d\n\x15\x65xtraction_graph_name\x18\x02 \x01(\t\"O\n\x11GetSchemaResponse\x12:\n\x06schema\x18\x01 \x01(\x0b\x32*.indexify_coordinator.StructuredDataSchema\"e\n\x14StructuredDataSchema\x12\n\n\x02id\x18\x01 \x01(\t\x12\x1d\n\x15\x65xtraction_graph_name\x18\x02 \x01(\t\x12\x11\n\tnamespace\x18\x03 \x01(\t\x12\x0f\n\x07\x63olumns\x18\x04 \x01(\t\"(\n\x13GetAllSchemaRequest\x12\x11\n\tnamespace\x18\x01 \x01(\t\"S\n\x14GetAllSchemaResponse\x12;\n\x07schemas\x18\x01 \x03(\x0b\x32*.indexify_coordinator.StructuredDataSchema\"\x1f\n\x1dGetRaftMetricsSnapshotRequest\"\x1c\n\nUint64List\x12\x0e\n\x06values\x18\x01 \x03(\x04\"\xa5\x11\n\x1bRaftMetricsSnapshotResponse\x12\x66\n\x14\x66\x61il_connect_to_peer\x18\x01 \x03(\x0b\x32H.indexify_coordinator.RaftMetricsSnapshotResponse.FailConnectToPeerEntry\x12T\n\nsent_bytes\x18\x02 \x03(\x0b\x32@.indexify_coordinator.RaftMetricsSnapshotResponse.SentBytesEntry\x12T\n\nrecv_bytes\x18\x03 \x03(\x0b\x32@.indexify_coordinator.RaftMetricsSnapshotResponse.RecvBytesEntry\x12Z\n\rsent_failures\x18\x04 \x03(\x0b\x32\x43.indexify_coordinator.RaftMetricsSnapshotResponse.SentFailuresEntry\x12i\n\x15snapshot_send_success\x18\x05 \x03(\x0b\x32J.indexify_coordinator.RaftMetricsSnapshotResponse.SnapshotSendSuccessEntry\x12i\n\x15snapshot_send_failure\x18\x06 \x03(\x0b\x32J.indexify_coordinator.RaftMetricsSnapshotResponse.SnapshotSendFailureEntry\x12i\n\x15snapshot_recv_success\x18\x07 \x03(\x0b\x32J.indexify_coordinator.RaftMetricsSnapshotResponse.SnapshotRecvSuccessEntry\x12i\n\x15snapshot_recv_failure\x18\x08 \x03(\x0b\x32J.indexify_coordinator.RaftMetricsSnapshotResponse.SnapshotRecvFailureEntry\x12m\n\x17snapshot_send_inflights\x18\t \x03(\x0b\x32L.indexify_coordinator.RaftMetricsSnapshotResponse.SnapshotSendInflightsEntry\x12m\n\x17snapshot_recv_inflights\x18\n \x03(\x0b\x32L.indexify_coordinator.RaftMetricsSnapshotResponse.SnapshotRecvInflightsEntry\x12i\n\x15snapshot_sent_seconds\x18\x0b \x03(\x0b\x32J.indexify_coordinator.RaftMetricsSnapshotResponse.SnapshotSentSecondsEntry\x12i\n\x15snapshot_recv_seconds\x18\x0c \x03(\x0b\x32J.indexify_coordinator.RaftMetricsSnapshotResponse.SnapshotRecvSecondsEntry\x12\x15\n\rsnapshot_size\x18\r \x03(\x04\x12*\n\"last_snapshot_creation_time_millis\x18\x0e \x01(\x04\x12\x18\n\x10running_state_ok\x18\x0f \x01(\x08\x12\n\n\x02id\x18\x10 \x01(\x04\x12\x14\n\x0c\x63urrent_term\x18\x11 \x01(\x04\x12\x0c\n\x04vote\x18\x12 \x01(\x04\x12\x16\n\x0elast_log_index\x18\x13 \x01(\x04\x12\x16\n\x0e\x63urrent_leader\x18\x14 \x01(\x04\x1a\x38\n\x16\x46\x61ilConnectToPeerEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12\r\n\x05value\x18\x02 \x01(\x04:\x02\x38\x01\x1a\x30\n\x0eSentBytesEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12\r\n\x05value\x18\x02 \x01(\x04:\x02\x38\x01\x1a\x30\n\x0eRecvBytesEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12\r\n\x05value\x18\x02 \x01(\x04:\x02\x38\x01\x1a\x33\n\x11SentFailuresEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12\r\n\x05value\x18\x02 \x01(\x04:\x02\x38\x01\x1a:\n\x18SnapshotSendSuccessEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12\r\n\x05value\x18\x02 \x01(\x04:\x02\x38\x01\x1a:\n\x18SnapshotSendFailureEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12\r\n\x05value\x18\x02 \x01(\x04:\x02\x38\x01\x1a:\n\x18SnapshotRecvSuccessEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12\r\n\x05value\x18\x02 \x01(\x04:\x02\x38\x01\x1a:\n\x18SnapshotRecvFailureEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12\r\n\x05value\x18\x02 \x01(\x04:\x02\x38\x01\x1a<\n\x1aSnapshotSendInflightsEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12\r\n\x05value\x18\x02 \x01(\x04:\x02\x38\x01\x1a<\n\x1aSnapshotRecvInflightsEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12\r\n\x05value\x18\x02 \x01(\x04:\x02\x38\x01\x1a\\\n\x18SnapshotSentSecondsEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12/\n\x05value\x18\x02 \x01(\x0b\x32 .indexify_coordinator.Uint64List:\x02\x38\x01\x1a\\\n\x18SnapshotRecvSecondsEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12/\n\x05value\x18\x02 \x01(\x0b\x32 .indexify_coordinator.Uint64List:\x02\x38\x01\"\x1d\n\x1bGetAllTaskAssignmentRequest\"\x92\x01\n\x0fTaskAssignments\x12K\n\x0b\x61ssignments\x18\x01 \x03(\x0b\x32\x36.indexify_coordinator.TaskAssignments.AssignmentsEntry\x1a\x32\n\x10\x41ssignmentsEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12\r\n\x05value\x18\x02 \x01(\t:\x02\x38\x01\"!\n\x0eGetTaskRequest\x12\x0f\n\x07task_id\x18\x01 \x01(\t\";\n\x0fGetTaskResponse\x12(\n\x04task\x18\x01 \x01(\x0b\x32\x1a.indexify_coordinator.Task\"*\n\x17GetIngestionInfoRequest\x12\x0f\n\x07task_id\x18\x01 \x01(\t\"\xc4\x01\n\x18GetIngestionInfoResponse\x12(\n\x04task\x18\x01 \x01(\x0b\x32\x1a.indexify_coordinator.Task\x12;\n\x0croot_content\x18\x02 \x01(\x0b\x32%.indexify_coordinator.ContentMetadata\x12\x41\n\x11\x65xtraction_policy\x18\x03 \x01(\x0b\x32&.indexify_coordinator.ExtractionPolicy\"2\n\x1cWaitContentExtractionRequest\x12\x12\n\ncontent_id\x18\x01 \x01(\t\"\x1f\n\x1dWaitContentExtractionResponse\".\n\x19ListActiveContentsRequest\x12\x11\n\tnamespace\x18\x01 \x01(\t\"1\n\x1aListActiveContentsResponse\x12\x13\n\x0b\x63ontent_ids\x18\x01 \x03(\t\"\xca\x01\n\x13UpdateLabelsRequest\x12\x11\n\tnamespace\x18\x01 \x01(\t\x12\x12\n\ncontent_id\x18\x02 \x01(\t\x12\x45\n\x06labels\x18\x03 \x03(\x0b\x32\x35.indexify_coordinator.UpdateLabelsRequest.LabelsEntry\x1a\x45\n\x0bLabelsEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12%\n\x05value\x18\x02 \x01(\x0b\x32\x16.google.protobuf.Value:\x02\x38\x01\"\x16\n\x14UpdateLabelsResponse\".\n\x19\x45xecutorsHeartbeatRequest\x12\x11\n\texecutors\x18\x01 \x03(\t\"\x1c\n\x1a\x45xecutorsHeartbeatResponse\"~\n\x1bLinkExtractionGraphsRequest\x12\x11\n\tnamespace\x18\x01 \x01(\t\x12\x19\n\x11source_graph_name\x18\x02 \x01(\t\x12\x16\n\x0e\x63ontent_source\x18\x03 \x01(\t\x12\x19\n\x11linked_graph_name\x18\x04 \x01(\t\"\x1e\n\x1cLinkExtractionGraphsResponse\"H\n\x13\x45xtractionGraphLink\x12\x16\n\x0e\x63ontent_source\x18\x01 \x01(\t\x12\x19\n\x11linked_graph_name\x18\x02 \x01(\t\"K\n\x1b\x45xtractionGraphLinksRequest\x12\x11\n\tnamespace\x18\x01 \x01(\t\x12\x19\n\x11source_graph_name\x18\x02 \x01(\t\"X\n\x1c\x45xtractionGraphLinksResponse\x12\x38\n\x05links\x18\x01 \x03(\x0b\x32).indexify_coordinator.ExtractionGraphLink\"\\\n\x18\x41\x64\x64GraphToContentRequest\x12\x11\n\tnamespace\x18\x01 \x01(\t\x12\x18\n\x10\x65xtraction_graph\x18\x02 \x01(\t\x12\x13\n\x0b\x63ontent_ids\x18\x03 \x03(\t\"\x1b\n\x19\x41\x64\x64GraphToContentResponse*3\n\x0bTaskOutcome\x12\x0b\n\x07UNKNOWN\x10\x00\x12\n\n\x06\x46\x41ILED\x10\x01\x12\x0b\n\x07SUCCESS\x10\x02*b\n\x11TaskOutcomeFilter\x12\x12\n\x0e\x46ILTER_NOT_SET\x10\x00\x12\x12\n\x0e\x46ILTER_UNKNOWN\x10\x01\x12\x12\n\x0e\x46ILTER_SUCCESS\x10\x02\x12\x11\n\rFILTER_FAILED\x10\x03*P\n\nGcTaskType\x12\n\n\x06\x44\x65lete\x10\x00\x12\x10\n\x0cUpdateLabels\x10\x01\x12\x13\n\x0f\x44\x65leteBlobStore\x10\x02\x12\x0f\n\x0b\x44ropIndexes\x10\x03*1\n\x13\x43reateContentStatus\x12\x0b\n\x07\x43REATED\x10\x00\x12\r\n\tDUPLICATE\x10\x01\x32\xa3$\n\x12\x43oordinatorService\x12j\n\rCreateContent\x12*.indexify_coordinator.CreateContentRequest\x1a+.indexify_coordinator.CreateContentResponse\"\x00\x12s\n\x10TombstoneContent\x12-.indexify_coordinator.TombstoneContentRequest\x1a..indexify_coordinator.TombstoneContentResponse\"\x00\x12y\n\x12GetContentMetadata\x12/.indexify_coordinator.GetContentMetadataRequest\x1a\x30.indexify_coordinator.GetContentMetadataResponse\"\x00\x12\x85\x01\n\x16GetContentTreeMetadata\x12\x33.indexify_coordinator.GetContentTreeMetadataRequest\x1a\x34.indexify_coordinator.GetContentTreeMetadataResponse\"\x00\x12\x64\n\x0bListContent\x12(.indexify_coordinator.ListContentRequest\x1a).indexify_coordinator.ListContentResponse\"\x00\x12\x82\x01\n\x15\x43reateExtractionGraph\x12\x32.indexify_coordinator.CreateExtractionGraphRequest\x1a\x33.indexify_coordinator.CreateExtractionGraphResponse\"\x00\x12}\n\x14ListExtractionGraphs\x12\x30.indexify_coordinator.ListExtractionGraphRequest\x1a\x31.indexify_coordinator.ListExtractionGraphResponse\"\x00\x12i\n\x08\x43reateNS\x12,.indexify_coordinator.CreateNamespaceRequest\x1a-.indexify_coordinator.CreateNamespaceResponse\"\x00\x12\x63\n\x06ListNS\x12*.indexify_coordinator.ListNamespaceRequest\x1a+.indexify_coordinator.ListNamespaceResponse\"\x00\x12`\n\x05GetNS\x12).indexify_coordinator.GetNamespaceRequest\x1a*.indexify_coordinator.GetNamespaceResponse\"\x00\x12m\n\x0eListExtractors\x12+.indexify_coordinator.ListExtractorsRequest\x1a,.indexify_coordinator.ListExtractorsResponse\"\x00\x12s\n\x10RegisterExecutor\x12-.indexify_coordinator.RegisterExecutorRequest\x1a..indexify_coordinator.RegisterExecutorResponse\"\x00\x12\x88\x01\n\x17RegisterIngestionServer\x12\x34.indexify_coordinator.RegisterIngestionServerRequest\x1a\x35.indexify_coordinator.RegisterIngestionServerResponse\"\x00\x12\x82\x01\n\x15RemoveIngestionServer\x12\x32.indexify_coordinator.RemoveIngestionServerRequest\x1a\x33.indexify_coordinator.RemoveIngestionServerResponse\"\x00\x12j\n\rCreateGCTasks\x12*.indexify_coordinator.CreateGCTasksRequest\x1a+.indexify_coordinator.CreateGCTasksResponse\"\x00\x12l\n\rGCTasksStream\x12+.indexify_coordinator.GCTaskAcknowledgement\x1a(.indexify_coordinator.CoordinatorCommand\"\x00(\x01\x30\x01\x12\x62\n\tHeartbeat\x12&.indexify_coordinator.HeartbeatRequest\x1a\'.indexify_coordinator.HeartbeatResponse\"\x00(\x01\x30\x01\x12\x94\x01\n\x1bGetExtractionGraphAnalytics\x12\x38.indexify_coordinator.GetExtractionGraphAnalyticsRequest\x1a\x39.indexify_coordinator.GetExtractionGraphAnalyticsResponse\"\x00\x12\x64\n\x0bListIndexes\x12(.indexify_coordinator.ListIndexesRequest\x1a).indexify_coordinator.ListIndexesResponse\"\x00\x12[\n\x08GetIndex\x12%.indexify_coordinator.GetIndexRequest\x1a&.indexify_coordinator.GetIndexResponse\"\x00\x12y\n\x12UpdateIndexesState\x12/.indexify_coordinator.UpdateIndexesStateRequest\x1a\x30.indexify_coordinator.UpdateIndexesStateResponse\"\x00\x12\x88\x01\n\x17GetExtractorCoordinates\x12\x34.indexify_coordinator.GetExtractorCoordinatesRequest\x1a\x35.indexify_coordinator.GetExtractorCoordinatesResponse\"\x00\x12\x61\n\nUpdateTask\x12\'.indexify_coordinator.UpdateTaskRequest\x1a(.indexify_coordinator.UpdateTaskResponse\"\x00\x12s\n\x10ListStateChanges\x12-.indexify_coordinator.ListStateChangesRequest\x1a..indexify_coordinator.ListStateChangesResponse\"\x00\x12^\n\tListTasks\x12&.indexify_coordinator.ListTasksRequest\x1a\'.indexify_coordinator.ListTasksResponse\"\x00\x12^\n\tGetSchema\x12&.indexify_coordinator.GetSchemaRequest\x1a\'.indexify_coordinator.GetSchemaResponse\"\x00\x12\x66\n\x0bListSchemas\x12).indexify_coordinator.GetAllSchemaRequest\x1a*.indexify_coordinator.GetAllSchemaResponse\"\x00\x12\x82\x01\n\x16GetRaftMetricsSnapshot\x12\x33.indexify_coordinator.GetRaftMetricsSnapshotRequest\x1a\x31.indexify_coordinator.RaftMetricsSnapshotResponse\"\x00\x12s\n\x15GetAllTaskAssignments\x12\x31.indexify_coordinator.GetAllTaskAssignmentRequest\x1a%.indexify_coordinator.TaskAssignments\"\x00\x12X\n\x07GetTask\x12$.indexify_coordinator.GetTaskRequest\x1a%.indexify_coordinator.GetTaskResponse\"\x00\x12s\n\x10GetIngestionInfo\x12-.indexify_coordinator.GetIngestionInfoRequest\x1a..indexify_coordinator.GetIngestionInfoResponse\"\x00\x12\x82\x01\n\x15WaitContentExtraction\x12\x32.indexify_coordinator.WaitContentExtractionRequest\x1a\x33.indexify_coordinator.WaitContentExtractionResponse\"\x00\x12y\n\x12ListActiveContents\x12/.indexify_coordinator.ListActiveContentsRequest\x1a\x30.indexify_coordinator.ListActiveContentsResponse\"\x00\x12g\n\x0cUpdateLabels\x12).indexify_coordinator.UpdateLabelsRequest\x1a*.indexify_coordinator.UpdateLabelsResponse\"\x00\x12y\n\x12\x45xecutorsHeartbeat\x12/.indexify_coordinator.ExecutorsHeartbeatRequest\x1a\x30.indexify_coordinator.ExecutorsHeartbeatResponse\"\x00\x12\x7f\n\x14LinkExtractionGraphs\x12\x31.indexify_coordinator.LinkExtractionGraphsRequest\x1a\x32.indexify_coordinator.LinkExtractionGraphsResponse\"\x00\x12\x7f\n\x14\x45xtractionGraphLinks\x12\x31.indexify_coordinator.ExtractionGraphLinksRequest\x1a\x32.indexify_coordinator.ExtractionGraphLinksResponse\"\x00\x12v\n\x11\x41\x64\x64GraphToContent\x12..indexify_coordinator.AddGraphToContentRequest\x1a/.indexify_coordinator.AddGraphToContentResponse\"\x00\x12h\n\rContentStream\x12*.indexify_coordinator.ContentStreamRequest\x1a\'.indexify_coordinator.ContentStreamItem\"\x00\x30\x01\x12j\n\x15\x44\x65leteExtractionGraph\x12\x32.indexify_coordinator.DeleteExtractionGraphRequest\x1a\x1b.indexify_coordinator.Empty\"\x00\x62\x06proto3')
+DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(
+    b'\n\x19\x63oordinator_service.proto\x12\x14indexify_coordinator\x1a\x1cgoogle/protobuf/struct.proto"K\n\x1c\x44\x65leteExtractionGraphRequest\x12\x11\n\tnamespace\x18\x01 \x01(\t\x12\x18\n\x10\x65xtraction_graph\x18\x02 \x01(\t"u\n\x14\x43ontentStreamRequest\x12\x15\n\rchange_offset\x18\x01 \x01(\x04\x12\x11\n\tnamespace\x18\x02 \x01(\t\x12\x18\n\x10\x65xtraction_graph\x18\x03 \x01(\t\x12\x19\n\x11\x65xtraction_policy\x18\x04 \x01(\t"1\n\x19GetContentMetadataRequest\x12\x14\n\x0c\x63ontent_list\x18\x01 \x03(\t"Y\n\x1aGetContentMetadataResponse\x12;\n\x0c\x63ontent_list\x18\x01 \x03(\x0b\x32%.indexify_coordinator.ContentMetadata"\x80\x01\n\x1dGetContentTreeMetadataRequest\x12\x11\n\tnamespace\x18\x01 \x01(\t\x12\x12\n\ncontent_id\x18\x02 \x01(\t\x12\x1d\n\x15\x65xtraction_graph_name\x18\x03 \x01(\t\x12\x19\n\x11\x65xtraction_policy\x18\x04 \x01(\t"]\n\x1eGetContentTreeMetadataResponse\x12;\n\x0c\x63ontent_list\x18\x01 \x03(\x0b\x32%.indexify_coordinator.ContentMetadata"m\n\x11UpdateTaskRequest\x12\x13\n\x0b\x65xecutor_id\x18\x01 \x01(\t\x12\x0f\n\x07task_id\x18\x02 \x01(\t\x12\x32\n\x07outcome\x18\x03 \x01(\x0e\x32!.indexify_coordinator.TaskOutcome"\x19\n\x17ListStateChangesRequest"k\n\x0bStateChange\x12\n\n\x02id\x18\x01 \x01(\x04\x12\x11\n\tobject_id\x18\x02 \x01(\t\x12\x13\n\x0b\x63hange_type\x18\x03 \x01(\t\x12\x12\n\ncreated_at\x18\x04 \x01(\x04\x12\x14\n\x0cprocessed_at\x18\x05 \x01(\x04"N\n\x18ListStateChangesResponse\x12\x32\n\x07\x63hanges\x18\x01 \x03(\x0b\x32!.indexify_coordinator.StateChange"\xc9\x01\n\x10ListTasksRequest\x12\x11\n\tnamespace\x18\x01 \x01(\t\x12\x19\n\x11\x65xtraction_policy\x18\x02 \x01(\t\x12\x12\n\ncontent_id\x18\x03 \x01(\t\x12\x10\n\x08start_id\x18\x04 \x01(\t\x12\r\n\x05limit\x18\x05 \x01(\x04\x12\x38\n\x07outcome\x18\x07 \x01(\x0e\x32\'.indexify_coordinator.TaskOutcomeFilter\x12\x18\n\x10\x65xtraction_graph\x18\x08 \x01(\t"M\n\x11ListTasksResponse\x12)\n\x05tasks\x18\x01 \x03(\x0b\x32\x1a.indexify_coordinator.Task\x12\r\n\x05total\x18\x02 \x01(\x04"\x14\n\x12UpdateTaskResponse"3\n\x1eGetExtractorCoordinatesRequest\x12\x11\n\textractor\x18\x02 \x01(\t"0\n\x1fGetExtractorCoordinatesResponse\x12\r\n\x05\x61\x64\x64rs\x18\x01 \x03(\t"\'\n\x12ListIndexesRequest\x12\x11\n\tnamespace\x18\x01 \x01(\t"C\n\x13ListIndexesResponse\x12,\n\x07indexes\x18\x01 \x03(\x0b\x32\x1b.indexify_coordinator.Index"2\n\x0fGetIndexRequest\x12\x11\n\tnamespace\x18\x01 \x01(\t\x12\x0c\n\x04name\x18\x02 \x01(\t">\n\x10GetIndexResponse\x12*\n\x05index\x18\x01 \x01(\x0b\x32\x1b.indexify_coordinator.Index"I\n\x19UpdateIndexesStateRequest\x12,\n\x07indexes\x18\x01 \x03(\x0b\x32\x1b.indexify_coordinator.Index"\x1c\n\x1aUpdateIndexesStateResponse"\x8e\x01\n\x05Index\x12\x0c\n\x04name\x18\x01 \x01(\t\x12\x11\n\tnamespace\x18\x02 \x01(\t\x12\x12\n\ntable_name\x18\x03 \x01(\t\x12\x0e\n\x06schema\x18\x04 \x01(\t\x12\x19\n\x11\x65xtraction_policy\x18\x05 \x01(\t\x12\x11\n\textractor\x18\x06 \x01(\t\x12\x12\n\ngraph_name\x18\x07 \x01(\t"\x1e\n\tEmbedding\x12\x11\n\tembedding\x18\x01 \x03(\x02" \n\nAttributes\x12\x12\n\nattributes\x18\x02 \x01(\t"\x81\x01\n\x07\x46\x65\x61ture\x12\x0c\n\x04name\x18\x01 \x01(\t\x12\x32\n\tembedding\x18\x02 \x01(\x0b\x32\x1f.indexify_coordinator.Embedding\x12\x34\n\nattributes\x18\x03 \x01(\x0b\x32 .indexify_coordinator.Attributes"V\n\x07\x43ontent\x12\x0c\n\x04mime\x18\x02 \x01(\t\x12\x0c\n\x04\x64\x61ta\x18\x03 \x01(\x0c\x12/\n\x08\x66\x65\x61tures\x18\x04 \x03(\x0b\x32\x1d.indexify_coordinator.Feature"q\n\x17RegisterExecutorRequest\x12\x13\n\x0b\x65xecutor_id\x18\x01 \x01(\t\x12\x0c\n\x04\x61\x64\x64r\x18\x02 \x01(\t\x12\x33\n\nextractors\x18\x03 \x03(\x0b\x32\x1f.indexify_coordinator.Extractor"/\n\x18RegisterExecutorResponse\x12\x13\n\x0b\x65xecutor_id\x18\x01 \x01(\t"=\n\x1eRegisterIngestionServerRequest\x12\x1b\n\x13ingestion_server_id\x18\x01 \x01(\t"!\n\x1fRegisterIngestionServerResponse";\n\x1cRemoveIngestionServerRequest\x12\x1b\n\x13ingestion_server_id\x18\x01 \x01(\t"\x1f\n\x1dRemoveIngestionServerResponse"O\n\x14\x43reateGCTasksRequest\x12\x37\n\x0cstate_change\x18\x01 \x01(\x0b\x32!.indexify_coordinator.StateChange"\x17\n\x15\x43reateGCTasksResponse"C\n\x12\x43oordinatorCommand\x12-\n\x07gc_task\x18\x01 \x01(\x0b\x32\x1c.indexify_coordinator.GCTask"X\n\x15GCTaskAcknowledgement\x12\x0f\n\x07task_id\x18\x01 \x01(\t\x12\x11\n\tcompleted\x18\x02 \x01(\x08\x12\x1b\n\x13ingestion_server_id\x18\x03 \x01(\t"\xa5\x01\n\x06GCTask\x12\x0f\n\x07task_id\x18\x01 \x01(\t\x12\x11\n\tnamespace\x18\x02 \x01(\t\x12\x12\n\ncontent_id\x18\x03 \x01(\t\x12\x15\n\routput_tables\x18\x05 \x03(\t\x12\x17\n\x0f\x62lob_store_path\x18\x06 \x01(\t\x12\x33\n\ttask_type\x18\x07 \x01(\x0e\x32 .indexify_coordinator.GcTaskType"Y\n\x10HeartbeatRequest\x12\x13\n\x0b\x65xecutor_id\x18\x01 \x01(\t\x12\x15\n\rpending_tasks\x18\x02 \x01(\x03\x12\x19\n\x11max_pending_tasks\x18\x03 \x01(\x04"Q\n"GetExtractionGraphAnalyticsRequest\x12\x11\n\tnamespace\x18\x01 \x01(\t\x12\x18\n\x10\x65xtraction_graph\x18\x02 \x01(\t"B\n\rTaskAnalytics\x12\x0f\n\x07pending\x18\x01 \x01(\x04\x12\x0f\n\x07success\x18\x02 \x01(\x04\x12\x0f\n\x07\x66\x61ilure\x18\x03 \x01(\x04"\xe6\x01\n#GetExtractionGraphAnalyticsResponse\x12\x64\n\x0etask_analytics\x18\x01 \x03(\x0b\x32L.indexify_coordinator.GetExtractionGraphAnalyticsResponse.TaskAnalyticsEntry\x1aY\n\x12TaskAnalyticsEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12\x32\n\x05value\x18\x02 \x01(\x0b\x32#.indexify_coordinator.TaskAnalytics:\x02\x38\x01"S\n\x11HeartbeatResponse\x12\x13\n\x0b\x65xecutor_id\x18\x01 \x01(\t\x12)\n\x05tasks\x18\x02 \x03(\x0b\x32\x1a.indexify_coordinator.Task"\xa3\x03\n\x04Task\x12\n\n\x02id\x18\x01 \x01(\t\x12\x11\n\textractor\x18\x02 \x01(\t\x12\x11\n\tnamespace\x18\x03 \x01(\t\x12?\n\x10\x63ontent_metadata\x18\x04 \x01(\x0b\x32%.indexify_coordinator.ContentMetadata\x12\x14\n\x0cinput_params\x18\x05 \x01(\t\x12\x1c\n\x14\x65xtraction_policy_id\x18\x06 \x01(\t\x12\x1d\n\x15\x65xtraction_graph_name\x18\x07 \x01(\t\x12P\n\x14output_index_mapping\x18\x08 \x03(\x0b\x32\x32.indexify_coordinator.Task.OutputIndexMappingEntry\x12\x32\n\x07outcome\x18\t \x01(\x0e\x32!.indexify_coordinator.TaskOutcome\x12\x14\n\x0cindex_tables\x18\n \x03(\t\x1a\x39\n\x17OutputIndexMappingEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12\r\n\x05value\x18\x02 \x01(\t:\x02\x38\x01"\x17\n\x15ListExtractorsRequest"M\n\x16ListExtractorsResponse\x12\x33\n\nextractors\x18\x01 \x03(\x0b\x32\x1f.indexify_coordinator.Extractor"\xf1\x02\n\tExtractor\x12\x0c\n\x04name\x18\x01 \x01(\t\x12\x13\n\x0b\x64\x65scription\x18\x02 \x01(\t\x12\x14\n\x0cinput_params\x18\x03 \x01(\t\x12P\n\x11\x65mbedding_schemas\x18\x04 \x03(\x0b\x32\x35.indexify_coordinator.Extractor.EmbeddingSchemasEntry\x12N\n\x10metadata_schemas\x18\x05 \x03(\x0b\x32\x34.indexify_coordinator.Extractor.MetadataSchemasEntry\x12\x18\n\x10input_mime_types\x18\x06 \x03(\t\x1a\x37\n\x15\x45mbeddingSchemasEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12\r\n\x05value\x18\x02 \x01(\t:\x02\x38\x01\x1a\x36\n\x14MetadataSchemasEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12\r\n\x05value\x18\x02 \x01(\t:\x02\x38\x01"#\n\x13GetNamespaceRequest\x12\x0c\n\x04name\x18\x01 \x01(\t"J\n\x14GetNamespaceResponse\x12\x32\n\tnamespace\x18\x01 \x01(\x0b\x32\x1f.indexify_coordinator.Namespace"\x07\n\x05\x45mpty"\x89\x01\n\rContentSource\x12\x10\n\x06policy\x18\x01 \x01(\tH\x00\x12\x30\n\tingestion\x18\x02 \x01(\x0b\x32\x1b.indexify_coordinator.EmptyH\x00\x12+\n\x04none\x18\x03 \x01(\x0b\x32\x1b.indexify_coordinator.EmptyH\x00\x42\x07\n\x05value"\xd3\x01\n\x12ListContentRequest\x12\x11\n\tnamespace\x18\x01 \x01(\t\x12\x33\n\x06source\x18\x02 \x01(\x0b\x32#.indexify_coordinator.ContentSource\x12\x11\n\tparent_id\x18\x03 \x01(\t\x12\x15\n\rlabels_filter\x18\x04 \x03(\t\x12\r\n\x05limit\x18\x05 \x01(\x04\x12\x10\n\x08start_id\x18\x06 \x01(\t\x12\r\n\x05graph\x18\x08 \x01(\t\x12\x1b\n\x13ingested_content_id\x18\t \x01(\t"a\n\x13ListContentResponse\x12;\n\x0c\x63ontent_list\x18\x01 \x03(\x0b\x32%.indexify_coordinator.ContentMetadata\x12\r\n\x05total\x18\x02 \x01(\x04"/\n\x1aListExtractionGraphRequest\x12\x11\n\tnamespace\x18\x01 \x01(\t"T\n\x1bListExtractionGraphResponse\x12\x35\n\x06graphs\x18\x01 \x03(\x0b\x32%.indexify_coordinator.ExtractionGraph"&\n\x16\x43reateNamespaceRequest\x12\x0c\n\x04name\x18\x01 \x01(\t";\n\x17\x43reateNamespaceResponse\x12\x0c\n\x04name\x18\x01 \x01(\t\x12\x12\n\ncreated_at\x18\x02 \x01(\x03"\x16\n\x14ListNamespaceRequest"L\n\x15ListNamespaceResponse\x12\x33\n\nnamespaces\x18\x01 \x03(\x0b\x32\x1f.indexify_coordinator.Namespace"\x98\x01\n\x0f\x45xtractionGraph\x12\n\n\x02id\x18\x01 \x01(\t\x12\x11\n\tnamespace\x18\x02 \x01(\t\x12\x0c\n\x04name\x18\x03 \x01(\t\x12\x43\n\x13\x65xtraction_policies\x18\x04 \x03(\x0b\x32&.indexify_coordinator.ExtractionPolicy\x12\x13\n\x0b\x64\x65scription\x18\x05 \x01(\t"\xaa\x02\n\x10\x45xtractionPolicy\x12\n\n\x02id\x18\x01 \x01(\t\x12\x11\n\textractor\x18\x02 \x01(\t\x12\x0c\n\x04name\x18\x03 \x01(\t\x12\x14\n\x0cinput_params\x18\x04 \x01(\t\x12\x16\n\x0e\x63ontent_source\x18\x06 \x01(\t\x12\x12\n\ngraph_name\x18\x07 \x01(\t\x12\\\n\x14output_table_mapping\x18\x08 \x03(\x0b\x32>.indexify_coordinator.ExtractionPolicy.OutputTableMappingEntry\x12\x0e\n\x06\x66ilter\x18\t \x03(\t\x1a\x39\n\x17OutputTableMappingEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12\r\n\x05value\x18\x02 \x01(\t:\x02\x38\x01"\x9f\x01\n\x17\x45xtractionPolicyRequest\x12\x11\n\tnamespace\x18\x01 \x01(\t\x12\x11\n\textractor\x18\x02 \x01(\t\x12\x0c\n\x04name\x18\x03 \x01(\t\x12\x14\n\x0cinput_params\x18\x04 \x01(\t\x12\x16\n\x0e\x63ontent_source\x18\x06 \x01(\t\x12\x12\n\ncreated_at\x18\x07 \x01(\x03\x12\x0e\n\x06\x66ilter\x18\x08 \x03(\t"\x95\x01\n\x1c\x43reateExtractionGraphRequest\x12\x11\n\tnamespace\x18\x01 \x01(\t\x12\x0c\n\x04name\x18\x02 \x01(\t\x12\x13\n\x0b\x64\x65scription\x18\x04 \x01(\t\x12?\n\x08policies\x18\x03 \x03(\x0b\x32-.indexify_coordinator.ExtractionPolicyRequest"\xba\x03\n\x1d\x43reateExtractionGraphResponse\x12\x10\n\x08graph_id\x18\x01 \x01(\t\x12W\n\nextractors\x18\x02 \x03(\x0b\x32\x43.indexify_coordinator.CreateExtractionGraphResponse.ExtractorsEntry\x12S\n\x08policies\x18\x03 \x03(\x0b\x32\x41.indexify_coordinator.CreateExtractionGraphResponse.PoliciesEntry\x12,\n\x07indexes\x18\x05 \x03(\x0b\x32\x1b.indexify_coordinator.Index\x1aR\n\x0f\x45xtractorsEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12.\n\x05value\x18\x02 \x01(\x0b\x32\x1f.indexify_coordinator.Extractor:\x02\x38\x01\x1aW\n\rPoliciesEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12\x35\n\x05value\x18\x02 \x01(\x0b\x32&.indexify_coordinator.ExtractionPolicy:\x02\x38\x01"\xfe\x03\n\x18\x45xtractionPolicyResponse\x12\x12\n\ncreated_at\x18\x01 \x01(\x03\x12\x32\n\textractor\x18\x02 \x01(\x0b\x32\x1f.indexify_coordinator.Extractor\x12\x41\n\x11\x65xtraction_policy\x18\x03 \x01(\x0b\x32&.indexify_coordinator.ExtractionPolicy\x12k\n\x18index_name_table_mapping\x18\x04 \x03(\x0b\x32I.indexify_coordinator.ExtractionPolicyResponse.IndexNameTableMappingEntry\x12m\n\x19output_index_name_mapping\x18\x05 \x03(\x0b\x32J.indexify_coordinator.ExtractionPolicyResponse.OutputIndexNameMappingEntry\x1a<\n\x1aIndexNameTableMappingEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12\r\n\x05value\x18\x02 \x01(\t:\x02\x38\x01\x1a=\n\x1bOutputIndexNameMappingEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12\r\n\x05value\x18\x02 \x01(\t:\x02\x38\x01"\xb9\x04\n\x0f\x43ontentMetadata\x12\n\n\x02id\x18\x01 \x01(\t\x12\x11\n\tfile_name\x18\x02 \x01(\t\x12\x11\n\tparent_id\x18\x03 \x01(\t\x12\x0c\n\x04mime\x18\x04 \x01(\t\x12\x41\n\x06labels\x18\x05 \x03(\x0b\x32\x31.indexify_coordinator.ContentMetadata.LabelsEntry\x12\x13\n\x0bstorage_url\x18\x06 \x01(\t\x12\x12\n\ncreated_at\x18\x07 \x01(\x03\x12\x11\n\tnamespace\x18\x08 \x01(\t\x12\x0e\n\x06source\x18\t \x01(\t\x12\x12\n\nsize_bytes\x18\n \x01(\x04\x12\x0c\n\x04hash\x18\x0b \x01(\t\x12]\n\x15\x65xtraction_policy_ids\x18\x0c \x03(\x0b\x32>.indexify_coordinator.ContentMetadata.ExtractionPolicyIdsEntry\x12\x17\n\x0froot_content_id\x18\r \x01(\t\x12\x1e\n\x16\x65xtraction_graph_names\x18\x0e \x03(\t\x12\x1a\n\x12\x65xtracted_metadata\x18\x0f \x01(\t\x1a\x45\n\x0bLabelsEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12%\n\x05value\x18\x02 \x01(\x0b\x32\x16.google.protobuf.Value:\x02\x38\x01\x1a:\n\x18\x45xtractionPolicyIdsEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12\r\n\x05value\x18\x02 \x01(\x04:\x02\x38\x01"b\n\x11\x43ontentStreamItem\x12\x36\n\x07\x63ontent\x18\x01 \x01(\x0b\x32%.indexify_coordinator.ContentMetadata\x12\x15\n\rchange_offset\x18\x02 \x01(\x04"N\n\x14\x43reateContentRequest\x12\x36\n\x07\x63ontent\x18\x02 \x01(\x0b\x32%.indexify_coordinator.ContentMetadata"R\n\x15\x43reateContentResponse\x12\x39\n\x06status\x18\x02 \x01(\x0e\x32).indexify_coordinator.CreateContentStatus"A\n\x17TombstoneContentRequest\x12\x11\n\tnamespace\x18\x01 \x01(\t\x12\x13\n\x0b\x63ontent_ids\x18\x02 \x03(\t"\x1a\n\x18TombstoneContentResponse"[\n\tNamespace\x12\x0c\n\x04name\x18\x01 \x01(\t\x12@\n\x11\x65xtraction_graphs\x18\x02 \x03(\x0b\x32%.indexify_coordinator.ExtractionGraph"D\n\x10GetSchemaRequest\x12\x11\n\tnamespace\x18\x01 \x01(\t\x12\x1d\n\x15\x65xtraction_graph_name\x18\x02 \x01(\t"O\n\x11GetSchemaResponse\x12:\n\x06schema\x18\x01 \x01(\x0b\x32*.indexify_coordinator.StructuredDataSchema"e\n\x14StructuredDataSchema\x12\n\n\x02id\x18\x01 \x01(\t\x12\x1d\n\x15\x65xtraction_graph_name\x18\x02 \x01(\t\x12\x11\n\tnamespace\x18\x03 \x01(\t\x12\x0f\n\x07\x63olumns\x18\x04 \x01(\t"(\n\x13GetAllSchemaRequest\x12\x11\n\tnamespace\x18\x01 \x01(\t"S\n\x14GetAllSchemaResponse\x12;\n\x07schemas\x18\x01 \x03(\x0b\x32*.indexify_coordinator.StructuredDataSchema"\x1f\n\x1dGetRaftMetricsSnapshotRequest"\x1c\n\nUint64List\x12\x0e\n\x06values\x18\x01 \x03(\x04"\xa5\x11\n\x1bRaftMetricsSnapshotResponse\x12\x66\n\x14\x66\x61il_connect_to_peer\x18\x01 \x03(\x0b\x32H.indexify_coordinator.RaftMetricsSnapshotResponse.FailConnectToPeerEntry\x12T\n\nsent_bytes\x18\x02 \x03(\x0b\x32@.indexify_coordinator.RaftMetricsSnapshotResponse.SentBytesEntry\x12T\n\nrecv_bytes\x18\x03 \x03(\x0b\x32@.indexify_coordinator.RaftMetricsSnapshotResponse.RecvBytesEntry\x12Z\n\rsent_failures\x18\x04 \x03(\x0b\x32\x43.indexify_coordinator.RaftMetricsSnapshotResponse.SentFailuresEntry\x12i\n\x15snapshot_send_success\x18\x05 \x03(\x0b\x32J.indexify_coordinator.RaftMetricsSnapshotResponse.SnapshotSendSuccessEntry\x12i\n\x15snapshot_send_failure\x18\x06 \x03(\x0b\x32J.indexify_coordinator.RaftMetricsSnapshotResponse.SnapshotSendFailureEntry\x12i\n\x15snapshot_recv_success\x18\x07 \x03(\x0b\x32J.indexify_coordinator.RaftMetricsSnapshotResponse.SnapshotRecvSuccessEntry\x12i\n\x15snapshot_recv_failure\x18\x08 \x03(\x0b\x32J.indexify_coordinator.RaftMetricsSnapshotResponse.SnapshotRecvFailureEntry\x12m\n\x17snapshot_send_inflights\x18\t \x03(\x0b\x32L.indexify_coordinator.RaftMetricsSnapshotResponse.SnapshotSendInflightsEntry\x12m\n\x17snapshot_recv_inflights\x18\n \x03(\x0b\x32L.indexify_coordinator.RaftMetricsSnapshotResponse.SnapshotRecvInflightsEntry\x12i\n\x15snapshot_sent_seconds\x18\x0b \x03(\x0b\x32J.indexify_coordinator.RaftMetricsSnapshotResponse.SnapshotSentSecondsEntry\x12i\n\x15snapshot_recv_seconds\x18\x0c \x03(\x0b\x32J.indexify_coordinator.RaftMetricsSnapshotResponse.SnapshotRecvSecondsEntry\x12\x15\n\rsnapshot_size\x18\r \x03(\x04\x12*\n"last_snapshot_creation_time_millis\x18\x0e \x01(\x04\x12\x18\n\x10running_state_ok\x18\x0f \x01(\x08\x12\n\n\x02id\x18\x10 \x01(\x04\x12\x14\n\x0c\x63urrent_term\x18\x11 \x01(\x04\x12\x0c\n\x04vote\x18\x12 \x01(\x04\x12\x16\n\x0elast_log_index\x18\x13 \x01(\x04\x12\x16\n\x0e\x63urrent_leader\x18\x14 \x01(\x04\x1a\x38\n\x16\x46\x61ilConnectToPeerEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12\r\n\x05value\x18\x02 \x01(\x04:\x02\x38\x01\x1a\x30\n\x0eSentBytesEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12\r\n\x05value\x18\x02 \x01(\x04:\x02\x38\x01\x1a\x30\n\x0eRecvBytesEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12\r\n\x05value\x18\x02 \x01(\x04:\x02\x38\x01\x1a\x33\n\x11SentFailuresEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12\r\n\x05value\x18\x02 \x01(\x04:\x02\x38\x01\x1a:\n\x18SnapshotSendSuccessEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12\r\n\x05value\x18\x02 \x01(\x04:\x02\x38\x01\x1a:\n\x18SnapshotSendFailureEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12\r\n\x05value\x18\x02 \x01(\x04:\x02\x38\x01\x1a:\n\x18SnapshotRecvSuccessEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12\r\n\x05value\x18\x02 \x01(\x04:\x02\x38\x01\x1a:\n\x18SnapshotRecvFailureEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12\r\n\x05value\x18\x02 \x01(\x04:\x02\x38\x01\x1a<\n\x1aSnapshotSendInflightsEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12\r\n\x05value\x18\x02 \x01(\x04:\x02\x38\x01\x1a<\n\x1aSnapshotRecvInflightsEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12\r\n\x05value\x18\x02 \x01(\x04:\x02\x38\x01\x1a\\\n\x18SnapshotSentSecondsEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12/\n\x05value\x18\x02 \x01(\x0b\x32 .indexify_coordinator.Uint64List:\x02\x38\x01\x1a\\\n\x18SnapshotRecvSecondsEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12/\n\x05value\x18\x02 \x01(\x0b\x32 .indexify_coordinator.Uint64List:\x02\x38\x01"\x1d\n\x1bGetAllTaskAssignmentRequest"\x92\x01\n\x0fTaskAssignments\x12K\n\x0b\x61ssignments\x18\x01 \x03(\x0b\x32\x36.indexify_coordinator.TaskAssignments.AssignmentsEntry\x1a\x32\n\x10\x41ssignmentsEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12\r\n\x05value\x18\x02 \x01(\t:\x02\x38\x01"!\n\x0eGetTaskRequest\x12\x0f\n\x07task_id\x18\x01 \x01(\t";\n\x0fGetTaskResponse\x12(\n\x04task\x18\x01 \x01(\x0b\x32\x1a.indexify_coordinator.Task"*\n\x17GetIngestionInfoRequest\x12\x0f\n\x07task_id\x18\x01 \x01(\t"\xc4\x01\n\x18GetIngestionInfoResponse\x12(\n\x04task\x18\x01 \x01(\x0b\x32\x1a.indexify_coordinator.Task\x12;\n\x0croot_content\x18\x02 \x01(\x0b\x32%.indexify_coordinator.ContentMetadata\x12\x41\n\x11\x65xtraction_policy\x18\x03 \x01(\x0b\x32&.indexify_coordinator.ExtractionPolicy"2\n\x1cWaitContentExtractionRequest\x12\x12\n\ncontent_id\x18\x01 \x01(\t"\x1f\n\x1dWaitContentExtractionResponse".\n\x19ListActiveContentsRequest\x12\x11\n\tnamespace\x18\x01 \x01(\t"1\n\x1aListActiveContentsResponse\x12\x13\n\x0b\x63ontent_ids\x18\x01 \x03(\t"\xca\x01\n\x13UpdateLabelsRequest\x12\x11\n\tnamespace\x18\x01 \x01(\t\x12\x12\n\ncontent_id\x18\x02 \x01(\t\x12\x45\n\x06labels\x18\x03 \x03(\x0b\x32\x35.indexify_coordinator.UpdateLabelsRequest.LabelsEntry\x1a\x45\n\x0bLabelsEntry\x12\x0b\n\x03key\x18\x01 \x01(\t\x12%\n\x05value\x18\x02 \x01(\x0b\x32\x16.google.protobuf.Value:\x02\x38\x01"\x16\n\x14UpdateLabelsResponse".\n\x19\x45xecutorsHeartbeatRequest\x12\x11\n\texecutors\x18\x01 \x03(\t"\x1c\n\x1a\x45xecutorsHeartbeatResponse"~\n\x1bLinkExtractionGraphsRequest\x12\x11\n\tnamespace\x18\x01 \x01(\t\x12\x19\n\x11source_graph_name\x18\x02 \x01(\t\x12\x16\n\x0e\x63ontent_source\x18\x03 \x01(\t\x12\x19\n\x11linked_graph_name\x18\x04 \x01(\t"\x1e\n\x1cLinkExtractionGraphsResponse"H\n\x13\x45xtractionGraphLink\x12\x16\n\x0e\x63ontent_source\x18\x01 \x01(\t\x12\x19\n\x11linked_graph_name\x18\x02 \x01(\t"K\n\x1b\x45xtractionGraphLinksRequest\x12\x11\n\tnamespace\x18\x01 \x01(\t\x12\x19\n\x11source_graph_name\x18\x02 \x01(\t"X\n\x1c\x45xtractionGraphLinksResponse\x12\x38\n\x05links\x18\x01 \x03(\x0b\x32).indexify_coordinator.ExtractionGraphLink"\\\n\x18\x41\x64\x64GraphToContentRequest\x12\x11\n\tnamespace\x18\x01 \x01(\t\x12\x18\n\x10\x65xtraction_graph\x18\x02 \x01(\t\x12\x13\n\x0b\x63ontent_ids\x18\x03 \x03(\t"\x1b\n\x19\x41\x64\x64GraphToContentResponse*3\n\x0bTaskOutcome\x12\x0b\n\x07UNKNOWN\x10\x00\x12\n\n\x06\x46\x41ILED\x10\x01\x12\x0b\n\x07SUCCESS\x10\x02*b\n\x11TaskOutcomeFilter\x12\x12\n\x0e\x46ILTER_NOT_SET\x10\x00\x12\x12\n\x0e\x46ILTER_UNKNOWN\x10\x01\x12\x12\n\x0e\x46ILTER_SUCCESS\x10\x02\x12\x11\n\rFILTER_FAILED\x10\x03*P\n\nGcTaskType\x12\n\n\x06\x44\x65lete\x10\x00\x12\x10\n\x0cUpdateLabels\x10\x01\x12\x13\n\x0f\x44\x65leteBlobStore\x10\x02\x12\x0f\n\x0b\x44ropIndexes\x10\x03*1\n\x13\x43reateContentStatus\x12\x0b\n\x07\x43REATED\x10\x00\x12\r\n\tDUPLICATE\x10\x01\x32\xa3$\n\x12\x43oordinatorService\x12j\n\rCreateContent\x12*.indexify_coordinator.CreateContentRequest\x1a+.indexify_coordinator.CreateContentResponse"\x00\x12s\n\x10TombstoneContent\x12-.indexify_coordinator.TombstoneContentRequest\x1a..indexify_coordinator.TombstoneContentResponse"\x00\x12y\n\x12GetContentMetadata\x12/.indexify_coordinator.GetContentMetadataRequest\x1a\x30.indexify_coordinator.GetContentMetadataResponse"\x00\x12\x85\x01\n\x16GetContentTreeMetadata\x12\x33.indexify_coordinator.GetContentTreeMetadataRequest\x1a\x34.indexify_coordinator.GetContentTreeMetadataResponse"\x00\x12\x64\n\x0bListContent\x12(.indexify_coordinator.ListContentRequest\x1a).indexify_coordinator.ListContentResponse"\x00\x12\x82\x01\n\x15\x43reateExtractionGraph\x12\x32.indexify_coordinator.CreateExtractionGraphRequest\x1a\x33.indexify_coordinator.CreateExtractionGraphResponse"\x00\x12}\n\x14ListExtractionGraphs\x12\x30.indexify_coordinator.ListExtractionGraphRequest\x1a\x31.indexify_coordinator.ListExtractionGraphResponse"\x00\x12i\n\x08\x43reateNS\x12,.indexify_coordinator.CreateNamespaceRequest\x1a-.indexify_coordinator.CreateNamespaceResponse"\x00\x12\x63\n\x06ListNS\x12*.indexify_coordinator.ListNamespaceRequest\x1a+.indexify_coordinator.ListNamespaceResponse"\x00\x12`\n\x05GetNS\x12).indexify_coordinator.GetNamespaceRequest\x1a*.indexify_coordinator.GetNamespaceResponse"\x00\x12m\n\x0eListExtractors\x12+.indexify_coordinator.ListExtractorsRequest\x1a,.indexify_coordinator.ListExtractorsResponse"\x00\x12s\n\x10RegisterExecutor\x12-.indexify_coordinator.RegisterExecutorRequest\x1a..indexify_coordinator.RegisterExecutorResponse"\x00\x12\x88\x01\n\x17RegisterIngestionServer\x12\x34.indexify_coordinator.RegisterIngestionServerRequest\x1a\x35.indexify_coordinator.RegisterIngestionServerResponse"\x00\x12\x82\x01\n\x15RemoveIngestionServer\x12\x32.indexify_coordinator.RemoveIngestionServerRequest\x1a\x33.indexify_coordinator.RemoveIngestionServerResponse"\x00\x12j\n\rCreateGCTasks\x12*.indexify_coordinator.CreateGCTasksRequest\x1a+.indexify_coordinator.CreateGCTasksResponse"\x00\x12l\n\rGCTasksStream\x12+.indexify_coordinator.GCTaskAcknowledgement\x1a(.indexify_coordinator.CoordinatorCommand"\x00(\x01\x30\x01\x12\x62\n\tHeartbeat\x12&.indexify_coordinator.HeartbeatRequest\x1a\'.indexify_coordinator.HeartbeatResponse"\x00(\x01\x30\x01\x12\x94\x01\n\x1bGetExtractionGraphAnalytics\x12\x38.indexify_coordinator.GetExtractionGraphAnalyticsRequest\x1a\x39.indexify_coordinator.GetExtractionGraphAnalyticsResponse"\x00\x12\x64\n\x0bListIndexes\x12(.indexify_coordinator.ListIndexesRequest\x1a).indexify_coordinator.ListIndexesResponse"\x00\x12[\n\x08GetIndex\x12%.indexify_coordinator.GetIndexRequest\x1a&.indexify_coordinator.GetIndexResponse"\x00\x12y\n\x12UpdateIndexesState\x12/.indexify_coordinator.UpdateIndexesStateRequest\x1a\x30.indexify_coordinator.UpdateIndexesStateResponse"\x00\x12\x88\x01\n\x17GetExtractorCoordinates\x12\x34.indexify_coordinator.GetExtractorCoordinatesRequest\x1a\x35.indexify_coordinator.GetExtractorCoordinatesResponse"\x00\x12\x61\n\nUpdateTask\x12\'.indexify_coordinator.UpdateTaskRequest\x1a(.indexify_coordinator.UpdateTaskResponse"\x00\x12s\n\x10ListStateChanges\x12-.indexify_coordinator.ListStateChangesRequest\x1a..indexify_coordinator.ListStateChangesResponse"\x00\x12^\n\tListTasks\x12&.indexify_coordinator.ListTasksRequest\x1a\'.indexify_coordinator.ListTasksResponse"\x00\x12^\n\tGetSchema\x12&.indexify_coordinator.GetSchemaRequest\x1a\'.indexify_coordinator.GetSchemaResponse"\x00\x12\x66\n\x0bListSchemas\x12).indexify_coordinator.GetAllSchemaRequest\x1a*.indexify_coordinator.GetAllSchemaResponse"\x00\x12\x82\x01\n\x16GetRaftMetricsSnapshot\x12\x33.indexify_coordinator.GetRaftMetricsSnapshotRequest\x1a\x31.indexify_coordinator.RaftMetricsSnapshotResponse"\x00\x12s\n\x15GetAllTaskAssignments\x12\x31.indexify_coordinator.GetAllTaskAssignmentRequest\x1a%.indexify_coordinator.TaskAssignments"\x00\x12X\n\x07GetTask\x12$.indexify_coordinator.GetTaskRequest\x1a%.indexify_coordinator.GetTaskResponse"\x00\x12s\n\x10GetIngestionInfo\x12-.indexify_coordinator.GetIngestionInfoRequest\x1a..indexify_coordinator.GetIngestionInfoResponse"\x00\x12\x82\x01\n\x15WaitContentExtraction\x12\x32.indexify_coordinator.WaitContentExtractionRequest\x1a\x33.indexify_coordinator.WaitContentExtractionResponse"\x00\x12y\n\x12ListActiveContents\x12/.indexify_coordinator.ListActiveContentsRequest\x1a\x30.indexify_coordinator.ListActiveContentsResponse"\x00\x12g\n\x0cUpdateLabels\x12).indexify_coordinator.UpdateLabelsRequest\x1a*.indexify_coordinator.UpdateLabelsResponse"\x00\x12y\n\x12\x45xecutorsHeartbeat\x12/.indexify_coordinator.ExecutorsHeartbeatRequest\x1a\x30.indexify_coordinator.ExecutorsHeartbeatResponse"\x00\x12\x7f\n\x14LinkExtractionGraphs\x12\x31.indexify_coordinator.LinkExtractionGraphsRequest\x1a\x32.indexify_coordinator.LinkExtractionGraphsResponse"\x00\x12\x7f\n\x14\x45xtractionGraphLinks\x12\x31.indexify_coordinator.ExtractionGraphLinksRequest\x1a\x32.indexify_coordinator.ExtractionGraphLinksResponse"\x00\x12v\n\x11\x41\x64\x64GraphToContent\x12..indexify_coordinator.AddGraphToContentRequest\x1a/.indexify_coordinator.AddGraphToContentResponse"\x00\x12h\n\rContentStream\x12*.indexify_coordinator.ContentStreamRequest\x1a\'.indexify_coordinator.ContentStreamItem"\x00\x30\x01\x12j\n\x15\x44\x65leteExtractionGraph\x12\x32.indexify_coordinator.DeleteExtractionGraphRequest\x1a\x1b.indexify_coordinator.Empty"\x00\x62\x06proto3'
+)
 
 _globals = globals()
 _builder.BuildMessageAndEnumDescriptors(DESCRIPTOR, _globals)
-_builder.BuildTopDescriptorsAndMessages(DESCRIPTOR, 'coordinator_service_pb2', _globals)
+_builder.BuildTopDescriptorsAndMessages(DESCRIPTOR, "coordinator_service_pb2", _globals)
 if _descriptor._USE_C_DESCRIPTORS == False:
-  DESCRIPTOR._options = None
-  _globals['_GETEXTRACTIONGRAPHANALYTICSRESPONSE_TASKANALYTICSENTRY']._options = None
-  _globals['_GETEXTRACTIONGRAPHANALYTICSRESPONSE_TASKANALYTICSENTRY']._serialized_options = b'8\001'
-  _globals['_TASK_OUTPUTINDEXMAPPINGENTRY']._options = None
-  _globals['_TASK_OUTPUTINDEXMAPPINGENTRY']._serialized_options = b'8\001'
-  _globals['_EXTRACTOR_EMBEDDINGSCHEMASENTRY']._options = None
-  _globals['_EXTRACTOR_EMBEDDINGSCHEMASENTRY']._serialized_options = b'8\001'
-  _globals['_EXTRACTOR_METADATASCHEMASENTRY']._options = None
-  _globals['_EXTRACTOR_METADATASCHEMASENTRY']._serialized_options = b'8\001'
-  _globals['_EXTRACTIONPOLICY_OUTPUTTABLEMAPPINGENTRY']._options = None
-  _globals['_EXTRACTIONPOLICY_OUTPUTTABLEMAPPINGENTRY']._serialized_options = b'8\001'
-  _globals['_CREATEEXTRACTIONGRAPHRESPONSE_EXTRACTORSENTRY']._options = None
-  _globals['_CREATEEXTRACTIONGRAPHRESPONSE_EXTRACTORSENTRY']._serialized_options = b'8\001'
-  _globals['_CREATEEXTRACTIONGRAPHRESPONSE_POLICIESENTRY']._options = None
-  _globals['_CREATEEXTRACTIONGRAPHRESPONSE_POLICIESENTRY']._serialized_options = b'8\001'
-  _globals['_EXTRACTIONPOLICYRESPONSE_INDEXNAMETABLEMAPPINGENTRY']._options = None
-  _globals['_EXTRACTIONPOLICYRESPONSE_INDEXNAMETABLEMAPPINGENTRY']._serialized_options = b'8\001'
-  _globals['_EXTRACTIONPOLICYRESPONSE_OUTPUTINDEXNAMEMAPPINGENTRY']._options = None
-  _globals['_EXTRACTIONPOLICYRESPONSE_OUTPUTINDEXNAMEMAPPINGENTRY']._serialized_options = b'8\001'
-  _globals['_CONTENTMETADATA_LABELSENTRY']._options = None
-  _globals['_CONTENTMETADATA_LABELSENTRY']._serialized_options = b'8\001'
-  _globals['_CONTENTMETADATA_EXTRACTIONPOLICYIDSENTRY']._options = None
-  _globals['_CONTENTMETADATA_EXTRACTIONPOLICYIDSENTRY']._serialized_options = b'8\001'
-  _globals['_RAFTMETRICSSNAPSHOTRESPONSE_FAILCONNECTTOPEERENTRY']._options = None
-  _globals['_RAFTMETRICSSNAPSHOTRESPONSE_FAILCONNECTTOPEERENTRY']._serialized_options = b'8\001'
-  _globals['_RAFTMETRICSSNAPSHOTRESPONSE_SENTBYTESENTRY']._options = None
-  _globals['_RAFTMETRICSSNAPSHOTRESPONSE_SENTBYTESENTRY']._serialized_options = b'8\001'
-  _globals['_RAFTMETRICSSNAPSHOTRESPONSE_RECVBYTESENTRY']._options = None
-  _globals['_RAFTMETRICSSNAPSHOTRESPONSE_RECVBYTESENTRY']._serialized_options = b'8\001'
-  _globals['_RAFTMETRICSSNAPSHOTRESPONSE_SENTFAILURESENTRY']._options = None
-  _globals['_RAFTMETRICSSNAPSHOTRESPONSE_SENTFAILURESENTRY']._serialized_options = b'8\001'
-  _globals['_RAFTMETRICSSNAPSHOTRESPONSE_SNAPSHOTSENDSUCCESSENTRY']._options = None
-  _globals['_RAFTMETRICSSNAPSHOTRESPONSE_SNAPSHOTSENDSUCCESSENTRY']._serialized_options = b'8\001'
-  _globals['_RAFTMETRICSSNAPSHOTRESPONSE_SNAPSHOTSENDFAILUREENTRY']._options = None
-  _globals['_RAFTMETRICSSNAPSHOTRESPONSE_SNAPSHOTSENDFAILUREENTRY']._serialized_options = b'8\001'
-  _globals['_RAFTMETRICSSNAPSHOTRESPONSE_SNAPSHOTRECVSUCCESSENTRY']._options = None
-  _globals['_RAFTMETRICSSNAPSHOTRESPONSE_SNAPSHOTRECVSUCCESSENTRY']._serialized_options = b'8\001'
-  _globals['_RAFTMETRICSSNAPSHOTRESPONSE_SNAPSHOTRECVFAILUREENTRY']._options = None
-  _globals['_RAFTMETRICSSNAPSHOTRESPONSE_SNAPSHOTRECVFAILUREENTRY']._serialized_options = b'8\001'
-  _globals['_RAFTMETRICSSNAPSHOTRESPONSE_SNAPSHOTSENDINFLIGHTSENTRY']._options = None
-  _globals['_RAFTMETRICSSNAPSHOTRESPONSE_SNAPSHOTSENDINFLIGHTSENTRY']._serialized_options = b'8\001'
-  _globals['_RAFTMETRICSSNAPSHOTRESPONSE_SNAPSHOTRECVINFLIGHTSENTRY']._options = None
-  _globals['_RAFTMETRICSSNAPSHOTRESPONSE_SNAPSHOTRECVINFLIGHTSENTRY']._serialized_options = b'8\001'
-  _globals['_RAFTMETRICSSNAPSHOTRESPONSE_SNAPSHOTSENTSECONDSENTRY']._options = None
-  _globals['_RAFTMETRICSSNAPSHOTRESPONSE_SNAPSHOTSENTSECONDSENTRY']._serialized_options = b'8\001'
-  _globals['_RAFTMETRICSSNAPSHOTRESPONSE_SNAPSHOTRECVSECONDSENTRY']._options = None
-  _globals['_RAFTMETRICSSNAPSHOTRESPONSE_SNAPSHOTRECVSECONDSENTRY']._serialized_options = b'8\001'
-  _globals['_TASKASSIGNMENTS_ASSIGNMENTSENTRY']._options = None
-  _globals['_TASKASSIGNMENTS_ASSIGNMENTSENTRY']._serialized_options = b'8\001'
-  _globals['_UPDATELABELSREQUEST_LABELSENTRY']._options = None
-  _globals['_UPDATELABELSREQUEST_LABELSENTRY']._serialized_options = b'8\001'
-  _globals['_TASKOUTCOME']._serialized_start=12248
-  _globals['_TASKOUTCOME']._serialized_end=12299
-  _globals['_TASKOUTCOMEFILTER']._serialized_start=12301
-  _globals['_TASKOUTCOMEFILTER']._serialized_end=12399
-  _globals['_GCTASKTYPE']._serialized_start=12401
-  _globals['_GCTASKTYPE']._serialized_end=12481
-  _globals['_CREATECONTENTSTATUS']._serialized_start=12483
-  _globals['_CREATECONTENTSTATUS']._serialized_end=12532
-  _globals['_DELETEEXTRACTIONGRAPHREQUEST']._serialized_start=81
-  _globals['_DELETEEXTRACTIONGRAPHREQUEST']._serialized_end=156
-  _globals['_CONTENTSTREAMREQUEST']._serialized_start=158
-  _globals['_CONTENTSTREAMREQUEST']._serialized_end=275
-  _globals['_GETCONTENTMETADATAREQUEST']._serialized_start=277
-  _globals['_GETCONTENTMETADATAREQUEST']._serialized_end=326
-  _globals['_GETCONTENTMETADATARESPONSE']._serialized_start=328
-  _globals['_GETCONTENTMETADATARESPONSE']._serialized_end=417
-  _globals['_GETCONTENTTREEMETADATAREQUEST']._serialized_start=420
-  _globals['_GETCONTENTTREEMETADATAREQUEST']._serialized_end=548
-  _globals['_GETCONTENTTREEMETADATARESPONSE']._serialized_start=550
-  _globals['_GETCONTENTTREEMETADATARESPONSE']._serialized_end=643
-  _globals['_UPDATETASKREQUEST']._serialized_start=645
-  _globals['_UPDATETASKREQUEST']._serialized_end=754
-  _globals['_LISTSTATECHANGESREQUEST']._serialized_start=756
-  _globals['_LISTSTATECHANGESREQUEST']._serialized_end=781
-  _globals['_STATECHANGE']._serialized_start=783
-  _globals['_STATECHANGE']._serialized_end=890
-  _globals['_LISTSTATECHANGESRESPONSE']._serialized_start=892
-  _globals['_LISTSTATECHANGESRESPONSE']._serialized_end=970
-  _globals['_LISTTASKSREQUEST']._serialized_start=973
-  _globals['_LISTTASKSREQUEST']._serialized_end=1174
-  _globals['_LISTTASKSRESPONSE']._serialized_start=1176
-  _globals['_LISTTASKSRESPONSE']._serialized_end=1253
-  _globals['_UPDATETASKRESPONSE']._serialized_start=1255
-  _globals['_UPDATETASKRESPONSE']._serialized_end=1275
-  _globals['_GETEXTRACTORCOORDINATESREQUEST']._serialized_start=1277
-  _globals['_GETEXTRACTORCOORDINATESREQUEST']._serialized_end=1328
-  _globals['_GETEXTRACTORCOORDINATESRESPONSE']._serialized_start=1330
-  _globals['_GETEXTRACTORCOORDINATESRESPONSE']._serialized_end=1378
-  _globals['_LISTINDEXESREQUEST']._serialized_start=1380
-  _globals['_LISTINDEXESREQUEST']._serialized_end=1419
-  _globals['_LISTINDEXESRESPONSE']._serialized_start=1421
-  _globals['_LISTINDEXESRESPONSE']._serialized_end=1488
-  _globals['_GETINDEXREQUEST']._serialized_start=1490
-  _globals['_GETINDEXREQUEST']._serialized_end=1540
-  _globals['_GETINDEXRESPONSE']._serialized_start=1542
-  _globals['_GETINDEXRESPONSE']._serialized_end=1604
-  _globals['_UPDATEINDEXESSTATEREQUEST']._serialized_start=1606
-  _globals['_UPDATEINDEXESSTATEREQUEST']._serialized_end=1679
-  _globals['_UPDATEINDEXESSTATERESPONSE']._serialized_start=1681
-  _globals['_UPDATEINDEXESSTATERESPONSE']._serialized_end=1709
-  _globals['_INDEX']._serialized_start=1712
-  _globals['_INDEX']._serialized_end=1854
-  _globals['_EMBEDDING']._serialized_start=1856
-  _globals['_EMBEDDING']._serialized_end=1886
-  _globals['_ATTRIBUTES']._serialized_start=1888
-  _globals['_ATTRIBUTES']._serialized_end=1920
-  _globals['_FEATURE']._serialized_start=1923
-  _globals['_FEATURE']._serialized_end=2052
-  _globals['_CONTENT']._serialized_start=2054
-  _globals['_CONTENT']._serialized_end=2140
-  _globals['_REGISTEREXECUTORREQUEST']._serialized_start=2142
-  _globals['_REGISTEREXECUTORREQUEST']._serialized_end=2255
-  _globals['_REGISTEREXECUTORRESPONSE']._serialized_start=2257
-  _globals['_REGISTEREXECUTORRESPONSE']._serialized_end=2304
-  _globals['_REGISTERINGESTIONSERVERREQUEST']._serialized_start=2306
-  _globals['_REGISTERINGESTIONSERVERREQUEST']._serialized_end=2367
-  _globals['_REGISTERINGESTIONSERVERRESPONSE']._serialized_start=2369
-  _globals['_REGISTERINGESTIONSERVERRESPONSE']._serialized_end=2402
-  _globals['_REMOVEINGESTIONSERVERREQUEST']._serialized_start=2404
-  _globals['_REMOVEINGESTIONSERVERREQUEST']._serialized_end=2463
-  _globals['_REMOVEINGESTIONSERVERRESPONSE']._serialized_start=2465
-  _globals['_REMOVEINGESTIONSERVERRESPONSE']._serialized_end=2496
-  _globals['_CREATEGCTASKSREQUEST']._serialized_start=2498
-  _globals['_CREATEGCTASKSREQUEST']._serialized_end=2577
-  _globals['_CREATEGCTASKSRESPONSE']._serialized_start=2579
-  _globals['_CREATEGCTASKSRESPONSE']._serialized_end=2602
-  _globals['_COORDINATORCOMMAND']._serialized_start=2604
-  _globals['_COORDINATORCOMMAND']._serialized_end=2671
-  _globals['_GCTASKACKNOWLEDGEMENT']._serialized_start=2673
-  _globals['_GCTASKACKNOWLEDGEMENT']._serialized_end=2761
-  _globals['_GCTASK']._serialized_start=2764
-  _globals['_GCTASK']._serialized_end=2929
-  _globals['_HEARTBEATREQUEST']._serialized_start=2931
-  _globals['_HEARTBEATREQUEST']._serialized_end=3020
-  _globals['_GETEXTRACTIONGRAPHANALYTICSREQUEST']._serialized_start=3022
-  _globals['_GETEXTRACTIONGRAPHANALYTICSREQUEST']._serialized_end=3103
-  _globals['_TASKANALYTICS']._serialized_start=3105
-  _globals['_TASKANALYTICS']._serialized_end=3171
-  _globals['_GETEXTRACTIONGRAPHANALYTICSRESPONSE']._serialized_start=3174
-  _globals['_GETEXTRACTIONGRAPHANALYTICSRESPONSE']._serialized_end=3404
-  _globals['_GETEXTRACTIONGRAPHANALYTICSRESPONSE_TASKANALYTICSENTRY']._serialized_start=3315
-  _globals['_GETEXTRACTIONGRAPHANALYTICSRESPONSE_TASKANALYTICSENTRY']._serialized_end=3404
-  _globals['_HEARTBEATRESPONSE']._serialized_start=3406
-  _globals['_HEARTBEATRESPONSE']._serialized_end=3489
-  _globals['_TASK']._serialized_start=3492
-  _globals['_TASK']._serialized_end=3911
-  _globals['_TASK_OUTPUTINDEXMAPPINGENTRY']._serialized_start=3854
-  _globals['_TASK_OUTPUTINDEXMAPPINGENTRY']._serialized_end=3911
-  _globals['_LISTEXTRACTORSREQUEST']._serialized_start=3913
-  _globals['_LISTEXTRACTORSREQUEST']._serialized_end=3936
-  _globals['_LISTEXTRACTORSRESPONSE']._serialized_start=3938
-  _globals['_LISTEXTRACTORSRESPONSE']._serialized_end=4015
-  _globals['_EXTRACTOR']._serialized_start=4018
-  _globals['_EXTRACTOR']._serialized_end=4387
-  _globals['_EXTRACTOR_EMBEDDINGSCHEMASENTRY']._serialized_start=4276
-  _globals['_EXTRACTOR_EMBEDDINGSCHEMASENTRY']._serialized_end=4331
-  _globals['_EXTRACTOR_METADATASCHEMASENTRY']._serialized_start=4333
-  _globals['_EXTRACTOR_METADATASCHEMASENTRY']._serialized_end=4387
-  _globals['_GETNAMESPACEREQUEST']._serialized_start=4389
-  _globals['_GETNAMESPACEREQUEST']._serialized_end=4424
-  _globals['_GETNAMESPACERESPONSE']._serialized_start=4426
-  _globals['_GETNAMESPACERESPONSE']._serialized_end=4500
-  _globals['_EMPTY']._serialized_start=4502
-  _globals['_EMPTY']._serialized_end=4509
-  _globals['_CONTENTSOURCE']._serialized_start=4512
-  _globals['_CONTENTSOURCE']._serialized_end=4649
-  _globals['_LISTCONTENTREQUEST']._serialized_start=4652
-  _globals['_LISTCONTENTREQUEST']._serialized_end=4863
-  _globals['_LISTCONTENTRESPONSE']._serialized_start=4865
-  _globals['_LISTCONTENTRESPONSE']._serialized_end=4962
-  _globals['_LISTEXTRACTIONGRAPHREQUEST']._serialized_start=4964
-  _globals['_LISTEXTRACTIONGRAPHREQUEST']._serialized_end=5011
-  _globals['_LISTEXTRACTIONGRAPHRESPONSE']._serialized_start=5013
-  _globals['_LISTEXTRACTIONGRAPHRESPONSE']._serialized_end=5097
-  _globals['_CREATENAMESPACEREQUEST']._serialized_start=5099
-  _globals['_CREATENAMESPACEREQUEST']._serialized_end=5137
-  _globals['_CREATENAMESPACERESPONSE']._serialized_start=5139
-  _globals['_CREATENAMESPACERESPONSE']._serialized_end=5198
-  _globals['_LISTNAMESPACEREQUEST']._serialized_start=5200
-  _globals['_LISTNAMESPACEREQUEST']._serialized_end=5222
-  _globals['_LISTNAMESPACERESPONSE']._serialized_start=5224
-  _globals['_LISTNAMESPACERESPONSE']._serialized_end=5300
-  _globals['_EXTRACTIONGRAPH']._serialized_start=5303
-  _globals['_EXTRACTIONGRAPH']._serialized_end=5455
-  _globals['_EXTRACTIONPOLICY']._serialized_start=5458
-  _globals['_EXTRACTIONPOLICY']._serialized_end=5756
-  _globals['_EXTRACTIONPOLICY_OUTPUTTABLEMAPPINGENTRY']._serialized_start=5699
-  _globals['_EXTRACTIONPOLICY_OUTPUTTABLEMAPPINGENTRY']._serialized_end=5756
-  _globals['_EXTRACTIONPOLICYREQUEST']._serialized_start=5759
-  _globals['_EXTRACTIONPOLICYREQUEST']._serialized_end=5918
-  _globals['_CREATEEXTRACTIONGRAPHREQUEST']._serialized_start=5921
-  _globals['_CREATEEXTRACTIONGRAPHREQUEST']._serialized_end=6070
-  _globals['_CREATEEXTRACTIONGRAPHRESPONSE']._serialized_start=6073
-  _globals['_CREATEEXTRACTIONGRAPHRESPONSE']._serialized_end=6515
-  _globals['_CREATEEXTRACTIONGRAPHRESPONSE_EXTRACTORSENTRY']._serialized_start=6344
-  _globals['_CREATEEXTRACTIONGRAPHRESPONSE_EXTRACTORSENTRY']._serialized_end=6426
-  _globals['_CREATEEXTRACTIONGRAPHRESPONSE_POLICIESENTRY']._serialized_start=6428
-  _globals['_CREATEEXTRACTIONGRAPHRESPONSE_POLICIESENTRY']._serialized_end=6515
-  _globals['_EXTRACTIONPOLICYRESPONSE']._serialized_start=6518
-  _globals['_EXTRACTIONPOLICYRESPONSE']._serialized_end=7028
-  _globals['_EXTRACTIONPOLICYRESPONSE_INDEXNAMETABLEMAPPINGENTRY']._serialized_start=6905
-  _globals['_EXTRACTIONPOLICYRESPONSE_INDEXNAMETABLEMAPPINGENTRY']._serialized_end=6965
-  _globals['_EXTRACTIONPOLICYRESPONSE_OUTPUTINDEXNAMEMAPPINGENTRY']._serialized_start=6967
-  _globals['_EXTRACTIONPOLICYRESPONSE_OUTPUTINDEXNAMEMAPPINGENTRY']._serialized_end=7028
-  _globals['_CONTENTMETADATA']._serialized_start=7031
-  _globals['_CONTENTMETADATA']._serialized_end=7600
-  _globals['_CONTENTMETADATA_LABELSENTRY']._serialized_start=7471
-  _globals['_CONTENTMETADATA_LABELSENTRY']._serialized_end=7540
-  _globals['_CONTENTMETADATA_EXTRACTIONPOLICYIDSENTRY']._serialized_start=7542
-  _globals['_CONTENTMETADATA_EXTRACTIONPOLICYIDSENTRY']._serialized_end=7600
-  _globals['_CONTENTSTREAMITEM']._serialized_start=7602
-  _globals['_CONTENTSTREAMITEM']._serialized_end=7700
-  _globals['_CREATECONTENTREQUEST']._serialized_start=7702
-  _globals['_CREATECONTENTREQUEST']._serialized_end=7780
-  _globals['_CREATECONTENTRESPONSE']._serialized_start=7782
-  _globals['_CREATECONTENTRESPONSE']._serialized_end=7864
-  _globals['_TOMBSTONECONTENTREQUEST']._serialized_start=7866
-  _globals['_TOMBSTONECONTENTREQUEST']._serialized_end=7931
-  _globals['_TOMBSTONECONTENTRESPONSE']._serialized_start=7933
-  _globals['_TOMBSTONECONTENTRESPONSE']._serialized_end=7959
-  _globals['_NAMESPACE']._serialized_start=7961
-  _globals['_NAMESPACE']._serialized_end=8052
-  _globals['_GETSCHEMAREQUEST']._serialized_start=8054
-  _globals['_GETSCHEMAREQUEST']._serialized_end=8122
-  _globals['_GETSCHEMARESPONSE']._serialized_start=8124
-  _globals['_GETSCHEMARESPONSE']._serialized_end=8203
-  _globals['_STRUCTUREDDATASCHEMA']._serialized_start=8205
-  _globals['_STRUCTUREDDATASCHEMA']._serialized_end=8306
-  _globals['_GETALLSCHEMAREQUEST']._serialized_start=8308
-  _globals['_GETALLSCHEMAREQUEST']._serialized_end=8348
-  _globals['_GETALLSCHEMARESPONSE']._serialized_start=8350
-  _globals['_GETALLSCHEMARESPONSE']._serialized_end=8433
-  _globals['_GETRAFTMETRICSSNAPSHOTREQUEST']._serialized_start=8435
-  _globals['_GETRAFTMETRICSSNAPSHOTREQUEST']._serialized_end=8466
-  _globals['_UINT64LIST']._serialized_start=8468
-  _globals['_UINT64LIST']._serialized_end=8496
-  _globals['_RAFTMETRICSSNAPSHOTRESPONSE']._serialized_start=8499
-  _globals['_RAFTMETRICSSNAPSHOTRESPONSE']._serialized_end=10712
-  _globals['_RAFTMETRICSSNAPSHOTRESPONSE_FAILCONNECTTOPEERENTRY']._serialized_start=9951
-  _globals['_RAFTMETRICSSNAPSHOTRESPONSE_FAILCONNECTTOPEERENTRY']._serialized_end=10007
-  _globals['_RAFTMETRICSSNAPSHOTRESPONSE_SENTBYTESENTRY']._serialized_start=10009
-  _globals['_RAFTMETRICSSNAPSHOTRESPONSE_SENTBYTESENTRY']._serialized_end=10057
-  _globals['_RAFTMETRICSSNAPSHOTRESPONSE_RECVBYTESENTRY']._serialized_start=10059
-  _globals['_RAFTMETRICSSNAPSHOTRESPONSE_RECVBYTESENTRY']._serialized_end=10107
-  _globals['_RAFTMETRICSSNAPSHOTRESPONSE_SENTFAILURESENTRY']._serialized_start=10109
-  _globals['_RAFTMETRICSSNAPSHOTRESPONSE_SENTFAILURESENTRY']._serialized_end=10160
-  _globals['_RAFTMETRICSSNAPSHOTRESPONSE_SNAPSHOTSENDSUCCESSENTRY']._serialized_start=10162
-  _globals['_RAFTMETRICSSNAPSHOTRESPONSE_SNAPSHOTSENDSUCCESSENTRY']._serialized_end=10220
-  _globals['_RAFTMETRICSSNAPSHOTRESPONSE_SNAPSHOTSENDFAILUREENTRY']._serialized_start=10222
-  _globals['_RAFTMETRICSSNAPSHOTRESPONSE_SNAPSHOTSENDFAILUREENTRY']._serialized_end=10280
-  _globals['_RAFTMETRICSSNAPSHOTRESPONSE_SNAPSHOTRECVSUCCESSENTRY']._serialized_start=10282
-  _globals['_RAFTMETRICSSNAPSHOTRESPONSE_SNAPSHOTRECVSUCCESSENTRY']._serialized_end=10340
-  _globals['_RAFTMETRICSSNAPSHOTRESPONSE_SNAPSHOTRECVFAILUREENTRY']._serialized_start=10342
-  _globals['_RAFTMETRICSSNAPSHOTRESPONSE_SNAPSHOTRECVFAILUREENTRY']._serialized_end=10400
-  _globals['_RAFTMETRICSSNAPSHOTRESPONSE_SNAPSHOTSENDINFLIGHTSENTRY']._serialized_start=10402
-  _globals['_RAFTMETRICSSNAPSHOTRESPONSE_SNAPSHOTSENDINFLIGHTSENTRY']._serialized_end=10462
-  _globals['_RAFTMETRICSSNAPSHOTRESPONSE_SNAPSHOTRECVINFLIGHTSENTRY']._serialized_start=10464
-  _globals['_RAFTMETRICSSNAPSHOTRESPONSE_SNAPSHOTRECVINFLIGHTSENTRY']._serialized_end=10524
-  _globals['_RAFTMETRICSSNAPSHOTRESPONSE_SNAPSHOTSENTSECONDSENTRY']._serialized_start=10526
-  _globals['_RAFTMETRICSSNAPSHOTRESPONSE_SNAPSHOTSENTSECONDSENTRY']._serialized_end=10618
-  _globals['_RAFTMETRICSSNAPSHOTRESPONSE_SNAPSHOTRECVSECONDSENTRY']._serialized_start=10620
-  _globals['_RAFTMETRICSSNAPSHOTRESPONSE_SNAPSHOTRECVSECONDSENTRY']._serialized_end=10712
-  _globals['_GETALLTASKASSIGNMENTREQUEST']._serialized_start=10714
-  _globals['_GETALLTASKASSIGNMENTREQUEST']._serialized_end=10743
-  _globals['_TASKASSIGNMENTS']._serialized_start=10746
-  _globals['_TASKASSIGNMENTS']._serialized_end=10892
-  _globals['_TASKASSIGNMENTS_ASSIGNMENTSENTRY']._serialized_start=10842
-  _globals['_TASKASSIGNMENTS_ASSIGNMENTSENTRY']._serialized_end=10892
-  _globals['_GETTASKREQUEST']._serialized_start=10894
-  _globals['_GETTASKREQUEST']._serialized_end=10927
-  _globals['_GETTASKRESPONSE']._serialized_start=10929
-  _globals['_GETTASKRESPONSE']._serialized_end=10988
-  _globals['_GETINGESTIONINFOREQUEST']._serialized_start=10990
-  _globals['_GETINGESTIONINFOREQUEST']._serialized_end=11032
-  _globals['_GETINGESTIONINFORESPONSE']._serialized_start=11035
-  _globals['_GETINGESTIONINFORESPONSE']._serialized_end=11231
-  _globals['_WAITCONTENTEXTRACTIONREQUEST']._serialized_start=11233
-  _globals['_WAITCONTENTEXTRACTIONREQUEST']._serialized_end=11283
-  _globals['_WAITCONTENTEXTRACTIONRESPONSE']._serialized_start=11285
-  _globals['_WAITCONTENTEXTRACTIONRESPONSE']._serialized_end=11316
-  _globals['_LISTACTIVECONTENTSREQUEST']._serialized_start=11318
-  _globals['_LISTACTIVECONTENTSREQUEST']._serialized_end=11364
-  _globals['_LISTACTIVECONTENTSRESPONSE']._serialized_start=11366
-  _globals['_LISTACTIVECONTENTSRESPONSE']._serialized_end=11415
-  _globals['_UPDATELABELSREQUEST']._serialized_start=11418
-  _globals['_UPDATELABELSREQUEST']._serialized_end=11620
-  _globals['_UPDATELABELSREQUEST_LABELSENTRY']._serialized_start=7471
-  _globals['_UPDATELABELSREQUEST_LABELSENTRY']._serialized_end=7540
-  _globals['_UPDATELABELSRESPONSE']._serialized_start=11622
-  _globals['_UPDATELABELSRESPONSE']._serialized_end=11644
-  _globals['_EXECUTORSHEARTBEATREQUEST']._serialized_start=11646
-  _globals['_EXECUTORSHEARTBEATREQUEST']._serialized_end=11692
-  _globals['_EXECUTORSHEARTBEATRESPONSE']._serialized_start=11694
-  _globals['_EXECUTORSHEARTBEATRESPONSE']._serialized_end=11722
-  _globals['_LINKEXTRACTIONGRAPHSREQUEST']._serialized_start=11724
-  _globals['_LINKEXTRACTIONGRAPHSREQUEST']._serialized_end=11850
-  _globals['_LINKEXTRACTIONGRAPHSRESPONSE']._serialized_start=11852
-  _globals['_LINKEXTRACTIONGRAPHSRESPONSE']._serialized_end=11882
-  _globals['_EXTRACTIONGRAPHLINK']._serialized_start=11884
-  _globals['_EXTRACTIONGRAPHLINK']._serialized_end=11956
-  _globals['_EXTRACTIONGRAPHLINKSREQUEST']._serialized_start=11958
-  _globals['_EXTRACTIONGRAPHLINKSREQUEST']._serialized_end=12033
-  _globals['_EXTRACTIONGRAPHLINKSRESPONSE']._serialized_start=12035
-  _globals['_EXTRACTIONGRAPHLINKSRESPONSE']._serialized_end=12123
-  _globals['_ADDGRAPHTOCONTENTREQUEST']._serialized_start=12125
-  _globals['_ADDGRAPHTOCONTENTREQUEST']._serialized_end=12217
-  _globals['_ADDGRAPHTOCONTENTRESPONSE']._serialized_start=12219
-  _globals['_ADDGRAPHTOCONTENTRESPONSE']._serialized_end=12246
-  _globals['_COORDINATORSERVICE']._serialized_start=12535
-  _globals['_COORDINATORSERVICE']._serialized_end=17178
+    DESCRIPTOR._options = None
+    _globals["_GETEXTRACTIONGRAPHANALYTICSRESPONSE_TASKANALYTICSENTRY"]._options = None
+    _globals[
+        "_GETEXTRACTIONGRAPHANALYTICSRESPONSE_TASKANALYTICSENTRY"
+    ]._serialized_options = b"8\001"
+    _globals["_TASK_OUTPUTINDEXMAPPINGENTRY"]._options = None
+    _globals["_TASK_OUTPUTINDEXMAPPINGENTRY"]._serialized_options = b"8\001"
+    _globals["_EXTRACTOR_EMBEDDINGSCHEMASENTRY"]._options = None
+    _globals["_EXTRACTOR_EMBEDDINGSCHEMASENTRY"]._serialized_options = b"8\001"
+    _globals["_EXTRACTOR_METADATASCHEMASENTRY"]._options = None
+    _globals["_EXTRACTOR_METADATASCHEMASENTRY"]._serialized_options = b"8\001"
+    _globals["_EXTRACTIONPOLICY_OUTPUTTABLEMAPPINGENTRY"]._options = None
+    _globals["_EXTRACTIONPOLICY_OUTPUTTABLEMAPPINGENTRY"]._serialized_options = b"8\001"
+    _globals["_CREATEEXTRACTIONGRAPHRESPONSE_EXTRACTORSENTRY"]._options = None
+    _globals[
+        "_CREATEEXTRACTIONGRAPHRESPONSE_EXTRACTORSENTRY"
+    ]._serialized_options = b"8\001"
+    _globals["_CREATEEXTRACTIONGRAPHRESPONSE_POLICIESENTRY"]._options = None
+    _globals[
+        "_CREATEEXTRACTIONGRAPHRESPONSE_POLICIESENTRY"
+    ]._serialized_options = b"8\001"
+    _globals["_EXTRACTIONPOLICYRESPONSE_INDEXNAMETABLEMAPPINGENTRY"]._options = None
+    _globals[
+        "_EXTRACTIONPOLICYRESPONSE_INDEXNAMETABLEMAPPINGENTRY"
+    ]._serialized_options = b"8\001"
+    _globals["_EXTRACTIONPOLICYRESPONSE_OUTPUTINDEXNAMEMAPPINGENTRY"]._options = None
+    _globals[
+        "_EXTRACTIONPOLICYRESPONSE_OUTPUTINDEXNAMEMAPPINGENTRY"
+    ]._serialized_options = b"8\001"
+    _globals["_CONTENTMETADATA_LABELSENTRY"]._options = None
+    _globals["_CONTENTMETADATA_LABELSENTRY"]._serialized_options = b"8\001"
+    _globals["_CONTENTMETADATA_EXTRACTIONPOLICYIDSENTRY"]._options = None
+    _globals["_CONTENTMETADATA_EXTRACTIONPOLICYIDSENTRY"]._serialized_options = b"8\001"
+    _globals["_RAFTMETRICSSNAPSHOTRESPONSE_FAILCONNECTTOPEERENTRY"]._options = None
+    _globals[
+        "_RAFTMETRICSSNAPSHOTRESPONSE_FAILCONNECTTOPEERENTRY"
+    ]._serialized_options = b"8\001"
+    _globals["_RAFTMETRICSSNAPSHOTRESPONSE_SENTBYTESENTRY"]._options = None
+    _globals[
+        "_RAFTMETRICSSNAPSHOTRESPONSE_SENTBYTESENTRY"
+    ]._serialized_options = b"8\001"
+    _globals["_RAFTMETRICSSNAPSHOTRESPONSE_RECVBYTESENTRY"]._options = None
+    _globals[
+        "_RAFTMETRICSSNAPSHOTRESPONSE_RECVBYTESENTRY"
+    ]._serialized_options = b"8\001"
+    _globals["_RAFTMETRICSSNAPSHOTRESPONSE_SENTFAILURESENTRY"]._options = None
+    _globals[
+        "_RAFTMETRICSSNAPSHOTRESPONSE_SENTFAILURESENTRY"
+    ]._serialized_options = b"8\001"
+    _globals["_RAFTMETRICSSNAPSHOTRESPONSE_SNAPSHOTSENDSUCCESSENTRY"]._options = None
+    _globals[
+        "_RAFTMETRICSSNAPSHOTRESPONSE_SNAPSHOTSENDSUCCESSENTRY"
+    ]._serialized_options = b"8\001"
+    _globals["_RAFTMETRICSSNAPSHOTRESPONSE_SNAPSHOTSENDFAILUREENTRY"]._options = None
+    _globals[
+        "_RAFTMETRICSSNAPSHOTRESPONSE_SNAPSHOTSENDFAILUREENTRY"
+    ]._serialized_options = b"8\001"
+    _globals["_RAFTMETRICSSNAPSHOTRESPONSE_SNAPSHOTRECVSUCCESSENTRY"]._options = None
+    _globals[
+        "_RAFTMETRICSSNAPSHOTRESPONSE_SNAPSHOTRECVSUCCESSENTRY"
+    ]._serialized_options = b"8\001"
+    _globals["_RAFTMETRICSSNAPSHOTRESPONSE_SNAPSHOTRECVFAILUREENTRY"]._options = None
+    _globals[
+        "_RAFTMETRICSSNAPSHOTRESPONSE_SNAPSHOTRECVFAILUREENTRY"
+    ]._serialized_options = b"8\001"
+    _globals["_RAFTMETRICSSNAPSHOTRESPONSE_SNAPSHOTSENDINFLIGHTSENTRY"]._options = None
+    _globals[
+        "_RAFTMETRICSSNAPSHOTRESPONSE_SNAPSHOTSENDINFLIGHTSENTRY"
+    ]._serialized_options = b"8\001"
+    _globals["_RAFTMETRICSSNAPSHOTRESPONSE_SNAPSHOTRECVINFLIGHTSENTRY"]._options = None
+    _globals[
+        "_RAFTMETRICSSNAPSHOTRESPONSE_SNAPSHOTRECVINFLIGHTSENTRY"
+    ]._serialized_options = b"8\001"
+    _globals["_RAFTMETRICSSNAPSHOTRESPONSE_SNAPSHOTSENTSECONDSENTRY"]._options = None
+    _globals[
+        "_RAFTMETRICSSNAPSHOTRESPONSE_SNAPSHOTSENTSECONDSENTRY"
+    ]._serialized_options = b"8\001"
+    _globals["_RAFTMETRICSSNAPSHOTRESPONSE_SNAPSHOTRECVSECONDSENTRY"]._options = None
+    _globals[
+        "_RAFTMETRICSSNAPSHOTRESPONSE_SNAPSHOTRECVSECONDSENTRY"
+    ]._serialized_options = b"8\001"
+    _globals["_TASKASSIGNMENTS_ASSIGNMENTSENTRY"]._options = None
+    _globals["_TASKASSIGNMENTS_ASSIGNMENTSENTRY"]._serialized_options = b"8\001"
+    _globals["_UPDATELABELSREQUEST_LABELSENTRY"]._options = None
+    _globals["_UPDATELABELSREQUEST_LABELSENTRY"]._serialized_options = b"8\001"
+    _globals["_TASKOUTCOME"]._serialized_start = 12248
+    _globals["_TASKOUTCOME"]._serialized_end = 12299
+    _globals["_TASKOUTCOMEFILTER"]._serialized_start = 12301
+    _globals["_TASKOUTCOMEFILTER"]._serialized_end = 12399
+    _globals["_GCTASKTYPE"]._serialized_start = 12401
+    _globals["_GCTASKTYPE"]._serialized_end = 12481
+    _globals["_CREATECONTENTSTATUS"]._serialized_start = 12483
+    _globals["_CREATECONTENTSTATUS"]._serialized_end = 12532
+    _globals["_DELETEEXTRACTIONGRAPHREQUEST"]._serialized_start = 81
+    _globals["_DELETEEXTRACTIONGRAPHREQUEST"]._serialized_end = 156
+    _globals["_CONTENTSTREAMREQUEST"]._serialized_start = 158
+    _globals["_CONTENTSTREAMREQUEST"]._serialized_end = 275
+    _globals["_GETCONTENTMETADATAREQUEST"]._serialized_start = 277
+    _globals["_GETCONTENTMETADATAREQUEST"]._serialized_end = 326
+    _globals["_GETCONTENTMETADATARESPONSE"]._serialized_start = 328
+    _globals["_GETCONTENTMETADATARESPONSE"]._serialized_end = 417
+    _globals["_GETCONTENTTREEMETADATAREQUEST"]._serialized_start = 420
+    _globals["_GETCONTENTTREEMETADATAREQUEST"]._serialized_end = 548
+    _globals["_GETCONTENTTREEMETADATARESPONSE"]._serialized_start = 550
+    _globals["_GETCONTENTTREEMETADATARESPONSE"]._serialized_end = 643
+    _globals["_UPDATETASKREQUEST"]._serialized_start = 645
+    _globals["_UPDATETASKREQUEST"]._serialized_end = 754
+    _globals["_LISTSTATECHANGESREQUEST"]._serialized_start = 756
+    _globals["_LISTSTATECHANGESREQUEST"]._serialized_end = 781
+    _globals["_STATECHANGE"]._serialized_start = 783
+    _globals["_STATECHANGE"]._serialized_end = 890
+    _globals["_LISTSTATECHANGESRESPONSE"]._serialized_start = 892
+    _globals["_LISTSTATECHANGESRESPONSE"]._serialized_end = 970
+    _globals["_LISTTASKSREQUEST"]._serialized_start = 973
+    _globals["_LISTTASKSREQUEST"]._serialized_end = 1174
+    _globals["_LISTTASKSRESPONSE"]._serialized_start = 1176
+    _globals["_LISTTASKSRESPONSE"]._serialized_end = 1253
+    _globals["_UPDATETASKRESPONSE"]._serialized_start = 1255
+    _globals["_UPDATETASKRESPONSE"]._serialized_end = 1275
+    _globals["_GETEXTRACTORCOORDINATESREQUEST"]._serialized_start = 1277
+    _globals["_GETEXTRACTORCOORDINATESREQUEST"]._serialized_end = 1328
+    _globals["_GETEXTRACTORCOORDINATESRESPONSE"]._serialized_start = 1330
+    _globals["_GETEXTRACTORCOORDINATESRESPONSE"]._serialized_end = 1378
+    _globals["_LISTINDEXESREQUEST"]._serialized_start = 1380
+    _globals["_LISTINDEXESREQUEST"]._serialized_end = 1419
+    _globals["_LISTINDEXESRESPONSE"]._serialized_start = 1421
+    _globals["_LISTINDEXESRESPONSE"]._serialized_end = 1488
+    _globals["_GETINDEXREQUEST"]._serialized_start = 1490
+    _globals["_GETINDEXREQUEST"]._serialized_end = 1540
+    _globals["_GETINDEXRESPONSE"]._serialized_start = 1542
+    _globals["_GETINDEXRESPONSE"]._serialized_end = 1604
+    _globals["_UPDATEINDEXESSTATEREQUEST"]._serialized_start = 1606
+    _globals["_UPDATEINDEXESSTATEREQUEST"]._serialized_end = 1679
+    _globals["_UPDATEINDEXESSTATERESPONSE"]._serialized_start = 1681
+    _globals["_UPDATEINDEXESSTATERESPONSE"]._serialized_end = 1709
+    _globals["_INDEX"]._serialized_start = 1712
+    _globals["_INDEX"]._serialized_end = 1854
+    _globals["_EMBEDDING"]._serialized_start = 1856
+    _globals["_EMBEDDING"]._serialized_end = 1886
+    _globals["_ATTRIBUTES"]._serialized_start = 1888
+    _globals["_ATTRIBUTES"]._serialized_end = 1920
+    _globals["_FEATURE"]._serialized_start = 1923
+    _globals["_FEATURE"]._serialized_end = 2052
+    _globals["_CONTENT"]._serialized_start = 2054
+    _globals["_CONTENT"]._serialized_end = 2140
+    _globals["_REGISTEREXECUTORREQUEST"]._serialized_start = 2142
+    _globals["_REGISTEREXECUTORREQUEST"]._serialized_end = 2255
+    _globals["_REGISTEREXECUTORRESPONSE"]._serialized_start = 2257
+    _globals["_REGISTEREXECUTORRESPONSE"]._serialized_end = 2304
+    _globals["_REGISTERINGESTIONSERVERREQUEST"]._serialized_start = 2306
+    _globals["_REGISTERINGESTIONSERVERREQUEST"]._serialized_end = 2367
+    _globals["_REGISTERINGESTIONSERVERRESPONSE"]._serialized_start = 2369
+    _globals["_REGISTERINGESTIONSERVERRESPONSE"]._serialized_end = 2402
+    _globals["_REMOVEINGESTIONSERVERREQUEST"]._serialized_start = 2404
+    _globals["_REMOVEINGESTIONSERVERREQUEST"]._serialized_end = 2463
+    _globals["_REMOVEINGESTIONSERVERRESPONSE"]._serialized_start = 2465
+    _globals["_REMOVEINGESTIONSERVERRESPONSE"]._serialized_end = 2496
+    _globals["_CREATEGCTASKSREQUEST"]._serialized_start = 2498
+    _globals["_CREATEGCTASKSREQUEST"]._serialized_end = 2577
+    _globals["_CREATEGCTASKSRESPONSE"]._serialized_start = 2579
+    _globals["_CREATEGCTASKSRESPONSE"]._serialized_end = 2602
+    _globals["_COORDINATORCOMMAND"]._serialized_start = 2604
+    _globals["_COORDINATORCOMMAND"]._serialized_end = 2671
+    _globals["_GCTASKACKNOWLEDGEMENT"]._serialized_start = 2673
+    _globals["_GCTASKACKNOWLEDGEMENT"]._serialized_end = 2761
+    _globals["_GCTASK"]._serialized_start = 2764
+    _globals["_GCTASK"]._serialized_end = 2929
+    _globals["_HEARTBEATREQUEST"]._serialized_start = 2931
+    _globals["_HEARTBEATREQUEST"]._serialized_end = 3020
+    _globals["_GETEXTRACTIONGRAPHANALYTICSREQUEST"]._serialized_start = 3022
+    _globals["_GETEXTRACTIONGRAPHANALYTICSREQUEST"]._serialized_end = 3103
+    _globals["_TASKANALYTICS"]._serialized_start = 3105
+    _globals["_TASKANALYTICS"]._serialized_end = 3171
+    _globals["_GETEXTRACTIONGRAPHANALYTICSRESPONSE"]._serialized_start = 3174
+    _globals["_GETEXTRACTIONGRAPHANALYTICSRESPONSE"]._serialized_end = 3404
+    _globals[
+        "_GETEXTRACTIONGRAPHANALYTICSRESPONSE_TASKANALYTICSENTRY"
+    ]._serialized_start = 3315
+    _globals[
+        "_GETEXTRACTIONGRAPHANALYTICSRESPONSE_TASKANALYTICSENTRY"
+    ]._serialized_end = 3404
+    _globals["_HEARTBEATRESPONSE"]._serialized_start = 3406
+    _globals["_HEARTBEATRESPONSE"]._serialized_end = 3489
+    _globals["_TASK"]._serialized_start = 3492
+    _globals["_TASK"]._serialized_end = 3911
+    _globals["_TASK_OUTPUTINDEXMAPPINGENTRY"]._serialized_start = 3854
+    _globals["_TASK_OUTPUTINDEXMAPPINGENTRY"]._serialized_end = 3911
+    _globals["_LISTEXTRACTORSREQUEST"]._serialized_start = 3913
+    _globals["_LISTEXTRACTORSREQUEST"]._serialized_end = 3936
+    _globals["_LISTEXTRACTORSRESPONSE"]._serialized_start = 3938
+    _globals["_LISTEXTRACTORSRESPONSE"]._serialized_end = 4015
+    _globals["_EXTRACTOR"]._serialized_start = 4018
+    _globals["_EXTRACTOR"]._serialized_end = 4387
+    _globals["_EXTRACTOR_EMBEDDINGSCHEMASENTRY"]._serialized_start = 4276
+    _globals["_EXTRACTOR_EMBEDDINGSCHEMASENTRY"]._serialized_end = 4331
+    _globals["_EXTRACTOR_METADATASCHEMASENTRY"]._serialized_start = 4333
+    _globals["_EXTRACTOR_METADATASCHEMASENTRY"]._serialized_end = 4387
+    _globals["_GETNAMESPACEREQUEST"]._serialized_start = 4389
+    _globals["_GETNAMESPACEREQUEST"]._serialized_end = 4424
+    _globals["_GETNAMESPACERESPONSE"]._serialized_start = 4426
+    _globals["_GETNAMESPACERESPONSE"]._serialized_end = 4500
+    _globals["_EMPTY"]._serialized_start = 4502
+    _globals["_EMPTY"]._serialized_end = 4509
+    _globals["_CONTENTSOURCE"]._serialized_start = 4512
+    _globals["_CONTENTSOURCE"]._serialized_end = 4649
+    _globals["_LISTCONTENTREQUEST"]._serialized_start = 4652
+    _globals["_LISTCONTENTREQUEST"]._serialized_end = 4863
+    _globals["_LISTCONTENTRESPONSE"]._serialized_start = 4865
+    _globals["_LISTCONTENTRESPONSE"]._serialized_end = 4962
+    _globals["_LISTEXTRACTIONGRAPHREQUEST"]._serialized_start = 4964
+    _globals["_LISTEXTRACTIONGRAPHREQUEST"]._serialized_end = 5011
+    _globals["_LISTEXTRACTIONGRAPHRESPONSE"]._serialized_start = 5013
+    _globals["_LISTEXTRACTIONGRAPHRESPONSE"]._serialized_end = 5097
+    _globals["_CREATENAMESPACEREQUEST"]._serialized_start = 5099
+    _globals["_CREATENAMESPACEREQUEST"]._serialized_end = 5137
+    _globals["_CREATENAMESPACERESPONSE"]._serialized_start = 5139
+    _globals["_CREATENAMESPACERESPONSE"]._serialized_end = 5198
+    _globals["_LISTNAMESPACEREQUEST"]._serialized_start = 5200
+    _globals["_LISTNAMESPACEREQUEST"]._serialized_end = 5222
+    _globals["_LISTNAMESPACERESPONSE"]._serialized_start = 5224
+    _globals["_LISTNAMESPACERESPONSE"]._serialized_end = 5300
+    _globals["_EXTRACTIONGRAPH"]._serialized_start = 5303
+    _globals["_EXTRACTIONGRAPH"]._serialized_end = 5455
+    _globals["_EXTRACTIONPOLICY"]._serialized_start = 5458
+    _globals["_EXTRACTIONPOLICY"]._serialized_end = 5756
+    _globals["_EXTRACTIONPOLICY_OUTPUTTABLEMAPPINGENTRY"]._serialized_start = 5699
+    _globals["_EXTRACTIONPOLICY_OUTPUTTABLEMAPPINGENTRY"]._serialized_end = 5756
+    _globals["_EXTRACTIONPOLICYREQUEST"]._serialized_start = 5759
+    _globals["_EXTRACTIONPOLICYREQUEST"]._serialized_end = 5918
+    _globals["_CREATEEXTRACTIONGRAPHREQUEST"]._serialized_start = 5921
+    _globals["_CREATEEXTRACTIONGRAPHREQUEST"]._serialized_end = 6070
+    _globals["_CREATEEXTRACTIONGRAPHRESPONSE"]._serialized_start = 6073
+    _globals["_CREATEEXTRACTIONGRAPHRESPONSE"]._serialized_end = 6515
+    _globals["_CREATEEXTRACTIONGRAPHRESPONSE_EXTRACTORSENTRY"]._serialized_start = 6344
+    _globals["_CREATEEXTRACTIONGRAPHRESPONSE_EXTRACTORSENTRY"]._serialized_end = 6426
+    _globals["_CREATEEXTRACTIONGRAPHRESPONSE_POLICIESENTRY"]._serialized_start = 6428
+    _globals["_CREATEEXTRACTIONGRAPHRESPONSE_POLICIESENTRY"]._serialized_end = 6515
+    _globals["_EXTRACTIONPOLICYRESPONSE"]._serialized_start = 6518
+    _globals["_EXTRACTIONPOLICYRESPONSE"]._serialized_end = 7028
+    _globals[
+        "_EXTRACTIONPOLICYRESPONSE_INDEXNAMETABLEMAPPINGENTRY"
+    ]._serialized_start = 6905
+    _globals[
+        "_EXTRACTIONPOLICYRESPONSE_INDEXNAMETABLEMAPPINGENTRY"
+    ]._serialized_end = 6965
+    _globals[
+        "_EXTRACTIONPOLICYRESPONSE_OUTPUTINDEXNAMEMAPPINGENTRY"
+    ]._serialized_start = 6967
+    _globals[
+        "_EXTRACTIONPOLICYRESPONSE_OUTPUTINDEXNAMEMAPPINGENTRY"
+    ]._serialized_end = 7028
+    _globals["_CONTENTMETADATA"]._serialized_start = 7031
+    _globals["_CONTENTMETADATA"]._serialized_end = 7600
+    _globals["_CONTENTMETADATA_LABELSENTRY"]._serialized_start = 7471
+    _globals["_CONTENTMETADATA_LABELSENTRY"]._serialized_end = 7540
+    _globals["_CONTENTMETADATA_EXTRACTIONPOLICYIDSENTRY"]._serialized_start = 7542
+    _globals["_CONTENTMETADATA_EXTRACTIONPOLICYIDSENTRY"]._serialized_end = 7600
+    _globals["_CONTENTSTREAMITEM"]._serialized_start = 7602
+    _globals["_CONTENTSTREAMITEM"]._serialized_end = 7700
+    _globals["_CREATECONTENTREQUEST"]._serialized_start = 7702
+    _globals["_CREATECONTENTREQUEST"]._serialized_end = 7780
+    _globals["_CREATECONTENTRESPONSE"]._serialized_start = 7782
+    _globals["_CREATECONTENTRESPONSE"]._serialized_end = 7864
+    _globals["_TOMBSTONECONTENTREQUEST"]._serialized_start = 7866
+    _globals["_TOMBSTONECONTENTREQUEST"]._serialized_end = 7931
+    _globals["_TOMBSTONECONTENTRESPONSE"]._serialized_start = 7933
+    _globals["_TOMBSTONECONTENTRESPONSE"]._serialized_end = 7959
+    _globals["_NAMESPACE"]._serialized_start = 7961
+    _globals["_NAMESPACE"]._serialized_end = 8052
+    _globals["_GETSCHEMAREQUEST"]._serialized_start = 8054
+    _globals["_GETSCHEMAREQUEST"]._serialized_end = 8122
+    _globals["_GETSCHEMARESPONSE"]._serialized_start = 8124
+    _globals["_GETSCHEMARESPONSE"]._serialized_end = 8203
+    _globals["_STRUCTUREDDATASCHEMA"]._serialized_start = 8205
+    _globals["_STRUCTUREDDATASCHEMA"]._serialized_end = 8306
+    _globals["_GETALLSCHEMAREQUEST"]._serialized_start = 8308
+    _globals["_GETALLSCHEMAREQUEST"]._serialized_end = 8348
+    _globals["_GETALLSCHEMARESPONSE"]._serialized_start = 8350
+    _globals["_GETALLSCHEMARESPONSE"]._serialized_end = 8433
+    _globals["_GETRAFTMETRICSSNAPSHOTREQUEST"]._serialized_start = 8435
+    _globals["_GETRAFTMETRICSSNAPSHOTREQUEST"]._serialized_end = 8466
+    _globals["_UINT64LIST"]._serialized_start = 8468
+    _globals["_UINT64LIST"]._serialized_end = 8496
+    _globals["_RAFTMETRICSSNAPSHOTRESPONSE"]._serialized_start = 8499
+    _globals["_RAFTMETRICSSNAPSHOTRESPONSE"]._serialized_end = 10712
+    _globals[
+        "_RAFTMETRICSSNAPSHOTRESPONSE_FAILCONNECTTOPEERENTRY"
+    ]._serialized_start = 9951
+    _globals[
+        "_RAFTMETRICSSNAPSHOTRESPONSE_FAILCONNECTTOPEERENTRY"
+    ]._serialized_end = 10007
+    _globals["_RAFTMETRICSSNAPSHOTRESPONSE_SENTBYTESENTRY"]._serialized_start = 10009
+    _globals["_RAFTMETRICSSNAPSHOTRESPONSE_SENTBYTESENTRY"]._serialized_end = 10057
+    _globals["_RAFTMETRICSSNAPSHOTRESPONSE_RECVBYTESENTRY"]._serialized_start = 10059
+    _globals["_RAFTMETRICSSNAPSHOTRESPONSE_RECVBYTESENTRY"]._serialized_end = 10107
+    _globals["_RAFTMETRICSSNAPSHOTRESPONSE_SENTFAILURESENTRY"]._serialized_start = 10109
+    _globals["_RAFTMETRICSSNAPSHOTRESPONSE_SENTFAILURESENTRY"]._serialized_end = 10160
+    _globals[
+        "_RAFTMETRICSSNAPSHOTRESPONSE_SNAPSHOTSENDSUCCESSENTRY"
+    ]._serialized_start = 10162
+    _globals[
+        "_RAFTMETRICSSNAPSHOTRESPONSE_SNAPSHOTSENDSUCCESSENTRY"
+    ]._serialized_end = 10220
+    _globals[
+        "_RAFTMETRICSSNAPSHOTRESPONSE_SNAPSHOTSENDFAILUREENTRY"
+    ]._serialized_start = 10222
+    _globals[
+        "_RAFTMETRICSSNAPSHOTRESPONSE_SNAPSHOTSENDFAILUREENTRY"
+    ]._serialized_end = 10280
+    _globals[
+        "_RAFTMETRICSSNAPSHOTRESPONSE_SNAPSHOTRECVSUCCESSENTRY"
+    ]._serialized_start = 10282
+    _globals[
+        "_RAFTMETRICSSNAPSHOTRESPONSE_SNAPSHOTRECVSUCCESSENTRY"
+    ]._serialized_end = 10340
+    _globals[
+        "_RAFTMETRICSSNAPSHOTRESPONSE_SNAPSHOTRECVFAILUREENTRY"
+    ]._serialized_start = 10342
+    _globals[
+        "_RAFTMETRICSSNAPSHOTRESPONSE_SNAPSHOTRECVFAILUREENTRY"
+    ]._serialized_end = 10400
+    _globals[
+        "_RAFTMETRICSSNAPSHOTRESPONSE_SNAPSHOTSENDINFLIGHTSENTRY"
+    ]._serialized_start = 10402
+    _globals[
+        "_RAFTMETRICSSNAPSHOTRESPONSE_SNAPSHOTSENDINFLIGHTSENTRY"
+    ]._serialized_end = 10462
+    _globals[
+        "_RAFTMETRICSSNAPSHOTRESPONSE_SNAPSHOTRECVINFLIGHTSENTRY"
+    ]._serialized_start = 10464
+    _globals[
+        "_RAFTMETRICSSNAPSHOTRESPONSE_SNAPSHOTRECVINFLIGHTSENTRY"
+    ]._serialized_end = 10524
+    _globals[
+        "_RAFTMETRICSSNAPSHOTRESPONSE_SNAPSHOTSENTSECONDSENTRY"
+    ]._serialized_start = 10526
+    _globals[
+        "_RAFTMETRICSSNAPSHOTRESPONSE_SNAPSHOTSENTSECONDSENTRY"
+    ]._serialized_end = 10618
+    _globals[
+        "_RAFTMETRICSSNAPSHOTRESPONSE_SNAPSHOTRECVSECONDSENTRY"
+    ]._serialized_start = 10620
+    _globals[
+        "_RAFTMETRICSSNAPSHOTRESPONSE_SNAPSHOTRECVSECONDSENTRY"
+    ]._serialized_end = 10712
+    _globals["_GETALLTASKASSIGNMENTREQUEST"]._serialized_start = 10714
+    _globals["_GETALLTASKASSIGNMENTREQUEST"]._serialized_end = 10743
+    _globals["_TASKASSIGNMENTS"]._serialized_start = 10746
+    _globals["_TASKASSIGNMENTS"]._serialized_end = 10892
+    _globals["_TASKASSIGNMENTS_ASSIGNMENTSENTRY"]._serialized_start = 10842
+    _globals["_TASKASSIGNMENTS_ASSIGNMENTSENTRY"]._serialized_end = 10892
+    _globals["_GETTASKREQUEST"]._serialized_start = 10894
+    _globals["_GETTASKREQUEST"]._serialized_end = 10927
+    _globals["_GETTASKRESPONSE"]._serialized_start = 10929
+    _globals["_GETTASKRESPONSE"]._serialized_end = 10988
+    _globals["_GETINGESTIONINFOREQUEST"]._serialized_start = 10990
+    _globals["_GETINGESTIONINFOREQUEST"]._serialized_end = 11032
+    _globals["_GETINGESTIONINFORESPONSE"]._serialized_start = 11035
+    _globals["_GETINGESTIONINFORESPONSE"]._serialized_end = 11231
+    _globals["_WAITCONTENTEXTRACTIONREQUEST"]._serialized_start = 11233
+    _globals["_WAITCONTENTEXTRACTIONREQUEST"]._serialized_end = 11283
+    _globals["_WAITCONTENTEXTRACTIONRESPONSE"]._serialized_start = 11285
+    _globals["_WAITCONTENTEXTRACTIONRESPONSE"]._serialized_end = 11316
+    _globals["_LISTACTIVECONTENTSREQUEST"]._serialized_start = 11318
+    _globals["_LISTACTIVECONTENTSREQUEST"]._serialized_end = 11364
+    _globals["_LISTACTIVECONTENTSRESPONSE"]._serialized_start = 11366
+    _globals["_LISTACTIVECONTENTSRESPONSE"]._serialized_end = 11415
+    _globals["_UPDATELABELSREQUEST"]._serialized_start = 11418
+    _globals["_UPDATELABELSREQUEST"]._serialized_end = 11620
+    _globals["_UPDATELABELSREQUEST_LABELSENTRY"]._serialized_start = 7471
+    _globals["_UPDATELABELSREQUEST_LABELSENTRY"]._serialized_end = 7540
+    _globals["_UPDATELABELSRESPONSE"]._serialized_start = 11622
+    _globals["_UPDATELABELSRESPONSE"]._serialized_end = 11644
+    _globals["_EXECUTORSHEARTBEATREQUEST"]._serialized_start = 11646
+    _globals["_EXECUTORSHEARTBEATREQUEST"]._serialized_end = 11692
+    _globals["_EXECUTORSHEARTBEATRESPONSE"]._serialized_start = 11694
+    _globals["_EXECUTORSHEARTBEATRESPONSE"]._serialized_end = 11722
+    _globals["_LINKEXTRACTIONGRAPHSREQUEST"]._serialized_start = 11724
+    _globals["_LINKEXTRACTIONGRAPHSREQUEST"]._serialized_end = 11850
+    _globals["_LINKEXTRACTIONGRAPHSRESPONSE"]._serialized_start = 11852
+    _globals["_LINKEXTRACTIONGRAPHSRESPONSE"]._serialized_end = 11882
+    _globals["_EXTRACTIONGRAPHLINK"]._serialized_start = 11884
+    _globals["_EXTRACTIONGRAPHLINK"]._serialized_end = 11956
+    _globals["_EXTRACTIONGRAPHLINKSREQUEST"]._serialized_start = 11958
+    _globals["_EXTRACTIONGRAPHLINKSREQUEST"]._serialized_end = 12033
+    _globals["_EXTRACTIONGRAPHLINKSRESPONSE"]._serialized_start = 12035
+    _globals["_EXTRACTIONGRAPHLINKSRESPONSE"]._serialized_end = 12123
+    _globals["_ADDGRAPHTOCONTENTREQUEST"]._serialized_start = 12125
+    _globals["_ADDGRAPHTOCONTENTREQUEST"]._serialized_end = 12217
+    _globals["_ADDGRAPHTOCONTENTRESPONSE"]._serialized_start = 12219
+    _globals["_ADDGRAPHTOCONTENTRESPONSE"]._serialized_end = 12246
+    _globals["_COORDINATORSERVICE"]._serialized_start = 12535
+    _globals["_COORDINATORSERVICE"]._serialized_end = 17178
 # @@protoc_insertion_point(module_scope)

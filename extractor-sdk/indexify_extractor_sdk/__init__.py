@@ -20,7 +20,13 @@ if not os.path.exists(EXTRACTOR_MODULE_PATH):
 
 load_indexify_extractors(EXTRACTOR_MODULE_PATH)
 
-from indexify.extractor_sdk import Content, EmbeddingSchema, Feature, extractor, Extractor
+from indexify.extractor_sdk import (
+    Content,
+    EmbeddingSchema,
+    Feature,
+    extractor,
+    Extractor,
+)
 
 __all__ = [
     "Content",

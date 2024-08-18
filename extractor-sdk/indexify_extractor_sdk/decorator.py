@@ -20,9 +20,9 @@ def extractor(
         hint = get_type_hints(fn).get("params", dict)
 
         if not args.get("name"):
-            args["name"] = (
-                f"{inspect.getmodule(inspect.stack()[1][0]).__name__}:{fn.__name__}"
-            )
+            args[
+                "name"
+            ] = f"{inspect.getmodule(inspect.stack()[1][0]).__name__}:{fn.__name__}"
 
         class DecoratedFn(Extractor):
             def extract(self, content: Content, params: hint) -> List[Content]:  # type: ignore

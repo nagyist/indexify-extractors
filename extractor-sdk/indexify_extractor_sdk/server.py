@@ -43,7 +43,9 @@ class ServerRouter:
         content_dict: Dict[str, Content] = {task_id: content}
         params_map = {task_id: request.input_params}
 
-        extractor_out = await self._extractor_worker.async_submit(request.extractor_name, content_dict, params_map)
+        extractor_out = await self._extractor_worker.async_submit(
+            request.extractor_name, content_dict, params_map
+        )
         api_content: List[ApiContent] = []
         api_features: List[ApiFeature] = []
 

@@ -15,14 +15,20 @@ console = Console()
 
 VENV_PATH = os.path.join(EXTRACTORS_PATH, "ve")
 
+
 def print_instructions():
-    message = """To use all the downloaded extractors run the following:\n[bold #4AA4F4]"""
+    message = (
+        """To use all the downloaded extractors run the following:\n[bold #4AA4F4]"""
+    )
 
     if not os.environ.get("VIRTUAL_ENV"):
         message += f"source {VENV_PATH}/bin/activate\n"
 
     message += f"indexify-extractor join-server[/]"
-    console.print(Panel(message, title="[bold magenta]Run the extractor[/]", expand=True))
+    console.print(
+        Panel(message, title="[bold magenta]Run the extractor[/]", expand=True)
+    )
+
 
 def install_dependencies(directory_path):
     console.print("[bold #4AA4F4]Installing dependencies...[/]")
@@ -37,7 +43,9 @@ def install_dependencies(directory_path):
 
     try:
         subprocess.check_call(pip_command)
-        subprocess.check_call([python_executable, "-m", "pip", "install", "indexify-extractor-sdk"])
+        subprocess.check_call(
+            [python_executable, "-m", "pip", "install", "indexify-extractor-sdk"]
+        )
     except subprocess.CalledProcessError as e:
         console.print(f"[bold #f04318]Error installing dependencies: {e}[/]")
         raise
@@ -51,32 +59,48 @@ def download_extractor(extractor_name):
     extractor_info = extractors_index.metadata_by_name(extractor_name)
     extractor_module_name = extractor_info["module_name"]
 
-    fs = fsspec.filesystem('s3', anon=True)
-    extractor_path = f's3://indexifyextractors/indexify-extractors/{extractor_info["path"]}'
+    fs = fsspec.filesystem("s3", anon=True)
+    extractor_path = (
+        f's3://indexifyextractors/indexify-extractors/{extractor_info["path"]}'
+    )
 
     try:
         fs.get(extractor_path, EXTRACTOR_MODULE_PATH, recursive=True)
     except Exception as e:
-        value = {"extractor_name": extractor_name, "stage": "extractor_download", "error": str(e)}
+        value = {
+            "extractor_name": extractor_name,
+            "stage": "extractor_download",
+            "error": str(e),
+        }
         log_event("extractor_download_failed", value=value)
         raise e
     base_extractor_path = os.path.basename(extractor_path)
     try:
         install_dependencies(os.path.join(EXTRACTOR_MODULE_PATH, base_extractor_path))
     except Exception as e:
-        value = {"extractor_name": extractor_name, "stage": "install_dependencies", "error": str(e)}
+        value = {
+            "extractor_name": extractor_name,
+            "stage": "install_dependencies",
+            "error": str(e),
+        }
         log_event("extractor_download_failed", value=value)
         raise e
 
     # Store the extractor info in the database
-    
+
     try:
-        description = ExtractorWrapper.from_name(f"indexify_extractors.{extractor_module_name}").describe()
+        description = ExtractorWrapper.from_name(
+            f"indexify_extractors.{extractor_module_name}"
+        ).describe()
     except Exception as e:
-        value = {"extractor_name": extractor_name, "stage": "extractor_description", "error": str(e)}
+        value = {
+            "extractor_name": extractor_name,
+            "stage": "extractor_description",
+            "error": str(e),
+        }
         log_event("extractor_download_failed", value=value)
         raise e
-    
+
     if description.name.startswith("tensorlake"):
         log_event("extractor_download", description.name)
 
@@ -84,7 +108,11 @@ def download_extractor(extractor_name):
         store.save_description(extractor_module_name, description)
     except Exception as e:
         print(f"Error saving extractor description: {e}")
-        value = {"extractor_name": extractor_name, "stage": "save_description", "error": str(e)}
+        value = {
+            "extractor_name": extractor_name,
+            "stage": "save_description",
+            "error": str(e),
+        }
         log_event("extractor_download_failed", value=value)
         raise e
 

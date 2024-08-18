@@ -3,6 +3,7 @@ import sys
 import importlib
 from pathlib import Path
 
+
 def load_indexify_extractors(base_path):
     # Resolve and expand the base path
     base_path = os.path.expanduser(base_path)

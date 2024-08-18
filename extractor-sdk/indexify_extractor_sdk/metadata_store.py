@@ -5,6 +5,7 @@ from typing import List
 import os
 from indexify.extractor_sdk import EmbeddingSchema
 
+
 class ExtractorMetadataStore:
     def __init__(self):
         self._path = os.path.join(EXTRACTORS_PATH, "extractors.db")
@@ -13,7 +14,8 @@ class ExtractorMetadataStore:
     def create_store(self):
         with sqlite3.connect(self._path) as conn:
             cur = conn.cursor()
-            cur.execute(f"""
+            cur.execute(
+                f"""
                     CREATE TABLE 
                     IF NOT EXISTS extractors (
                     id TEXT NOT NULL PRIMARY KEY,
@@ -24,25 +26,29 @@ class ExtractorMetadataStore:
                     metadata_schemas TEXT,
                     embedding_schemas TEXT
                     )
-                    """)
+                    """
+            )
             conn.commit()
 
     def save_description(self, id: str, description: ExtractorMetadata):
         with sqlite3.connect(self._path) as conn:
             cur = conn.cursor()
-            input_params: str = json.dumps(description.input_params) if description.input_params else ""
+            input_params: str = (
+                json.dumps(description.input_params) if description.input_params else ""
+            )
 
             # Convert the lists to JSON strings
             mime_types = json.dumps(description.input_mime_types)
             schemas = {}
             for name, embedding_schema in description.embedding_schemas.items():
                 schemas[name] = embedding_schema.model_dump_json()
- 
+
             embedding_schemas = json.dumps(schemas)
             metadata_schemas = json.dumps(description.metadata_schemas)
 
             # Insert the extractor info into the database
-            cur.execute("""
+            cur.execute(
+                """
                 INSERT INTO extractors (id, name, description, input_params, input_mime_types, metadata_schemas, embedding_schemas)
                 VALUES (?, ?, ?, ?, ?, ?, ?)
                 ON CONFLICT(id) 
@@ -54,19 +60,31 @@ class ExtractorMetadataStore:
                     input_mime_types = excluded.input_mime_types,
                     metadata_schemas = excluded.metadata_schemas,
                     embedding_schemas = excluded.embedding_schemas;
-            """, [id, description.name, description.description, input_params, mime_types, metadata_schemas, embedding_schemas])
+            """,
+                [
+                    id,
+                    description.name,
+                    description.description,
+                    input_params,
+                    mime_types,
+                    metadata_schemas,
+                    embedding_schemas,
+                ],
+            )
 
             conn.commit()
 
     def extractor_module_class(self, name: str) -> str:
         with sqlite3.connect(self._path) as conn:
             cur = conn.cursor()
-            record = cur.execute("SELECT id FROM extractors WHERE name = ?", (name,)).fetchone()
+            record = cur.execute(
+                "SELECT id FROM extractors WHERE name = ?", (name,)
+            ).fetchone()
             if record is None:
                 raise ValueError(f"Extractor {name} not found in the database.")
-            return record[0] 
+            return record[0]
         return None
-    
+
     def all_extractor_metadata(self) -> List[ExtractorMetadata]:
         with sqlite3.connect(self._path) as conn:
             cur = conn.cursor()
@@ -101,4 +119,3 @@ class ExtractorMetadataStore:
             embedding_schemas=embedding_schemas,
         )
         return description
-

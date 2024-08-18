@@ -2,7 +2,13 @@ import json
 import os
 from importlib import import_module
 import logging
-from indexify.extractor_sdk import Content, Feature, Extractor, ExtractorMetadata, EmbeddingSchema
+from indexify.extractor_sdk import (
+    Content,
+    Feature,
+    Extractor,
+    ExtractorMetadata,
+    EmbeddingSchema,
+)
 from typing import (
     Dict,
     List,
@@ -17,6 +23,7 @@ from pydantic import BaseModel, Field, Json
 EXTRACTORS_PATH = os.path.join(os.path.expanduser("~"), ".indexify-extractors")
 EXTRACTORS_MODULE = "indexify_extractors"
 EXTRACTOR_MODULE_PATH = os.path.join(EXTRACTORS_PATH, EXTRACTORS_MODULE)
+
 
 class ExtractorWrapper:
     def __init__(self, module_name: str, class_name: str):

@@ -1,12 +1,12 @@
 import asyncio
-from .base_extractor import ExtractorWrapper 
+from .base_extractor import ExtractorWrapper
 from typing import Optional, Tuple, List
 from .base_extractor import Content, EXTRACTOR_MODULE_PATH
 import nanoid
 import json
 from .agent import ExtractorAgent, DEFAULT_BATCH_SIZE
 import os
-from . import coordinator_service_pb2 
+from . import coordinator_service_pb2
 from .metadata_store import ExtractorMetadataStore
 from .utils import extractors_by_name
 from .extractor_worker import ExtractorWorker
@@ -64,7 +64,11 @@ def join(
         for name, metadata_schema in metadata.metadata_schemas.items():
             metadata_schemas[name] = json.dumps(metadata_schema)
 
-        input_params = json.dumps(metadata.input_params) if metadata.input_params else json.dumps({})
+        input_params = (
+            json.dumps(metadata.input_params)
+            if metadata.input_params
+            else json.dumps({})
+        )
         extractors.append(
             coordinator_service_pb2.Extractor(
                 name=metadata.name,

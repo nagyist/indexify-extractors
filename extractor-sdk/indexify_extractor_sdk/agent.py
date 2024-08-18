@@ -177,10 +177,21 @@ def extractor_state_new(extractor: str) -> ExtractorState:
 
 
 class ExtractTask(asyncio.Task):
-    def __init__(self, *, extractor_worker: ExtractorWorker, content_batch: ContentBatch, **kwargs):
+    def __init__(
+        self,
+        *,
+        extractor_worker: ExtractorWorker,
+        content_batch: ContentBatch,
+        **kwargs,
+    ):
         kwargs["name"] = "extract_content"
         kwargs["loop"] = asyncio.get_event_loop()
-        super().__init__(extractor_worker.async_submit(inputs=content_batch.content_list, params=content_batch.params),**kwargs,)
+        super().__init__(
+            extractor_worker.async_submit(
+                inputs=content_batch.content_list, params=content_batch.params
+            ),
+            **kwargs,
+        )
         self.content_batch = content_batch
 
 
@@ -189,7 +200,7 @@ class ExtractorAgent:
         self,
         executor_id: str,
         extractors: List[coordinator_service_pb2.Extractor],
-        extractor_worker:ExtractorWorker,
+        extractor_worker: ExtractorWorker,
         coordinator_addr: str,
         num_workers,
         listen_port: int,

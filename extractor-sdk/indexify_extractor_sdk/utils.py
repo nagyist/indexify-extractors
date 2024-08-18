@@ -20,22 +20,31 @@ def batched(iterable, n):
 def log_event(event, value):
     try:
         requests.post(
-            "https://getindexify.ai/api/analytics", json={"event": event, "value": value, "platform":platform.platform(), "machine": platform.machine()}
-        , timeout=1)
+            "https://getindexify.ai/api/analytics",
+            json={
+                "event": event,
+                "value": value,
+                "platform": platform.platform(),
+                "machine": platform.machine(),
+            },
+            timeout=1,
+        )
     except Exception as e:
         # fail silently
         pass
 
-def read_extractors_json_file():
-    file_path = f's3://indexifyextractors/indexify-extractors/extractors.json'
 
-    fs = fsspec.filesystem('s3', anon=True)
+def read_extractors_json_file():
+    file_path = f"s3://indexifyextractors/indexify-extractors/extractors.json"
+
+    fs = fsspec.filesystem("s3", anon=True)
 
     with fs.open(file_path, "r") as file:
         # Load the JSON content from the file
         json_content = json.load(file)
 
     return json_content
+
 
 def extractors_by_name():
     extractors_info_list = read_extractors_json_file()
@@ -46,10 +55,9 @@ def extractors_by_name():
 
 
 class ExtractorIndex:
-
     def __init__(self) -> None:
-        file_path = f's3://indexifyextractors/indexify-extractors/extractors.json'
-        fs = fsspec.filesystem('s3', anon=True)
+        file_path = f"s3://indexifyextractors/indexify-extractors/extractors.json"
+        fs = fsspec.filesystem("s3", anon=True)
         self._index = {}
         try:
             with fs.open(file_path, "r") as file:
@@ -69,5 +77,7 @@ class ExtractorIndex:
             value = {"stage": "extractor_metadata", "error": str(e)}
             log_event("extractor_download_failed", value=value)
             console.print(f"[bold #f04318]Extractor {name} not found[/]")
-            console.print(f"[bold #f04318]Use command: [yellow]indexify-extractor list[/yellow] to see the list of available extractors[/]")
+            console.print(
+                f"[bold #f04318]Use command: [yellow]indexify-extractor list[/yellow] to see the list of available extractors[/]"
+            )
             raise e

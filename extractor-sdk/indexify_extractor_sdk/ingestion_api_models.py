@@ -3,6 +3,7 @@ from typing import List, Dict, Any
 import json
 from indexify.extractor_sdk import Content, Feature
 
+
 class ApiFeature(BaseModel):
     feature_type: str
     name: str
@@ -40,6 +41,7 @@ class BeginExtractedContentIngest(BaseModel):
     task_id: str
     executor_id: str
     task_outcome: str
+
 
 class ExtractedFeatures(BaseModel):
     content_id: str
