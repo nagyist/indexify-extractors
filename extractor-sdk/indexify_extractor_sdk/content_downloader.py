@@ -86,7 +86,11 @@ async def fetch_url(url_config: UrlConfig) -> bytes:
     except Exception as e:
         raise e
 
-async def download_content(task: coordinator_service_pb2.Task, url_config: UrlConfig, ) -> tuple[str, ExtractorPayload]:
+
+async def download_content(
+    task: coordinator_service_pb2.Task,
+    url_config: UrlConfig,
+) -> tuple[str, ExtractorPayload]:
     if url_config.url.startswith("file://"):
         input_bytes = disk_loader(url_config.url)
     elif url_config.url.startswith("s3://"):
@@ -98,6 +102,13 @@ async def download_content(task: coordinator_service_pb2.Task, url_config: UrlCo
     else:
         raise Exception(f"unsupported storage url {url_config.url}")
 
-    extract_args= json.loads(task.input_params)
-    
-    return (task.id, ExtractorPayload(data=input_bytes, content_type=task.content_metadata.mime, extract_args=extract_args))
+    extract_args = json.loads(task.input_params)
+
+    return (
+        task.id,
+        ExtractorPayload(
+            data=input_bytes,
+            content_type=task.content_metadata.mime,
+            extract_args=extract_args,
+        ),
+    )

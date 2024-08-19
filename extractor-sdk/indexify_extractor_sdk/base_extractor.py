@@ -20,13 +20,11 @@ from indexify.extractor_sdk import (
 )
 
 
-from typing import (
-    Any,
-    Dict,
-    List,
-    Union,
-    get_type_hints,
-)
+class ExtractorPayload(BaseModel):
+    data: bytes
+    content_type: str
+    extract_args: Dict = None
+    class_args: Dict = None
 
 
 EXTRACTORS_PATH = os.path.join(os.path.expanduser("~"), ".indexify-extractors")
