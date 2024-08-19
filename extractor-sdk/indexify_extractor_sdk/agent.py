@@ -489,7 +489,7 @@ class ExtractorAgent:
         asyncio.get_event_loop().add_signal_handler(
             signal.SIGINT, self.shutdown, asyncio.get_event_loop()
         )
-        server_router = ServerRouter(self._extractor_worker)
+        server_router = ServerRouter(self._extractor_worker, self._metadata_store)
         self._http_server = http_server(server_router, port=self._listen_port)
         asyncio.create_task(self._http_server.serve())
         if not self._advertise_addr:
