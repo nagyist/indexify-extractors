@@ -11,7 +11,7 @@ class InputParams(BaseModel):
     compute_type: str = "int8"
 
 class FasterWhisper(Extractor):
-    name = "tensorflake/fasterwhisper"
+    name = "tensorlake/fasterwhisper"
     description = "fasterwhisper transcripts audio into json with timestamps and text"
     system_dependencies = []
     input_mime_types = ["audio", "audio/mpeg"]
