@@ -4,8 +4,7 @@ import os
 from importlib import import_module
 from typing import Any, Dict, List, Optional, Type, Union, get_type_hints
 
-from indexify.extractor_sdk import (Content, Extractor, ExtractorMetadata,
-                                    Feature)
+from indexify.extractor_sdk import Content, Extractor, ExtractorMetadata, Feature
 from pydantic import BaseModel, Json, create_model
 
 

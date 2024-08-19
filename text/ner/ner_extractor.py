@@ -2,8 +2,7 @@ from typing import List, Optional, Union
 
 from indexify_extractor_sdk import Content, Extractor, Feature
 from pydantic import BaseModel, Field
-from transformers import (AutoModelForTokenClassification, AutoTokenizer,
-                          pipeline)
+from transformers import AutoModelForTokenClassification, AutoTokenizer, pipeline
 
 
 class NERExtractorConfig(BaseModel):

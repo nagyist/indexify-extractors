@@ -12,8 +12,12 @@ from docker import DockerClient
 from docker import errors as docker_err
 
 from .base_extractor import EXTRACTORS_PATH
-from .packager_utils import (DockerfileTemplate, DynamicModuleLoader,
-                             ExtractorPathWrapper, async_docker_build)
+from .packager_utils import (
+    DockerfileTemplate,
+    DynamicModuleLoader,
+    ExtractorPathWrapper,
+    async_docker_build,
+)
 
 
 class ExtractorPackager:

@@ -18,19 +18,22 @@ from .metadata_store import ExtractorMetadataStore
 from .server import ServerRouter, get_server_advertise_addr, http_server
 from .server_if import coordinator_service_pb2
 from .server_if.coordinator_service_pb2_grpc import CoordinatorServiceStub
-from .server_if.ingestion_api_models import (ApiBeginExtractedContentIngest,
-                                             ApiBeginMultipartContent,
-                                             ApiContent, ApiExtractedFeatures,
-                                             ApiFeature,
-                                             ApiFinishExtractedContentIngest,
-                                             ApiFinishMultipartContent,
-                                             ApiMultipartContentFrame,
-                                             BeginExtractedContentIngest,
-                                             BeginMultipartContent,
-                                             ExtractedFeatures,
-                                             FinishExtractedContentIngest,
-                                             FinishMultipartContent,
-                                             MultipartContentFrame)
+from .server_if.ingestion_api_models import (
+    ApiBeginExtractedContentIngest,
+    ApiBeginMultipartContent,
+    ApiContent,
+    ApiExtractedFeatures,
+    ApiFeature,
+    ApiFinishExtractedContentIngest,
+    ApiFinishMultipartContent,
+    ApiMultipartContentFrame,
+    BeginExtractedContentIngest,
+    BeginMultipartContent,
+    ExtractedFeatures,
+    FinishExtractedContentIngest,
+    FinishMultipartContent,
+    MultipartContentFrame,
+)
 from .task_store import CompletedTask, TaskStore
 
 CONTENT_FRAME_SIZE = 1024 * 1024

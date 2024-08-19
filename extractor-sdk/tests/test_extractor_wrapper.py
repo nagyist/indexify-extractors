@@ -1,11 +1,12 @@
 import unittest
 from typing import List, Optional
 
-from indexify.extractor_sdk import (Content, EmbeddingSchema,
-                                    ExtractorMetadata, Feature)
+from indexify.extractor_sdk import Content, EmbeddingSchema, ExtractorMetadata, Feature
 from indexify_extractor_sdk.base_extractor import (
-    ExtractorPayload, ExtractorWrapper,
-    create_pydantic_model_from_class_init_args)
+    ExtractorPayload,
+    ExtractorWrapper,
+    create_pydantic_model_from_class_init_args,
+)
 from indexify_extractor_sdk.mock_extractor import InputParams
 from pydantic import BaseModel
 

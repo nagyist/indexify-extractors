@@ -6,9 +6,16 @@ import websockets
 from asynctest.mock import MagicMock
 from indexify_extractor_sdk.agent import process_task_outcome
 from indexify_extractor_sdk.server_if.ingestion_api_models import (
-    ApiBeginExtractedContentIngest, ApiBeginMultipartContent, ApiContent,
-    ApiFeature, ApiFinishExtractedContentIngest, ApiMultipartContentFeature,
-    ApiMultipartContentFrame, Content, Feature)
+    ApiBeginExtractedContentIngest,
+    ApiBeginMultipartContent,
+    ApiContent,
+    ApiFeature,
+    ApiFinishExtractedContentIngest,
+    ApiMultipartContentFeature,
+    ApiMultipartContentFrame,
+    Content,
+    Feature,
+)
 
 CONTENT_FRAME_SIZE = 2
 

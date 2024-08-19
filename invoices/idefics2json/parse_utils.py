@@ -1,5 +1,6 @@
 import re
 
+
 # let's turn that into JSON
 def token2json(tokens, added_vocab, is_inner_value=False):
     """

@@ -1,8 +1,11 @@
 from typing import List, Union
 
 from indexify_extractor_sdk import Content, Extractor, Feature
-from langchain.text_splitter import (LatexTextSplitter, MarkdownTextSplitter,
-                                     RecursiveCharacterTextSplitter)
+from langchain.text_splitter import (
+    LatexTextSplitter,
+    MarkdownTextSplitter,
+    RecursiveCharacterTextSplitter,
+)
 from pydantic import BaseModel
 from transformers import pipeline
 
