@@ -2,6 +2,7 @@ from pydantic import BaseModel, Json
 from typing import Dict, Optional, List
 from .ingestion_api_models import ApiContent, ApiFeature
 from .extractor_worker import ExtractorWorker
+from .base_extractor import ExtractorPayload
 from indexify.extractor_sdk import Content, Feature
 import uvicorn
 import asyncio
@@ -32,19 +33,11 @@ class ServerRouter:
         return {"Indexify Extractor"}
 
     async def extract(self, request: ExtractionRequest):
-        content = Content(
-            id=None,
-            content_type=request.content.content_type,
-            data=bytes(request.content.bytes),
-            features=[],
-            labels=request.content.labels,
-        )
         task_id = "dummy_task_id"
-        content_dict: Dict[str, Content] = {task_id: content}
-        params_map = {task_id: request.input_params}
+        content_dict: Dict[str, Content] = {task_id: ExtractorPayload(data=request.content.bytes, content_type=request.content.content_type)}
 
         extractor_out = await self._extractor_worker.async_submit(
-            request.extractor_name, content_dict, params_map
+            request.extractor_name, content_dict
         )
         api_content: List[ApiContent] = []
         api_features: List[ApiFeature] = []
