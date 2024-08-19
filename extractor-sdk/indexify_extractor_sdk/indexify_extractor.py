@@ -8,7 +8,7 @@ import nanoid
 from .base_extractor import ExtractorWrapper
 from .base_extractor import Content, EXTRACTOR_MODULE_PATH
 from .agent import ExtractorAgent, DEFAULT_BATCH_SIZE
-from . import coordinator_service_pb2
+from .server_if import coordinator_service_pb2
 from .metadata_store import ExtractorMetadataStore
 from .extractor_worker import ExtractorWorker
 

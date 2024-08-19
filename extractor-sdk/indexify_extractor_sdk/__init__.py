@@ -5,7 +5,6 @@ from .base_extractor import (
     EXTRACTOR_MODULE_PATH,
     EXTRACTORS_PATH,
 )
-from .decorator import extractor
 from .module_loader import load_indexify_extractors
 
 sys.path.append(".")

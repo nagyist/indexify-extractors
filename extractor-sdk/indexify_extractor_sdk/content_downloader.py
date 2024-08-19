@@ -8,12 +8,9 @@ import httpx
 from azure.storage.blob import BlobServiceClient
 from azure.identity import DefaultAzureCredential
 from google.cloud import storage
-from google.protobuf.json_format import MessageToDict
-from indexify.extractor_sdk import Content
 
-from . import coordinator_service_pb2
+from .server_if import coordinator_service_pb2
 from .base_extractor import ExtractorPayload
-
 
 @dataclass
 class UrlConfig:

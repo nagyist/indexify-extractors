@@ -11,8 +11,8 @@ import websockets
 from websockets.exceptions import ConnectionClosed
 from indexify.extractor_sdk import Content, Feature
 
-from . import coordinator_service_pb2
-from .coordinator_service_pb2_grpc import CoordinatorServiceStub
+from .server_if import coordinator_service_pb2
+from .server_if.coordinator_service_pb2_grpc import CoordinatorServiceStub
 from .content_downloader import (
     download_content,
     UrlConfig,
@@ -20,7 +20,7 @@ from .content_downloader import (
 from .metadata_store import ExtractorMetadataStore
 from .extractor_worker import ExtractorWorker
 from .base_extractor import ExtractorPayload
-from .ingestion_api_models import (
+from .server_if.ingestion_api_models import (
     ApiContent,
     ApiFeature,
     BeginExtractedContentIngest,

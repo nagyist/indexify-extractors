@@ -1,6 +1,6 @@
 from pydantic import BaseModel, Json
 from typing import Dict, Optional, List
-from .ingestion_api_models import ApiContent, ApiFeature
+from .server_if.ingestion_api_models import ApiContent, ApiFeature
 from .extractor_worker import ExtractorWorker
 from .base_extractor import ExtractorPayload
 from .metadata_store import ExtractorMetadataStore
