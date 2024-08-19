@@ -19,6 +19,9 @@ from indexify.extractor_sdk import (
     ExtractorMetadata,
 )
 
+import inspect
+from typing import get_type_hints
+from pydantic import create_model
 
 class ExtractorPayload(BaseModel):
     data: bytes
@@ -26,11 +29,9 @@ class ExtractorPayload(BaseModel):
     extract_args: Dict = None
     class_args: Dict = None
 
-
 EXTRACTORS_PATH = os.path.join(os.path.expanduser("~"), ".indexify-extractors")
 EXTRACTORS_MODULE = "indexify_extractors"
 EXTRACTOR_MODULE_PATH = os.path.join(EXTRACTORS_PATH, EXTRACTORS_MODULE)
-
 
 class ExtractorPayload(BaseModel):
     data: bytes
