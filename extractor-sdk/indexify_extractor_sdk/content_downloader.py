@@ -1,16 +1,17 @@
 import json
-from typing import Dict
 from dataclasses import dataclass
+from typing import Dict
 from urllib.parse import urlparse
 
 import boto3
 import httpx
-from azure.storage.blob import BlobServiceClient
 from azure.identity import DefaultAzureCredential
+from azure.storage.blob import BlobServiceClient
 from google.cloud import storage
 
-from .server_if import coordinator_service_pb2
 from .base_extractor import ExtractorPayload
+from .server_if import coordinator_service_pb2
+
 
 @dataclass
 class UrlConfig:

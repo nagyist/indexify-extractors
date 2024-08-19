@@ -2,11 +2,11 @@ import asyncio
 import concurrent
 import concurrent.futures
 from concurrent.futures.process import BrokenProcessPool
-from typing import List, Dict, Any
+from typing import Any, Dict, List
 
 from indexify.extractor_sdk import ExtractorMetadata
 
-from .base_extractor import ExtractorWrapper, ExtractorPayload
+from .base_extractor import ExtractorPayload, ExtractorWrapper
 
 # str here is ExtractorDescription.name
 extractor_wrapper_map: Dict[str, ExtractorWrapper] = {}

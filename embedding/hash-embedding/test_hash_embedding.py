@@ -2,9 +2,9 @@ import json
 import unittest
 from typing import Type
 
+from identity_hash_embedding import IdentityHashEmbedding
 from indexify_extractor_sdk.base_embedding import EmbeddingInputParams
 from indexify_extractor_sdk.base_extractor import Content, Extractor, ExtractorSchema
-from identity_hash_embedding import IdentityHashEmbedding
 from parameterized import parameterized
 
 

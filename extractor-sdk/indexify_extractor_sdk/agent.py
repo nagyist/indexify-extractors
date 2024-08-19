@@ -1,43 +1,40 @@
 import asyncio
-import ssl
 import json
-import grpc
-import yaml
-from typing import List, Dict, Union, Optional
+import ssl
 from concurrent.futures.process import BrokenProcessPool
+from typing import Dict, List, Optional, Union
 
-from pydantic import BaseModel, Json
+import grpc
 import websockets
-from websockets.exceptions import ConnectionClosed
+import yaml
 from indexify.extractor_sdk import Content, Feature
+from pydantic import BaseModel, Json
+from websockets.exceptions import ConnectionClosed
 
+from .base_extractor import ExtractorPayload
+from .content_downloader import UrlConfig, download_content
+from .extractor_worker import ExtractorWorker
+from .metadata_store import ExtractorMetadataStore
+from .server import ServerRouter, get_server_advertise_addr, http_server
 from .server_if import coordinator_service_pb2
 from .server_if.coordinator_service_pb2_grpc import CoordinatorServiceStub
-from .content_downloader import (
-    download_content,
-    UrlConfig,
-)
-from .metadata_store import ExtractorMetadataStore
-from .extractor_worker import ExtractorWorker
-from .base_extractor import ExtractorPayload
 from .server_if.ingestion_api_models import (
-    ApiContent,
-    ApiFeature,
-    BeginExtractedContentIngest,
-    ExtractedFeatures,
-    FinishExtractedContentIngest,
     ApiBeginExtractedContentIngest,
-    ApiExtractedFeatures,
-    ApiFinishExtractedContentIngest,
     ApiBeginMultipartContent,
-    BeginMultipartContent,
+    ApiContent,
+    ApiExtractedFeatures,
+    ApiFeature,
+    ApiFinishExtractedContentIngest,
     ApiFinishMultipartContent,
     ApiMultipartContentFrame,
-    MultipartContentFrame,
+    BeginExtractedContentIngest,
+    BeginMultipartContent,
+    ExtractedFeatures,
+    FinishExtractedContentIngest,
     FinishMultipartContent,
+    MultipartContentFrame,
 )
-from .server import http_server, ServerRouter, get_server_advertise_addr
-from .task_store import TaskStore, CompletedTask
+from .task_store import CompletedTask, TaskStore
 
 CONTENT_FRAME_SIZE = 1024 * 1024
 

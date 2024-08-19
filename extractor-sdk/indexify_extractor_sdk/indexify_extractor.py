@@ -1,16 +1,15 @@
 import asyncio
-from typing import Optional, Tuple, List
 import json
 import os
+from typing import List, Optional, Tuple
 
 import nanoid
 
-from .base_extractor import ExtractorWrapper
-from .base_extractor import Content, EXTRACTOR_MODULE_PATH
-from .agent import ExtractorAgent, DEFAULT_BATCH_SIZE
-from .server_if import coordinator_service_pb2
-from .metadata_store import ExtractorMetadataStore
+from .agent import DEFAULT_BATCH_SIZE, ExtractorAgent
+from .base_extractor import EXTRACTOR_MODULE_PATH, Content, ExtractorWrapper
 from .extractor_worker import ExtractorWorker
+from .metadata_store import ExtractorMetadataStore
+from .server_if import coordinator_service_pb2
 
 
 def local(extractor: str, text: Optional[str] = None, file: Optional[str] = None):

@@ -1,28 +1,12 @@
+import inspect
+import logging
 import os
 from importlib import import_module
-import logging
-from typing import (
-    Any,
-    Dict,
-    List,
-    Union,
-    Type,
-    Optional,
-    get_type_hints,
-)
-import inspect
+from typing import Any, Dict, List, Optional, Type, Union, get_type_hints
 
+from indexify.extractor_sdk import Content, Extractor, ExtractorMetadata, Feature
 from pydantic import BaseModel, Json, create_model
-from indexify.extractor_sdk import (
-    Content,
-    Feature,
-    Extractor,
-    ExtractorMetadata,
-)
 
-import inspect
-from typing import get_type_hints
-from pydantic import create_model
 
 class ExtractorPayload(BaseModel):
     data: bytes
@@ -30,9 +14,11 @@ class ExtractorPayload(BaseModel):
     extract_args: Optional[Dict] = None
     class_args: Optional[Dict] = None
 
+
 EXTRACTORS_PATH = os.path.join(os.path.expanduser("~"), ".indexify-extractors")
 EXTRACTORS_MODULE = "indexify_extractors"
 EXTRACTOR_MODULE_PATH = os.path.join(EXTRACTORS_PATH, EXTRACTORS_MODULE)
+
 
 class ExtractorPayload(BaseModel):
     data: bytes

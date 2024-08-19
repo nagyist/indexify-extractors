@@ -1,7 +1,8 @@
-from pydantic import BaseModel, Json
-from typing import List, Dict, Any
 import json
+from typing import Any, Dict, List
+
 from indexify.extractor_sdk import Content, Feature
+from pydantic import BaseModel, Json
 
 
 class ApiFeature(BaseModel):

@@ -1,8 +1,8 @@
-from indexify_extractor_sdk.extractor_worker import ExtractorWorker
-from indexify_extractor_sdk.base_extractor import ExtractorPayload, Content
 import unittest
-
 from unittest import IsolatedAsyncioTestCase
+
+from indexify_extractor_sdk.base_extractor import Content, ExtractorPayload
+from indexify_extractor_sdk.extractor_worker import ExtractorWorker
 
 
 class TestExtractorWorker(IsolatedAsyncioTestCase):

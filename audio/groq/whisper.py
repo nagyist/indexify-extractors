@@ -1,16 +1,19 @@
-from indexify_extractor_sdk import Extractor, Content
+import os
 
+from indexify_extractor_sdk import Content, Extractor
+from openai import OpenAI
 from pydantic import BaseModel, Field
 
-from openai import OpenAI
-import os
 
 class TranscriptionParams(BaseModel):
     prompt: str = Field(default="")
 
+
 def chunked(size, source):
     for i in range(0, len(source), size):
-        yield source[i:i+size]
+        yield source[i : i + size]
+
+
 class WhisperExtractor(Extractor):
     name = "tensorlake/whispergroq"
     description = "Whisper ASR using GROQ."
@@ -29,14 +32,13 @@ class WhisperExtractor(Extractor):
                     model="whisper-large-v3",
                     file=("temp." + "mp3", chunk, content.content_type),
                     response_format="json",
-                    prompt=params.prompt
+                    prompt=params.prompt,
                 )
                 text += transcription.text
             except Exception as e:
                 print(f"unable to call groq {e}")
                 raise e
         return [Content.from_text(text)]
-    
+
     def sample_input(self) -> Content:
         return self.sample_mp3()
-

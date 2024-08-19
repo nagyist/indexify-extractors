@@ -1,7 +1,7 @@
 import hashlib
-import numpy as np
 from typing import List
 
+import numpy as np
 from indexify_extractor_sdk.embedding.base_embedding import BaseEmbeddingExtractor
 
 

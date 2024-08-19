@@ -2,9 +2,9 @@ import json
 import unittest
 from typing import Type
 
+from colbertv2 import ColBERTv2Base
 from indexify_extractor_sdk.base_embedding import EmbeddingInputParams
 from indexify_extractor_sdk.base_extractor import Content, Extractor, ExtractorSchema
-from colbertv2 import ColBERTv2Base
 from parameterized import parameterized
 
 

@@ -1,9 +1,11 @@
-from typing import List, Union
-from indexify_extractor_sdk import Content, Extractor, Feature
-import requests
 import tempfile
+from typing import List, Union
+
 import cv2
+import requests
+from indexify_extractor_sdk import Content, Extractor, Feature
 from ultralytics import YOLO
+
 
 class TrackExtractor(Extractor):
     name = "tensorlake/tracking"
@@ -13,9 +15,9 @@ class TrackExtractor(Extractor):
 
     def __init__(self):
         super().__init__()
-        self.model = YOLO('yolov8n.pt')
+        self.model = YOLO("yolov8n.pt")
 
-    def extract(self, content: Content, params = None) -> List[Union[Feature, Content]]:
+    def extract(self, content: Content, params=None) -> List[Union[Feature, Content]]:
         features = []
         frame_count = 0
         with tempfile.NamedTemporaryFile(delete=False, suffix=".mp4") as tmpfile:
@@ -42,7 +44,14 @@ class TrackExtractor(Extractor):
                         c = box.cls
                         id = box.id.int().tolist()
                         name = self.model.names[int(c)]
-                        feature = Feature.metadata({"frame": frame_count, "track_id": id, "bounding_box": b.tolist(), "object_name": name})
+                        feature = Feature.metadata(
+                            {
+                                "frame": frame_count,
+                                "track_id": id,
+                                "bounding_box": b.tolist(),
+                                "object_name": name,
+                            }
+                        )
                         features.append(feature)
             frame_count += 1
 
@@ -51,9 +60,12 @@ class TrackExtractor(Extractor):
     def sample_input(self) -> Content:
         return self.sample_mp4()
 
+
 if __name__ == "__main__":
     filename = "sample.mp4"
-    with requests.get("https://extractor-files.diptanu-6d5.workers.dev/sample.mp4", stream=True) as r:
+    with requests.get(
+        "https://extractor-files.diptanu-6d5.workers.dev/sample.mp4", stream=True
+    ) as r:
         with open(filename, "wb") as f:
             for chunk in r.iter_content(chunk_size=8192):
                 f.write(chunk)

@@ -1,4 +1,5 @@
 from typing import List
+
 from indexify_extractor_sdk.embedding.base_embedding import BaseEmbeddingExtractor
 from sentence_transformers import SentenceTransformer
 
@@ -17,4 +18,4 @@ class ArcticExtractor(BaseEmbeddingExtractor):
 
 
 if __name__ == "__main__":
-    ArcticExtractor().extract_embeddings(['The Data Cloud!', 'Mexico City of Course!'])
+    ArcticExtractor().extract_embeddings(["The Data Cloud!", "Mexico City of Course!"])

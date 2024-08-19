@@ -1,15 +1,18 @@
 from typing import List, Tuple
+
+from indexify_extractor_sdk import Content, Extractor
 from indexify_extractor_sdk.base_extractor import Feature
-from pydantic import BaseModel, Field
 from llama_cpp import Llama
-from indexify_extractor_sdk import Extractor, Content
+from pydantic import BaseModel, Field
+
 
 class ModelConfig(BaseModel):
-    model: str = Field(default='microsoft/Phi-3-mini-4k-instruct-gguf')
-    filename: str = Field(default='*q4.gguf')
-    system_prompt: str = Field(default='You are a helpful assistant.')
+    model: str = Field(default="microsoft/Phi-3-mini-4k-instruct-gguf")
+    filename: str = Field(default="*q4.gguf")
+    system_prompt: str = Field(default="You are a helpful assistant.")
     max_tokens: int = Field(default=4000)
     n_ctx: int = Field(default=2048)
+
 
 class LlamaCppExtractor(Extractor):
     name = "tensorlake/llama_cpp"
@@ -27,22 +30,26 @@ class LlamaCppExtractor(Extractor):
         user_input = content.data.decode("utf-8")
 
         if model not in self._models:
-            self._models[model] = Llama.from_pretrained(repo_id=model, filename=filename, verbose=False, n_ctx=params.n_ctx)
+            self._models[model] = Llama.from_pretrained(
+                repo_id=model, filename=filename, verbose=False, n_ctx=params.n_ctx
+            )
 
         messages = [
             {"role": "system", "content": system_prompt},
-            {"role": "user", "content": user_input}
+            {"role": "user", "content": user_input},
         ]
         try:
-            response = self._models[model].create_chat_completion(messages, max_tokens=params.max_tokens)
+            response = self._models[model].create_chat_completion(
+                messages, max_tokens=params.max_tokens
+            )
         except Exception as e:
             print(f"exception calling llama.cpp {e}")
         result = response["choices"][0]["message"]["content"]
         return [Content.from_text(result)]
-    
+
     def sample_input(self) -> Content:
         return Content.from_text("How to create a chatbot in Python?")
-    
+
 
 if __name__ == "__main__":
     extractor = LlamaCppExtractor()

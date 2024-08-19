@@ -1,13 +1,16 @@
-from typing import List, Union
 import json
-from indexify_extractor_sdk import Content, Extractor, Feature
-from pydantic import BaseModel, Field
 import tempfile
+from typing import List, Union
+
+from indexify_extractor_sdk import Content, Extractor, Feature
 from paddleocr import PaddleOCR
 from pdf2image import convert_from_path
+from pydantic import BaseModel, Field
+
 
 class PaddleOCRExtractorConfig(BaseModel):
     output_types: List[str] = Field(default_factory=lambda: ["text"])
+
 
 class PaddleOCRExtractor(Extractor):
     name = "tensorlake/paddleocr_extractor"
@@ -17,9 +20,11 @@ class PaddleOCRExtractor(Extractor):
 
     def __init__(self):
         super(PaddleOCRExtractor, self).__init__()
-        self.ocr = PaddleOCR(use_angle_cls=True, lang='en')
+        self.ocr = PaddleOCR(use_angle_cls=True, lang="en")
 
-    def extract(self, content: Content, params: PaddleOCRExtractorConfig) -> List[Union[Feature, Content]]:
+    def extract(
+        self, content: Content, params: PaddleOCRExtractorConfig
+    ) -> List[Union[Feature, Content]]:
         contents = []
         with tempfile.NamedTemporaryFile(delete=False, suffix=".pdf") as inputtmpfile:
             inputtmpfile.write(content.data)
@@ -27,12 +32,16 @@ class PaddleOCRExtractor(Extractor):
 
             if "text" in params.output_types:
                 # Convert PDF to images
-                images = convert_from_path(inputtmpfile.name, dpi=200)  # Adjust DPI as needed
+                images = convert_from_path(
+                    inputtmpfile.name, dpi=200
+                )  # Adjust DPI as needed
 
                 all_texts = []
                 for image in images:
-                    with tempfile.NamedTemporaryFile(delete=False, suffix=".png") as img_file:
-                        image.save(img_file.name, 'PNG')
+                    with tempfile.NamedTemporaryFile(
+                        delete=False, suffix=".png"
+                    ) as img_file:
+                        image.save(img_file.name, "PNG")
                         result = self.ocr.ocr(img_file.name, cls=True)
                         for res in result:
                             texts = [line[1][0] for line in res]
@@ -46,6 +55,7 @@ class PaddleOCRExtractor(Extractor):
 
     def sample_input(self) -> Content:
         return self.sample_scientific_pdf()
+
 
 if __name__ == "__main__":
     f = open("W2_Summary.pdf", "rb")

@@ -1,25 +1,25 @@
 from typing import List
 
-from indexify_extractor_sdk import (
-    Extractor,
-    Content,
-)
-from indexify_extractor_sdk.base_extractor import Feature
-from pydantic import BaseModel
 import torch
-from transformers import AutoModelForSpeechSeq2Seq, AutoProcessor, pipeline
 from accelerate import Accelerator
 from accelerate.utils import gather_object
+from indexify_extractor_sdk import Content, Extractor
+from indexify_extractor_sdk.base_extractor import Feature
+from pydantic import BaseModel
+from transformers import AutoModelForSpeechSeq2Seq, AutoProcessor, pipeline
+
 
 class InputParams(BaseModel):
     chunk_length: int = 30
     max_new_tokens: int = 128
+
 
 class WhisperExtractor(Extractor):
     name = "tensorlake/whisper-asr"
     description = "Whisper ASR"
     system_dependencies = ["ffmpeg"]
     input_mime_types = ["audio", "audio/mpeg"]
+
     def __init__(self):
         super().__init__()
         self._accelerator = Accelerator()
@@ -30,7 +30,7 @@ class WhisperExtractor(Extractor):
         if torch.cuda.is_available():
             model = AutoModelForSpeechSeq2Seq.from_pretrained(
                 model_id,
-                device_map={"":self._accelerator.process_index},
+                device_map={"": self._accelerator.process_index},
                 torch_dtype=torch_dtype,
                 low_cpu_mem_usage=True,
                 use_safetensors=True,
@@ -54,7 +54,7 @@ class WhisperExtractor(Extractor):
                 batch_size=16,
                 return_timestamps=True,
                 torch_dtype=torch_dtype,
-                device_map={"":self._accelerator.process_index},
+                device_map={"": self._accelerator.process_index},
             )
         else:
             self._pipe = pipeline(
@@ -69,13 +69,14 @@ class WhisperExtractor(Extractor):
                 torch_dtype=torch_dtype,
             )
 
-    def extract(
-        self, content: Content, params: InputParams) -> List[Content]:
+    def extract(self, content: Content, params: InputParams) -> List[Content]:
         result = self._pipe(content.data)
-        text = result['text']
+        text = result["text"]
         return [Content.from_text(text)]
-    
-    def extract_batch(self, content_list: List[Content], params: List[type[BaseModel]] = None) -> List[List[Feature | Content]]:
+
+    def extract_batch(
+        self, content_list: List[Content], params: List[type[BaseModel]] = None
+    ) -> List[List[Feature | Content]]:
         out = []
         with self._accelerator.split_between_processes(content_list) as content_list:
             data = [content.data for content in content_list]
@@ -88,9 +89,9 @@ class WhisperExtractor(Extractor):
         results_gathered = gather_object(out)
         return results_gathered
 
-
     def sample_input(self) -> Content:
         return self.sample_mp3()
+
 
 if __name__ == "__main__":
     extractor = WhisperExtractor()
@@ -101,4 +102,3 @@ if __name__ == "__main__":
         print(len(content.features))
         for feature in content.features:
             print(feature.value)
-

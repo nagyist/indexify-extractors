@@ -1,9 +1,9 @@
-import platform
 import json
+import platform
 from itertools import islice
 
-import requests
 import fsspec
+import requests
 from rich.console import Console
 
 console = Console()

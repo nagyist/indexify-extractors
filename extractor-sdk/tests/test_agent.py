@@ -1,15 +1,15 @@
 import unittest
+from pathlib import Path
 
-from indexify_extractor_sdk.coordinator_service_pb2 import (
-    Task,
-    TaskOutcome,
-    ContentMetadata,
-    Extractor,
-)
 from indexify_extractor_sdk import coordinator_service_pb2
 from indexify_extractor_sdk.agent import ExtractorAgent
+from indexify_extractor_sdk.coordinator_service_pb2 import (
+    ContentMetadata,
+    Extractor,
+    Task,
+    TaskOutcome,
+)
 from indexify_extractor_sdk.extractor_worker import ExtractorModule, create_executor
-from pathlib import Path
 
 
 def create_mock_task():

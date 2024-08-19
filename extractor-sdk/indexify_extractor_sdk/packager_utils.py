@@ -1,13 +1,13 @@
 import asyncio
+import concurrent.futures
 import importlib
 import json
 import logging
 import re
 import sys
 from typing import List
-import docker
-import concurrent.futures
 
+import docker
 from jinja2 import Template
 
 
@@ -50,6 +50,7 @@ class DockerfileTemplate:
 
     def _load_template(self) -> Template:
         from importlib import resources as impresources
+
         from . import dockerfiles
 
         inp_file = impresources.files(dockerfiles) / "Dockerfile.extractor"

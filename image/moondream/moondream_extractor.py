@@ -1,23 +1,30 @@
-from pydantic import BaseModel
-
-from typing import List, Dict, Union
-import torch
-
-from accelerate import Accelerator
-from indexify_extractor_sdk import Extractor, Content, Feature
-from indexify_extractor_sdk.base_extractor import Content
-from transformers import AutoTokenizer, AutoModelForCausalLM
-import PIL.Image as Image
 import io
+from typing import Dict, List, Union
+
+import PIL.Image as Image
+import torch
+from accelerate import Accelerator
+from indexify_extractor_sdk import Content, Extractor, Feature
+from indexify_extractor_sdk.base_extractor import Content
+from pydantic import BaseModel
+from transformers import AutoModelForCausalLM, AutoTokenizer
+
 
 class MoondreamConfig(BaseModel):
     prompt: str = "Describe this image."
+
 
 class MoondreamExtractor(Extractor):
     name = "tensorlake/moondream"
     description = "This Extractor uses Moondream which is tiny LLM that can answer questions about images"
 
-    input_mime_types = ["image/bmp", "image/gif", "image/jpeg", "image/png", "image/tiff"]
+    input_mime_types = [
+        "image/bmp",
+        "image/gif",
+        "image/jpeg",
+        "image/png",
+        "image/tiff",
+    ]
 
     def __init__(self):
         super(MoondreamExtractor).__init__()
@@ -65,8 +72,11 @@ class MoondreamExtractor(Extractor):
         config = MoondreamConfig()
         return (self.sample_jpg(), config.model_dump_json())
 
+
 if __name__ == "__main__":
     extractor = MoondreamExtractor()
     input = extractor.sample_input()
-    results = extractor.extract_batch({"task_id": input}, {"task_id": config.model_dump_json()})
+    results = extractor.extract_batch(
+        {"task_id": input}, {"task_id": config.model_dump_json()}
+    )
     print(results)

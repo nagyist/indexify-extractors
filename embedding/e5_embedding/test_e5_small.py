@@ -2,9 +2,9 @@ import json
 import unittest
 from typing import Type
 
+from e5_small_v2 import E5SmallEmbeddings
 from indexify_extractor_sdk.base_embedding import EmbeddingInputParams
 from indexify_extractor_sdk.base_extractor import Content, Extractor, ExtractorSchema
-from e5_small_v2 import E5SmallEmbeddings
 from parameterized import parameterized
 
 
