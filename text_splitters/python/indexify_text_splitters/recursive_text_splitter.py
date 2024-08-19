@@ -1,2 +1,0 @@
-
-from .indexify_text_splitters import _FastRecursiveTextSplitter
