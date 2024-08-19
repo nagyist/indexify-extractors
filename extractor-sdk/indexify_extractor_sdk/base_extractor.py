@@ -7,6 +7,7 @@ from typing import (
     List,
     Union,
     Type,
+    Optional,
     get_type_hints,
 )
 import inspect
@@ -26,8 +27,8 @@ from pydantic import create_model
 class ExtractorPayload(BaseModel):
     data: bytes
     content_type: str
-    extract_args: Dict = None
-    class_args: Dict = None
+    extract_args: Optional[Dict] = None
+    class_args: Optional[Dict] = None
 
 EXTRACTORS_PATH = os.path.join(os.path.expanduser("~"), ".indexify-extractors")
 EXTRACTORS_MODULE = "indexify_extractors"
@@ -99,9 +100,12 @@ class ExtractorWrapper:
             )
             extractor_args = None
             if self._extractor_args_cls:
-                extractor_args = self._extractor_args_cls.model_validate(
-                    payload.extract_args
-                )
+                if payload.extract_args:
+                    extractor_args = self._extractor_args_cls.model_validate(
+                        payload.extract_args
+                    )
+                else:
+                    extractor_args = self._extractor_args_cls()
             args.append(extractor_args)
             task_ids.append(task_id)
             task_contents.append(content)

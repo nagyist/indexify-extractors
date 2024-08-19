@@ -102,7 +102,7 @@ async def download_content(
     else:
         raise Exception(f"unsupported storage url {url_config.url}")
 
-    extract_args = json.loads(task.input_params)
+    extract_args = json.loads(task.input_params) if task.input_params else None
 
     return (
         task.id,
