@@ -1,9 +1,9 @@
-from . import coordinator_service_pb2
+from .server_if import coordinator_service_pb2
 
 from typing import Dict, List
 
 from pydantic import BaseModel
-from .ingestion_api_models import ApiContent, ApiFeature
+from .server_if.ingestion_api_models import ApiContent, ApiFeature
 
 import asyncio
 

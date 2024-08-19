@@ -1,25 +1,26 @@
-import ssl
-import yaml
 import asyncio
-from . import coordinator_service_pb2
-from .coordinator_service_pb2_grpc import CoordinatorServiceStub
-import grpc
+import ssl
 import json
+import grpc
+import yaml
 from typing import List, Dict, Union, Optional
-from .base_extractor import ExtractorDescription
-from .base_extractor import Content, Feature, Embedding
+from concurrent.futures.process import BrokenProcessPool
+
+from pydantic import BaseModel, Json
+import websockets
+from websockets.exceptions import ConnectionClosed
+from indexify.extractor_sdk import Content, Feature
+
+from .server_if import coordinator_service_pb2
+from .server_if.coordinator_service_pb2_grpc import CoordinatorServiceStub
 from .content_downloader import (
-    create_content,
     download_content,
     UrlConfig,
 )
-from .extractor_worker import (
-    extract_content,
-    create_executor,
-    describe,
-)
-from concurrent.futures.process import BrokenProcessPool
-from .ingestion_api_models import (
+from .metadata_store import ExtractorMetadataStore
+from .extractor_worker import ExtractorWorker
+from .base_extractor import ExtractorPayload
+from .server_if.ingestion_api_models import (
     ApiContent,
     ApiFeature,
     BeginExtractedContentIngest,
@@ -35,13 +36,8 @@ from .ingestion_api_models import (
     MultipartContentFrame,
     FinishMultipartContent,
 )
-from .utils import batched
 from .server import http_server, ServerRouter, get_server_advertise_addr
-import concurrent
-import websockets
 from .task_store import TaskStore, CompletedTask
-from websockets.exceptions import ConnectionClosed
-from pydantic import BaseModel, Json
 
 CONTENT_FRAME_SIZE = 1024 * 1024
 
@@ -167,9 +163,7 @@ async def process_task_outcome(
 
 class ContentBatch(BaseModel):
     extractor: str
-    content_list: Dict[str, Content] = {}
-    params: Dict[str, Json] = {}
-    extractors: Dict[str, str] = {}
+    content_list: Dict[str, ExtractorPayload] = {}
 
 
 class ExtractorState(BaseModel):
@@ -182,31 +176,55 @@ def extractor_state_new(extractor: str) -> ExtractorState:
 
 
 class ExtractTask(asyncio.Task):
-    def __init__(self, *, executor, content_batch: ContentBatch, **kwargs):
+    def __init__(
+        self,
+        *,
+        extractor_worker: ExtractorWorker,
+        extractor_module_class: str,
+        extractor_name: str,
+        content_batch: ContentBatch,
+        **kwargs,
+    ):
         kwargs["name"] = "extract_content"
         kwargs["loop"] = asyncio.get_event_loop()
         super().__init__(
-            extract_content(
-                loop=asyncio.get_running_loop(),
-                executor=executor,
-                content_list=content_batch.content_list,
-                params=content_batch.params,
-                extractors=content_batch.extractors,
+            extractor_worker.async_submit(
+                extractor=extractor_name,
+                extractor_module_class=f"indexify_extractors.{extractor_module_class}",
+                inputs=content_batch.content_list,
             ),
             **kwargs,
         )
-        self.content_batch = content_batch
+        self.extractor_name = extractor_name
+        self.task_ids = list(content_batch.content_list.keys())
+
+
+class DownloadContentTask(asyncio.Task):
+    def __init__(
+        self,
+        *,
+        task: coordinator_service_pb2.Task,
+        url_config: UrlConfig,
+        **kwargs,
+    ):
+        kwargs["name"] = "download_content"
+        kwargs["loop"] = asyncio.get_event_loop()
+        super().__init__(
+            download_content(task, url_config),
+            **kwargs,
+        )
+        self.task_id = task.id
 
 
 class ExtractorAgent:
     def __init__(
         self,
         executor_id: str,
+        metadata_store: ExtractorMetadataStore,
         extractors: List[coordinator_service_pb2.Extractor],
+        extractor_worker: ExtractorWorker,
         coordinator_addr: str,
-        executor: concurrent.futures.ProcessPoolExecutor,
         num_workers,
-        extractor_arg,
         listen_port: int,
         advertise_addr: Optional[str],
         ingestion_addr: str = "localhost:8900",
@@ -215,7 +233,6 @@ class ExtractorAgent:
         batch_size: int = DEFAULT_BATCH_SIZE,
     ):
         self.num_workers = num_workers
-        self.extractor_arg = extractor_arg
         self._use_tls = False
         if config_path:
             with open(config_path, "r") as f:
@@ -243,15 +260,16 @@ class ExtractorAgent:
 
         self._task_store: TaskStore = TaskStore()
         self._executor_id = executor_id
+        self._metadata_store = metadata_store
         self._extractors = extractors
         self._has_registered = False
         self._coordinator_addr = coordinator_addr
         self._ingestion_addr = ingestion_addr
         self._listen_port = listen_port
         self._advertise_addr = advertise_addr
-        self._executor = executor
         self._download_method = download_method
         self._batch_size = batch_size
+        self._extractor_worker = extractor_worker
 
     async def ticker(self):
         while True:
@@ -340,14 +358,16 @@ class ExtractorAgent:
             return UrlConfig(url=task.content_metadata.storage_url, config={})
 
     async def task_launcher(self):
-        async_tasks = []
-        extractor_states = {}
+        async_tasks: List[asyncio.Task] = []
+        extractor_states: Dict[str, ExtractorState] = {}
         async_tasks.append(
             asyncio.create_task(
                 self._task_store.get_runnable_tasks(), name="get_runnable_tasks"
             )
         )
         while True:
+            extractor: str
+            state: ExtractorState
             for extractor, state in extractor_states.items():
                 if (
                     state.pending_batches == 0
@@ -357,9 +377,14 @@ class ExtractorAgent:
                     print(
                         f"extracting content for {extractor} tasks {len(content_batch.content_list.keys())} {content_batch.content_list.keys()}"
                     )
+                    extractor_module_class = (
+                        self._metadata_store.extractor_module_class(extractor)
+                    )
                     async_tasks.append(
                         ExtractTask(
-                            executor=self._executor,
+                            extractor_worker=self._extractor_worker,
+                            extractor_module_class=extractor_module_class,
+                            extractor_name=extractor,
                             content_batch=content_batch,
                         )
                     )
@@ -370,17 +395,15 @@ class ExtractorAgent:
             done, pending = await asyncio.wait(
                 async_tasks, return_when=asyncio.FIRST_COMPLETED
             )
-            async_tasks = list(pending)
+            async_tasks: List[asyncio.Task] = list(pending)
             for async_task in done:
                 if async_task.get_name() == "get_runnable_tasks":
-                    result = await async_task
+                    result: Dict[str, coordinator_service_pb2.Task] = await async_task
+                    task: coordinator_service_pb2.Task
                     for _, task in result.items():
-                        url_config = self.get_url_config(task)
+                        url_config: UrlConfig = self.get_url_config(task)
                         async_tasks.append(
-                            asyncio.create_task(
-                                download_content(task.id, url_config),
-                                name="download_content",
-                            )
+                            DownloadContentTask(task=task, url_config=url_config)
                         )
                     async_tasks.append(
                         asyncio.create_task(
@@ -389,35 +412,41 @@ class ExtractorAgent:
                         )
                     )
                 elif async_task.get_name() == "download_content":
-                    # Process all completed downloads and accumulate them in batches
-                    # without creating extraction tasks right away.
-                    task_id, bytes = await async_task
-                    if isinstance(bytes, Exception):
-                        print(f"failed to download content {bytes} for task {task_id}")
+                    if async_task.exception():
+                        print(
+                            f"failed to download content {async_task.exception()} for task {async_task.task_id}"
+                        )
                         completed_task = CompletedTask(
-                            task_id=task_id,
+                            task_id=async_task.task_id,
                             task_outcome="Failed",
                             new_content=[],
                             features=[],
                         )
                         self._task_store.complete(outcome=completed_task)
                         continue
-                    task = self._task_store.get_task(task_id)
-                    state = extractor_states.setdefault(
+                    # Process all completed downloads and accumulate them in batches
+                    # without creating extraction tasks right away.
+                    task_id: str
+                    extractor_payload: ExtractorPayload
+                    task_id, extractor_payload = await async_task
+                    task: coordinator_service_pb2.Task = self._task_store.get_task(
+                        task_id
+                    )
+                    state: ExtractorState = extractor_states.setdefault(
                         task.extractor, extractor_state_new(task.extractor)
                     )
                     if len(state.new_batches[-1].content_list) == self._batch_size:
                         state.new_batches.append(ContentBatch(extractor=task.extractor))
                     content_batch = state.new_batches[-1]
-                    content_batch.content_list[task_id] = create_content(bytes, task)
-                    content_batch.params[task_id] = task.input_params
-                    content_batch.extractors[task_id] = task.extractor
+                    content_batch.content_list[task_id] = extractor_payload
                 elif async_task.get_name() == "extract_content":
-                    content_batch = async_task.content_batch
-                    state = extractor_states[content_batch.extractor]
+                    async_task: ExtractTask
+                    state: ExtractorState = extractor_states[async_task.extractor_name]
                     state.pending_batches -= 1
                     try:
                         outputs = await async_task
+                        task_id: str
+                        e_output: List[Union[Feature, Content]]
                         for task_id, e_output in outputs.items():
                             print(f"completed task {task_id}")
                             new_content: List[ApiContent] = []
@@ -437,21 +466,14 @@ class ExtractorAgent:
                                 features=new_features,
                             )
                             self._task_store.complete(outcome=completed_task)
-                    except BrokenProcessPool as bp:
-                        print(f"failed to execute tasks {bp}, retrying")
-                        self._executor.shutdown(wait=True, cancel_futures=True)
-                        self._executor = create_executor(
-                            workers=self.num_workers, extractor_id=self.extractor_arg
-                        )
-                        for task_id in async_task.content_batch.content_list.keys():
+                    except BrokenProcessPool:
+                        for task_id in async_task.task_ids:
                             self._task_store.retriable_failure(task_id)
                         continue
                     except Exception as e:
-                        task_ids = ",".join(
-                            async_task.content_batch.content_list.keys()
-                        )
+                        task_ids = ",".join(async_task.task_ids)
                         print(f"failed to execute tasks {task_ids} {e}")
-                        for task_id in async_task.content_batch.content_list.keys():
+                        for task_id in async_task.task_ids:
                             completed_task = CompletedTask(
                                 task_id=task_id,
                                 task_outcome="Failed",
@@ -467,7 +489,7 @@ class ExtractorAgent:
         asyncio.get_event_loop().add_signal_handler(
             signal.SIGINT, self.shutdown, asyncio.get_event_loop()
         )
-        server_router = ServerRouter(self._executor)
+        server_router = ServerRouter(self._extractor_worker, self._metadata_store)
         self._http_server = http_server(server_router, port=self._listen_port)
         asyncio.create_task(self._http_server.serve())
         if not self._advertise_addr:
@@ -505,5 +527,5 @@ class ExtractorAgent:
             task.cancel()
 
     def shutdown(self, loop):
-        self._executor.shutdown(wait=True, cancel_futures=True)
+        self._extractor_worker.shutdown()
         loop.create_task(self._shutdown(loop))

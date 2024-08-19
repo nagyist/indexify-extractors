@@ -6,7 +6,6 @@ import logging
 import os
 from .list_extractors import list_extractors
 import sys
-from .downloader import get_db_path
 from .base_extractor import EXTRACTORS_PATH
 from .agent import DEFAULT_BATCH_SIZE
 from enum import Enum
@@ -56,7 +55,10 @@ def print_version():
 
 @typer_app.command(help="Describe the extractor")
 def describe(extractor: str):
-    indexify_extractor.describe_sync(extractor)
+    try:
+        indexify_extractor.describe_sync(extractor)
+    except Exception as e:
+        print(f"{e}")
 
 
 @typer_app.command(help="Run the extractor locally on the given text or file")
@@ -73,11 +75,6 @@ def run_local(
 
 @typer_app.command(help="Joins the extractors to the coordinator server")
 def join_server(
-    # optional, default to joining all extractor.
-    extractor: str = typer.Argument(
-        None,
-        help="The extractor name in the format 'module_name:class_name'. For example, 'mock_extractor:MockExtractor'.",
-    ),
     coordinator_addr: str = "localhost:8950",
     ingestion_addr: str = "localhost:8900",
     listen_port: int = typer.Option(
@@ -122,7 +119,6 @@ def join_server(
         listen_port=listen_port,
         advertise_addr=advertise_addr,
         config_path=config_path,
-        extractor=extractor,
         batch_size=batch_size,
     )
 

@@ -1,17 +1,16 @@
-import boto3
-
-from .base_extractor import Content
-from . import coordinator_service_pb2
+import json
+from typing import Dict
+from dataclasses import dataclass
 from urllib.parse import urlparse
+
+import boto3
+import httpx
 from azure.storage.blob import BlobServiceClient
 from azure.identity import DefaultAzureCredential
 from google.cloud import storage
-import httpx
-from typing import Dict
-import asyncio
-from google.protobuf.json_format import MessageToDict
-from dataclasses import dataclass
 
+from .server_if import coordinator_service_pb2
+from .base_extractor import ExtractorPayload
 
 @dataclass
 class UrlConfig:
@@ -65,7 +64,7 @@ def gcp_storage_loader(storage_url: str) -> bytes:
     return blob.download_as_bytes()
 
 
-async def fetch_url(id: str, url_config: UrlConfig):
+async def fetch_url(url_config: UrlConfig) -> bytes:
     try:
         kwargs = {}
         if url_config.config.get("use_tls"):
@@ -80,40 +79,33 @@ async def fetch_url(id: str, url_config: UrlConfig):
             print(f"downloading url {url_config.url}")
             response = await client.get(url_config.url, follow_redirects=True)
             response.raise_for_status()
-            return id, response.read()
+            return response.read()
     except Exception as e:
-        return id, e
+        raise e
 
 
-async def download_parallel(urls: Dict[str, UrlConfig]):
-    tasks = [fetch_url(id, url_config) for id, url_config in urls.items()]
-    results = await asyncio.gather(*tasks, return_exceptions=True)
-    return results
-
-
-async def download_content(task_id: str, url_config: UrlConfig) -> tuple[str, bytes]:
+async def download_content(
+    task: coordinator_service_pb2.Task,
+    url_config: UrlConfig,
+) -> tuple[str, ExtractorPayload]:
     if url_config.url.startswith("file://"):
-        return (task_id, disk_loader(url_config.url))
+        input_bytes = disk_loader(url_config.url)
     elif url_config.url.startswith("s3://"):
-        return (task_id, s3_loader(url_config.url))
+        input_bytes = s3_loader(url_config.url)
     elif url_config.url.startswith("https://") or url_config.url.startswith("http://"):
-        return await fetch_url(task_id, url_config)
+        input_bytes = await fetch_url(url_config)
     elif url_config.url.startswith("gs://"):
-        return (task_id, gcp_storage_loader(url_config.url))
+        input_bytes = gcp_storage_loader(url_config.url)
     else:
-        return (task_id, Exception(f"unsupported storage url {url_config.url}"))
+        raise Exception(f"unsupported storage url {url_config.url}")
 
+    extract_args = json.loads(task.input_params) if task.input_params else None
 
-def create_content(bytes, task: coordinator_service_pb2.Task) -> Content:
-    metadata = task.content_metadata
-
-    labels = {}
-    for key, value in metadata.labels.items():
-        labels[key] = MessageToDict(value)
-
-    return Content(
-        content_type=metadata.mime,
-        data=bytes,
-        features=[],
-        labels=labels,
+    return (
+        task.id,
+        ExtractorPayload(
+            data=input_bytes,
+            content_type=task.content_metadata.mime,
+            extract_args=extract_args,
+        ),
     )

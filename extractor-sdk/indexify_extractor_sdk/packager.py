@@ -134,9 +134,9 @@ class ExtractorPackager:
             self.logger.error(f"Failed to generate Dockerfile: {e}")
             raise
         if self.config.get("tofile"):
-            dockerfile_name = self.config.get('tofile')
+            dockerfile_name = self.config.get("tofile")
             print(f"Saving dockerfile to {dockerfile_name}")
-            f = open(dockerfile_name, 'w')
+            f = open(dockerfile_name, "w")
             f.write(dockerfile_content)
             f.close()
             return
@@ -181,7 +181,9 @@ class ExtractorPackager:
 
     def _get_python_dependencies(self):
         # get module path
-        module_path = pathlib.Path(EXTRACTORS_PATH).joinpath(self.config["module_name"].replace(".", "/") + ".py")
+        module_path = pathlib.Path(EXTRACTORS_PATH).joinpath(
+            self.config["module_name"].replace(".", "/") + ".py"
+        )
 
         # check for requirements.txt
         requirements_path = module_path.joinpath(module_path.parent, "requirements.txt")

@@ -29,35 +29,17 @@ class ChunkExtractor(Extractor):
     ) -> List[Content]:
 
         splitter = self._create_splitter(params)
+        text = content.data.decode("utf-8")
         if content.content_type == "application/json":
-            text = json.loads(content.data.decode("utf-8"))
-        else:
-            text = content.data.decode("utf-8")
-        
+            text = json.loads(text)
         chunks = splitter(text)
         
         chunk_contents = []
         for chunk in chunks:
             if type(chunk) == Document:
-                chunk_content = Content.from_text(
-                    chunk.page_content,
-                    features=content.features,
-                    labels=content.labels,
-                )
-                if chunk.metadata:
-                    chunk_content.features.append(Feature.metadata(chunk.metadata))
-            elif content.content_type == "application/json":
-                chunk_content = Content.from_json(
-                    chunk,
-                    features=content.features,
-                    labels=content.labels
-                )
+                chunk_content = Content.from_text(chunk.page_content)
             else:
-                chunk_content = Content.from_text(
-                    chunk,
-                    features=content.features,
-                    labels=content.labels
-                )
+                chunk_content = Content.from_text(chunk)
 
             chunk_contents.append(chunk_content)
 

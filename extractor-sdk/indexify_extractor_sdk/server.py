@@ -1,13 +1,13 @@
 from pydantic import BaseModel, Json
 from typing import Dict, Optional, List
-from .ingestion_api_models import ApiContent, ApiFeature
-from .base_extractor import Content, Feature
-from .extractor_worker import extract_content, ExtractorModule
+from .server_if.ingestion_api_models import ApiContent, ApiFeature
+from .extractor_worker import ExtractorWorker
+from .base_extractor import ExtractorPayload
+from .metadata_store import ExtractorMetadataStore
+from indexify.extractor_sdk import Content, Feature
 import uvicorn
 import asyncio
-import json
 import netifaces
-import concurrent
 
 from fastapi import FastAPI, APIRouter
 
@@ -24,8 +24,9 @@ class ExtractionResponse(BaseModel):
 
 
 class ServerRouter:
-    def __init__(self, executor: concurrent.futures.ProcessPoolExecutor):
-        self._executor = executor
+    def __init__(self, extractor_worker: ExtractorWorker, metadata_store: ExtractorMetadataStore):
+        self._extractor_worker = extractor_worker
+        self._metadata_store = metadata_store
         self.router = APIRouter()
         self.router.add_api_route("/", self.root, methods=["GET"])
         self.router.add_api_route("/extract", self.extract, methods=["POST"])
@@ -34,24 +35,12 @@ class ServerRouter:
         return {"Indexify Extractor"}
 
     async def extract(self, request: ExtractionRequest):
-        loop = asyncio.get_event_loop()
-        content = Content(
-            content_type=request.content.content_type,
-            data=bytes(request.content.bytes),
-            features=[],
-            labels=request.content.labels,
-        )
         task_id = "dummy_task_id"
-        content_dict: Dict[str, Content] = {task_id: content}
-        params_map = {task_id: request.input_params}
-        extractor_map = {task_id: request.extractor_name}
+        module_class = self._metadata_store.extractor_module_class(request.extractor_name)
+        content_dict: Dict[str, Content] = {task_id: ExtractorPayload(data=bytes(request.content.bytes), content_type=request.content.content_type)}
 
-        extractor_out: Dict[str, List[Content]] = await extract_content(
-            loop,
-            self._executor,
-            content_dict,
-            params=params_map,
-            extractors=extractor_map
+        extractor_out = await self._extractor_worker.async_submit(
+            request.extractor_name, f"indexify_extractors.{module_class}", content_dict
         )
         api_content: List[ApiContent] = []
         api_features: List[ApiFeature] = []

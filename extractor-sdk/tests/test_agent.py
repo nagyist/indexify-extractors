@@ -1,15 +1,12 @@
 import unittest
 
-from indexify_extractor_sdk.base_extractor import ExtractorWrapper, Content, Feature
-
-from indexify_extractor_sdk.mock_extractor import MockExtractor, InputParams
-
 from indexify_extractor_sdk.coordinator_service_pb2 import (
     Task,
     TaskOutcome,
     ContentMetadata,
     Extractor,
 )
+from indexify_extractor_sdk import coordinator_service_pb2
 from indexify_extractor_sdk.agent import ExtractorAgent
 from indexify_extractor_sdk.extractor_worker import ExtractorModule, create_executor
 from pathlib import Path
@@ -50,7 +47,7 @@ def _create_executor():
 
 
 def create_extractor_agent():
-    extractor = Extractor(
+    extractor = coordinator_service_pb2.Extractor(
         name="mock_extractor",
         description="mock extractor",
         input_params="{}",
