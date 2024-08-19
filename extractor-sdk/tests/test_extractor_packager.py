@@ -1,8 +1,9 @@
-from indexify_extractor_sdk.packager import ExtractorPackager
-import pytest
 import gzip
-import tarfile
 import io
+import tarfile
+
+import pytest
+from indexify_extractor_sdk.packager import ExtractorPackager
 
 
 @pytest.fixture

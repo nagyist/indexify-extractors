@@ -1,26 +1,21 @@
+import json
+import mimetypes
+import os
+import re
+import tempfile
 from typing import List, Optional
 
-from indexify_extractor_sdk import (
-    Extractor,
-    Content,
-)
 import torch
+import whisperx
+from deepmultilingualpunctuation import PunctuationModel
+from helpers import (create_config, filter_missing_timestamps,
+                     get_realigned_ws_mapping_with_punctuation,
+                     get_sentences_speaker_mapping, get_words_speaker_mapping,
+                     punct_model_langs, wav2vec2_langs)
+from indexify_extractor_sdk import Content, Extractor
+from nemo.collections.asr.models.msdd_models import NeuralDiarizer
 from pydantic import BaseModel
 from pydub import AudioSegment
-import os
-from nemo.collections.asr.models.msdd_models import NeuralDiarizer
-from helpers import wav2vec2_langs, filter_missing_timestamps, create_config
-import whisperx
-from helpers import get_words_speaker_mapping, punct_model_langs
-from deepmultilingualpunctuation import PunctuationModel
-import re
-from helpers import (
-    get_realigned_ws_mapping_with_punctuation,
-    get_sentences_speaker_mapping,
-)
-import tempfile
-import mimetypes
-import json
 
 
 class InputParams(BaseModel):
@@ -143,7 +138,7 @@ class WhisperDiarizationExtractor(Extractor):
         else:
             vocal_target = file_path
         return vocal_target
-    
+
     def get_word_timestamps(self, whisper_results, language, vocal_target, params):
         if language in wav2vec2_langs:
             alignment_model, metadata = whisperx.load_align_model(

@@ -1,8 +1,8 @@
-from transformers import AutoTokenizer, AutoModel
+from typing import List
+
 import torch
 import torch.nn.functional as F
-
-from typing import List
+from transformers import AutoModel, AutoTokenizer
 
 
 def mean_pooling(model_output, attention_mask):

@@ -1,9 +1,11 @@
-from .base_extractor import EXTRACTORS_PATH, ExtractorMetadata
-import sqlite3
 import json
-from typing import List
 import os
+import sqlite3
+from typing import List
+
 from indexify.extractor_sdk import EmbeddingSchema
+
+from .base_extractor import EXTRACTORS_PATH, ExtractorMetadata
 
 
 class ExtractorMetadataStore:

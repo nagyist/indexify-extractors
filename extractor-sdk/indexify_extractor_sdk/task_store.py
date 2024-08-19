@@ -1,11 +1,10 @@
-from .server_if import coordinator_service_pb2
-
+import asyncio
 from typing import Dict, List
 
 from pydantic import BaseModel
-from .server_if.ingestion_api_models import ApiContent, ApiFeature
 
-import asyncio
+from .server_if import coordinator_service_pb2
+from .server_if.ingestion_api_models import ApiContent, ApiFeature
 
 
 class CompletedTask(BaseModel):

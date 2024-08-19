@@ -1,15 +1,15 @@
 import os
-import sys
 import subprocess
+import sys
 
 import fsspec
 from rich.console import Console
 from rich.panel import Panel
 
+from .base_extractor import EXTRACTOR_MODULE_PATH, EXTRACTORS_PATH
 from .extractor_worker import ExtractorWrapper
-from .base_extractor import EXTRACTORS_PATH, EXTRACTOR_MODULE_PATH
 from .metadata_store import ExtractorMetadataStore
-from .utils import log_event, ExtractorIndex
+from .utils import ExtractorIndex, log_event
 
 console = Console()
 

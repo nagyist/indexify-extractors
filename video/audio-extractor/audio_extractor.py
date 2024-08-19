@@ -1,11 +1,13 @@
-from typing import List
-from indexify_extractor_sdk import Content, Extractor, Feature
-import moviepy.editor as mp
 import tempfile
+from typing import List
+
+import moviepy.editor as mp
+from indexify_extractor_sdk import Content, Extractor, Feature
 from pydantic import BaseModel
 
+
 class AudioExtractorConfig(BaseModel):
-   pass
+    pass
 
 
 class AudioExtractor(Extractor):
@@ -21,13 +23,15 @@ class AudioExtractor(Extractor):
         with tempfile.NamedTemporaryFile(suffix=suffix, delete=True) as tmpfile:
             # write bytes to temp file
             tmpfile.write(content.data)
-            tmpfile.flush() 
+            tmpfile.flush()
 
-            # moviepy read file 
+            # moviepy read file
             video = mp.VideoFileClip(tmpfile.name)
-            
+
             # write audio to tmp file and return content
-            with tempfile.NamedTemporaryFile(suffix=".mp3", delete=True) as tmpfile_audio:
+            with tempfile.NamedTemporaryFile(
+                suffix=".mp3", delete=True
+            ) as tmpfile_audio:
                 video.audio.write_audiofile(tmpfile_audio.name, codec="libmp3lame")
                 f = open(tmpfile_audio.name, "rb")
                 data = f.read()

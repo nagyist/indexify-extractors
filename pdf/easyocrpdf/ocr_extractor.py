@@ -1,9 +1,12 @@
-from typing import List, Union
 import io
-from indexify_extractor_sdk import Content, Extractor, Feature
-from .utils.ocr_module import get_text
-import fitz
 import tempfile
+from typing import List, Union
+
+import fitz
+from indexify_extractor_sdk import Content, Extractor, Feature
+
+from .utils.ocr_module import get_text
+
 
 class OCRExtractor(Extractor):
     name = "tensorlake/easyocr"
@@ -14,7 +17,7 @@ class OCRExtractor(Extractor):
     def __init__(self):
         super().__init__()
 
-    def extract(self, content: Content, params = None) -> List[Union[Feature, Content]]:
+    def extract(self, content: Content, params=None) -> List[Union[Feature, Content]]:
         contents = []
         full_text = ""
 
@@ -23,7 +26,9 @@ class OCRExtractor(Extractor):
             image_text = get_text(content.data)
             contents.append(Content.from_text(image_text))
         else:
-            with tempfile.NamedTemporaryFile(delete=False, suffix=".pdf") as inputtmpfile:
+            with tempfile.NamedTemporaryFile(
+                delete=False, suffix=".pdf"
+            ) as inputtmpfile:
                 inputtmpfile.write(content.data)
                 inputtmpfile.flush()
 
@@ -41,15 +46,16 @@ class OCRExtractor(Extractor):
                         pix = fitz.Pixmap(doc, xref)
                         image_text = get_text(pix.tobytes())
                         full_text += image_text + " "
-                
+
                 feature = Feature.metadata(value={"type": "text"})
                 contents.append(Content.from_text(full_text, features=[feature]))
-        
+
         return contents
 
     def sample_input(self) -> Content:
         f = open("sample.pdf", "rb")
         return Content(content_type="application/pdf", data=f.read())
+
 
 if __name__ == "__main__":
     f = open("sample.pdf", "rb")

@@ -1,11 +1,7 @@
 from abc import abstractmethod
 from typing import List, Union
 
-from indexify_extractor_sdk.base_extractor import (
-    Content,
-    Extractor,
-    Feature,
-)
+from indexify_extractor_sdk.base_extractor import Content, Extractor, Feature
 
 
 class BaseEmbeddingExtractor(Extractor):

@@ -1,8 +1,7 @@
-from indexify.extractor_sdk import Extractor, Content, Feature, EmbeddingSchema
-
-from typing import List, Tuple, Dict
-
 import json
+from typing import Dict, List, Tuple
+
+from indexify.extractor_sdk import Content, EmbeddingSchema, Extractor, Feature
 from pydantic import BaseModel
 
 

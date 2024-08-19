@@ -1,17 +1,18 @@
-import typer
-from . import indexify_extractor, version
-from .packager import ExtractorPackager
-from typing import Optional
 import logging
-import os
-from .list_extractors import list_extractors
-import sys
-from .base_extractor import EXTRACTORS_PATH
-from .agent import DEFAULT_BATCH_SIZE
-from enum import Enum
-
 import multiprocessing
+import os
+import sys
+from enum import Enum
+from typing import Optional
+
+import typer
 from typing_extensions import Annotated
+
+from . import indexify_extractor, version
+from .agent import DEFAULT_BATCH_SIZE
+from .base_extractor import EXTRACTORS_PATH
+from .list_extractors import list_extractors
+from .packager import ExtractorPackager
 
 cpu_count = multiprocessing.cpu_count()
 

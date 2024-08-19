@@ -1,10 +1,9 @@
-from pydantic import BaseModel
-
+import json
 from typing import List
 
-from indexify_extractor_sdk import Extractor, Content, Feature
+from indexify_extractor_sdk import Content, Extractor, Feature
 from indexify_extractor_sdk.base_extractor import Content
-import json
+from pydantic import BaseModel
 
 
 # Extractors can be parameterized by providing a pydantic model

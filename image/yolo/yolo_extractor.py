@@ -1,27 +1,32 @@
-from typing import List, Union, Optional
-from indexify_extractor_sdk import Content, Extractor, Feature
-from pydantic import BaseModel, Field
 import json
-from ultralytics import YOLO
+from typing import List, Optional, Union
+
 import cv2
 import numpy as np
+from indexify_extractor_sdk import Content, Extractor, Feature
+from pydantic import BaseModel, Field
+from ultralytics import YOLO
+
 
 class YoloExtractorConfig(BaseModel):
-    model_name: str = Field(default='yolov8n.pt')
+    model_name: str = Field(default="yolov8n.pt")
     conf: float = Field(default=0.25)
     iou: float = Field(default=0.7)
+
 
 class YoloExtractor(Extractor):
     name = "tensorlake/yolo-extractor"
     description = "An extractor that uses YOLO for object detection in images."
-    system_dependencies = ["libsm6","libglib2.0-0", "libxext6", "libgl1-mesa-glx"]
+    system_dependencies = ["libsm6", "libglib2.0-0", "libxext6", "libgl1-mesa-glx"]
     input_mime_types = ["image/jpeg", "image/png"]
 
     def __init__(self):
         super(YoloExtractor, self).__init__()
         self._models = {}
 
-    def extract(self, content: Content, params: YoloExtractorConfig) -> List[Union[Feature, Content]]:
+    def extract(
+        self, content: Content, params: YoloExtractorConfig
+    ) -> List[Union[Feature, Content]]:
         contents = []
 
         # Load the YOLO model
@@ -49,12 +54,15 @@ class YoloExtractor(Extractor):
                     "score": confidence,
                 }
 
-                contents.append(Content(content_type="application/json", data=json.dumps(detection)))
+                contents.append(
+                    Content(content_type="application/json", data=json.dumps(detection))
+                )
 
         return contents
 
     def sample_input(self) -> Content:
         return self.sample_jpg()
+
 
 if __name__ == "__main__":
     with open("test_image.jpg", "rb") as f:

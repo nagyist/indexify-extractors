@@ -1,9 +1,10 @@
 import argparse
 import os
-from helpers import *
+
 import torch
-from pydub import AudioSegment
+from helpers import *
 from nemo.collections.asr.models.msdd_models import NeuralDiarizer
+from pydub import AudioSegment
 
 parser = argparse.ArgumentParser()
 parser.add_argument(

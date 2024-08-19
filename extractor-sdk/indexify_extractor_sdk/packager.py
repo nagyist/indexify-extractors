@@ -1,20 +1,19 @@
 import asyncio
 import gzip
-import io
-from pathlib import Path
-import tarfile
-from docker import DockerClient, errors as docker_err
-from .packager_utils import (
-    DockerfileTemplate,
-    ExtractorPathWrapper,
-    DynamicModuleLoader,
-    async_docker_build,
-)
-import docker
-import logging
 import importlib.resources as pkg_resources
+import io
+import logging
 import pathlib
+import tarfile
+from pathlib import Path
+
+import docker
+from docker import DockerClient
+from docker import errors as docker_err
+
 from .base_extractor import EXTRACTORS_PATH
+from .packager_utils import (DockerfileTemplate, DynamicModuleLoader,
+                             ExtractorPathWrapper, async_docker_build)
 
 
 class ExtractorPackager:
