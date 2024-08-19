@@ -1,9 +1,10 @@
-from typing import List, Union
-from indexify_extractor_sdk import Content, Extractor, Feature
-import torch
-import clip
-from PIL import Image
 from io import BytesIO
+from typing import List, Union
+
+import clip
+import torch
+from indexify_extractor_sdk import Content, Extractor, Feature
+from PIL import Image
 
 
 class ClipEmbeddingExtractor(Extractor):
@@ -14,9 +15,13 @@ class ClipEmbeddingExtractor(Extractor):
     def __init__(self):
         super(ClipEmbeddingExtractor, self).__init__()
         self._device = "cuda" if torch.cuda.is_available() else "cpu"
-        self._model, self._preprocess = clip.load("ViT-B/32", device=self._device, jit=True)
+        self._model, self._preprocess = clip.load(
+            "ViT-B/32", device=self._device, jit=True
+        )
 
-    def extract(self, content: Content, params = None) -> Union[List[Feature], List[Content]]:
+    def extract(
+        self, content: Content, params=None
+    ) -> Union[List[Feature], List[Content]]:
         if "image" in content.content_type:
             img = Image.open(BytesIO(content.data))
             image = self._preprocess(img).unsqueeze(0).to(self._device)

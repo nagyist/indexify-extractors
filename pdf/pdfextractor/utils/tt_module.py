@@ -4,8 +4,7 @@ import torch
 from pdf2image import convert_from_bytes
 from torchvision import transforms
 from tqdm.auto import tqdm
-from transformers import (AutoModelForObjectDetection,
-                          TableTransformerForObjectDetection)
+from transformers import AutoModelForObjectDetection, TableTransformerForObjectDetection
 
 model = AutoModelForObjectDetection.from_pretrained(
     "microsoft/table-transformer-detection", revision="no_timm"

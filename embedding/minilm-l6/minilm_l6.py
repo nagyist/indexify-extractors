@@ -1,6 +1,9 @@
 from typing import List
+
 from indexify_extractor_sdk.embedding.base_embedding import BaseEmbeddingExtractor
-from indexify_extractor_sdk.embedding.sentence_transformer import SentenceTransformersEmbedding
+from indexify_extractor_sdk.embedding.sentence_transformer import (
+    SentenceTransformersEmbedding,
+)
 
 
 class MiniLML6Extractor(BaseEmbeddingExtractor):

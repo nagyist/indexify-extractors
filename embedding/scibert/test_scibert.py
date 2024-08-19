@@ -4,8 +4,8 @@ from typing import Type
 
 from indexify_extractor_sdk.base_embedding import EmbeddingInputParams
 from indexify_extractor_sdk.base_extractor import Content, Extractor, ExtractorSchema
-from scibert_uncased import SciBERTExtractor
 from parameterized import parameterized
+from scibert_uncased import SciBERTExtractor
 
 
 class TestColBERTv2Base(unittest.TestCase):

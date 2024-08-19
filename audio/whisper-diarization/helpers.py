@@ -6,8 +6,7 @@ import shutil
 import nltk
 import wget
 from omegaconf import OmegaConf
-from whisperx.alignment import (DEFAULT_ALIGN_MODELS_HF,
-                                DEFAULT_ALIGN_MODELS_TORCH)
+from whisperx.alignment import DEFAULT_ALIGN_MODELS_HF, DEFAULT_ALIGN_MODELS_TORCH
 from whisperx.utils import LANGUAGES, TO_LANGUAGE_CODE
 
 punct_model_langs = [

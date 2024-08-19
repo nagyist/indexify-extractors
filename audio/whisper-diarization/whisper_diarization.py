@@ -8,10 +8,15 @@ from typing import List, Optional
 import torch
 import whisperx
 from deepmultilingualpunctuation import PunctuationModel
-from helpers import (create_config, filter_missing_timestamps,
-                     get_realigned_ws_mapping_with_punctuation,
-                     get_sentences_speaker_mapping, get_words_speaker_mapping,
-                     punct_model_langs, wav2vec2_langs)
+from helpers import (
+    create_config,
+    filter_missing_timestamps,
+    get_realigned_ws_mapping_with_punctuation,
+    get_sentences_speaker_mapping,
+    get_words_speaker_mapping,
+    punct_model_langs,
+    wav2vec2_langs,
+)
 from indexify_extractor_sdk import Content, Extractor
 from nemo.collections.asr.models.msdd_models import NeuralDiarizer
 from pydantic import BaseModel
