@@ -145,3 +145,19 @@ docker run ExtractorImageName indexify-extractor join-server --coordinator-addr=
 If you have a GPU enabled extractor, you might need to set up your machine to support running the container with the GPU. This might involve installing the Nvidia Container Toolkit and setting up the Nvidia runtime for Docker. You can find more information on how to do this in the [Nvidia Container Toolkit Documentation](https://docs.nvidia.com/datacenter/cloud-native/container-toolkit/latest/index.html).
 
 Finally, to run your GPU enabled extractor, you can add the `--gpus all` flag to the `docker run` command.
+
+### Code formatting
+This repo uses `pre-commit` to run linters and format the code.
+`pre-commit` is executed on CI to verify that the code is formatted properly.
+
+To run it locally, use:
+
+```console
+pre-commit run --all-files
+```
+
+To set up `pre-commit` so that it runs before each commit, use:
+
+```console
+pre-commit install
+```
