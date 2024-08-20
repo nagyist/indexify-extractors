@@ -47,7 +47,7 @@ jobs:
           body: ${{ github.event.inputs.release_message }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          
+
   publish-extractor-sdk-to-pypi:
     name: Publish Extractor SDK
     runs-on: ubuntu-latest

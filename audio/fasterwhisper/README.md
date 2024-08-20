@@ -5,7 +5,7 @@ This extractor converts extracts transcriptions from audio. The entire text  wit
 Content[Audio] -> Content[Empty] + Features[JSON metadata of transcription]
 
 ## Usage
-Try out the extractor. Download your favorite audio podcast which has a lot of speech. 
+Try out the extractor. Download your favorite audio podcast which has a lot of speech.
 ```
 cd faster_whisper
 indexify extractor extract --file twiml-ai-podcast.mp3

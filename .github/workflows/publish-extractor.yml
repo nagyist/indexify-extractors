@@ -1,6 +1,6 @@
 name: Publish Extractor
 
-on: 
+on:
   workflow_dispatch:
     inputs:
       extractor_path:
@@ -44,4 +44,3 @@ jobs:
           DIRECTORY=$(dirname ${{ github.event.inputs.extractor_path }} | cut -d':' -f1)
           cd $DIRECTORY
           docker buildx build --platform=linux/amd64,linux/arm64/v8 --push . -t ${{ steps.extract_name.outputs.package_name }}:latest -f extractor.dockerfile;
-        

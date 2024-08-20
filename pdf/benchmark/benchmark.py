@@ -57,6 +57,7 @@ os.system("!indexify-extractor join-server")
 # Initialize the Indexify client
 client = IndexifyClient()
 
+
 # Function to create and run extraction graphs
 def create_and_run_extraction_graph(graph_name, extractor_name, pdf_filepath):
     extraction_graph_spec = f"""

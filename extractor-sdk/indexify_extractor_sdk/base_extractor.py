@@ -121,7 +121,9 @@ class ExtractorWrapper:
             embedding_schemas=embeddings_schemas,
             metadata_schemas={},
             input_mime_types=self._cls.input_mime_types,
-            input_params=self._extractor_args_cls.model_json_schema()
-            if self._extractor_args_cls
-            else None,
+            input_params=(
+                self._extractor_args_cls.model_json_schema()
+                if self._extractor_args_cls
+                else None
+            ),
         )

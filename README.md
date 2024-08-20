@@ -21,7 +21,7 @@ We have built some extractors based on demand from our users. You can write a ne
 pip install indexify-extractor-sdk
 ```
 
-#### List Available extractors 
+#### List Available extractors
 ```bash
 indexify-extractor list
 ```
@@ -32,7 +32,7 @@ Find the name of the extractor you want.
 indexify-extractor download tensorlake/minilm-l6
 ```
 
-#### Load and Run in Notebook or Python Applications 
+#### Load and Run in Notebook or Python Applications
 ```python
 from indexify_extractor_sdk import load_extractor, Content
 extractor, config_cls = load_extractor("indexify_extractors.minilm-l6.minilm_l6:MiniLML6Extractor")
@@ -65,9 +65,9 @@ If want to build a new extractor to give Indexify new data processing capabiliti
 #### Clone the template
 ```shell
 curl https://codeload.github.com/tensorlakeai/indexify-extractor-template/tar.gz/main | tar -xz  indexify-extractor-template-main
-``` 
+```
 
-#### Implement the extractor interface 
+#### Implement the extractor interface
 ```python
 class InputParams(BaseModel):
     a: int = 0
@@ -106,7 +106,7 @@ All the Python dependencies of the extractor goes into `requirements.txt` file a
 Once you have developed the extractor you can test the extractor locally by running the `indexify-extractor run-local` command as described above.
 
 #### Test and Deploy the extractor
-You can test your extractor without running the Indexify server! 
+You can test your extractor without running the Indexify server!
 ```python
 ex, config = load_extractor("custom_extractor:MyExtractor")
 config.schema()
@@ -123,12 +123,12 @@ You can install your extractor locally
 indexify-extractor install-local custom_extractor:MyExtractor
 ```
 
-When you are ready to deploy the extractor in production, package the extractor and deploy as many instances you want on your cluster for parallelism, and point it to the indexify server. 
+When you are ready to deploy the extractor in production, package the extractor and deploy as many instances you want on your cluster for parallelism, and point it to the indexify server.
 ```
 indexify-extractor join-server --coordinator-addr localhost:8950 --ingestion-addr localhost:8900
 ```
 
-#### Package the Extractor 
+#### Package the Extractor
 Once you build a new extractor, and have tested it and it's time to deploy this in production, you can build a container with the extractor -
 ```bash
 indexify-extractor package indexify_extractors.<folder_name>.custom_extractor:MyExtractor
@@ -145,3 +145,19 @@ docker run ExtractorImageName indexify-extractor join-server --coordinator-addr=
 If you have a GPU enabled extractor, you might need to set up your machine to support running the container with the GPU. This might involve installing the Nvidia Container Toolkit and setting up the Nvidia runtime for Docker. You can find more information on how to do this in the [Nvidia Container Toolkit Documentation](https://docs.nvidia.com/datacenter/cloud-native/container-toolkit/latest/index.html).
 
 Finally, to run your GPU enabled extractor, you can add the `--gpus all` flag to the `docker run` command.
+
+### Code formatting
+This repo uses `pre-commit` to run linters and format the code.
+`pre-commit` is executed on CI to verify that the code is formatted properly.
+
+To run it locally, use:
+
+```console
+pre-commit run --all-files
+```
+
+To set up `pre-commit` so that it runs before each commit, use:
+
+```console
+pre-commit install
+```

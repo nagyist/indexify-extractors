@@ -3,10 +3,11 @@ import platform
 from itertools import islice
 
 import fsspec
-import httpx 
+import httpx
 from rich.console import Console
 
 console = Console()
+
 
 # https://docs.python.org/3/library/itertools.html#itertools.batched
 def batched(iterable, n):

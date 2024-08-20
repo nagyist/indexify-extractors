@@ -1,6 +1,6 @@
 # PaddleOCR PDF Extractor
 
-This is a PaddleOCR based PDF extractor formulated using the [PaddleOCR] (https://github.com/PaddlePaddle/PaddleOCR/tree/release/2.7) library. 
+This is a PaddleOCR based PDF extractor formulated using the [PaddleOCR] (https://github.com/PaddlePaddle/PaddleOCR/tree/release/2.7) library.
 The PaddleOCR PDF Extractor API leverages the capabilities of PaddlePaddle OCR to efficiently extract text from various types of PDF documents. It supports multiple languages and can handle diverse document formats, including invoices, academic papers, and forms. PaddleOCR integrates many OCR algorithms, text detection algorithms include DB, EAST, SAST, etc., text recognition algorithms include CRNN, RARE, StarNet, Rosetta, SRN and other algorithms.
 
 ### Example:
@@ -33,4 +33,4 @@ with open('sample_form.pdf','wb') as f:
 client.upload_file(path="sample_form.pdf")
 ```
 
-The extractor can also be chained with other extractors for maximum effect. 
+The extractor can also be chained with other extractors for maximum effect.

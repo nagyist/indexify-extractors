@@ -6,7 +6,7 @@ chunks with timestamps are represented as metadata of the content.
 Content[Audio] -> Content[Empty] + Features[JSON metadata of transcription]
 
 ## Usage
-Try out the extractor. Download your favorite audio podcast which has a lot of speech. 
+Try out the extractor. Download your favorite audio podcast which has a lot of speech.
 ```
 cd whisper-asr
 indexify extractor extract --file twiml-ai-podcast.mp3

@@ -7,7 +7,7 @@ from indexify_extractor_sdk.embedding.base_embedding import BaseEmbeddingExtract
 
 class IdentityHashEmbedding(BaseEmbeddingExtractor):
     name = "yenicelik/identity-hash-extractor"
-    description = """Hash Extractor, which can be used to find duplicates within the dataset. 
+    description = """Hash Extractor, which can be used to find duplicates within the dataset.
     It hashes the text into bytes, and interprets these are a numpy array.
 
     We can extend this by LocalitySensitiveHashing, to also account for small perturbations in the input bytes.

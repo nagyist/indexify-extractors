@@ -1,7 +1,7 @@
-**ACM Reference Format:**  
+**ACM Reference Format:**
 Zhi-Qi Cheng, Jun-Xiu Li, Qi Dai, Xiao Wu, Jun-Yan He, Alexander G. Hauptmann. 2019. Improving the Learning of Multi-column Convolutional Neural Network for Crowd Counting. In *Proceedings of the 27th ACM International Conference on Multimedia (MM '19), Oct. 21--25, 2019, Nice, France.* ACM, New York, NY, USA, 11 pages. https://doi.org/10.1145/3343031.3350898
 
-# Introduction 
+# Introduction
 
 With the growth of wide applications, such as safety monitoring, disaster management, and public space design, crowd counting has been extensively studied in the past decade. As shown in Figure 1(#fig:scale-changes), a significant challenge of crowd counting lies in the extreme variation in the scale of people/head size. To improve the scale invariance of feature learning, Multi-column Convolutional Neural Networks are extensively studied . As illustrated in Figure 2(#fig:Multi-column), the motivation of multi-column networks is intuitive. Each column is devised with different receptive fields (e.g., different filter sizes) so that the features learned by different columns are expected to focus on different scales and resolutions. By assembling features from all columns, multi-column networks are easily adaptive to the large variations of the scale due to the generalization ability across scales and resolutions.
 
@@ -9,7 +9,7 @@ With the growth of wide applications, such as safety monitoring, disaster manage
 
 
 
- Examples of ShanghaiTech Part A dataset . Crowd counting is a challenging task with the significant variation in the people/head size due to the perspective effect. 
+ Examples of ShanghaiTech Part A dataset . Crowd counting is a challenging task with the significant variation in the people/head size due to the perspective effect.
 
 
 Although multi-column architecture is naturally employed for addressing the issue of various scale change, previous works  have pointed out that different columns always generate features with almost the same scale, which indicates that existing multi-column architectures cannot effectively improve the scale invariance of feature learning. To further verify this observation, we have extensively analyzed three state-of-the-art networks, i.e., MCNN , CSRNet  and ic-CNN . It is worth noting that CSRNet is a single column network, which has four different configurations (i.e., different dilation rates). We remould CSRNet to treat each configuration as a column, and design a four-column network as an alternative. The Maximal Information Coefficient (MIC)^1 and the Structural SIMilarity (SSIM)^2 are computed based on the results of different columns. MIC measures the strength of association between the outputs (i.e., crowd counts) and SSIM measures the similarity between density maps. As shown in Table 1(#tab:Multi-columns-problem), different columns (Col.$\leftrightarrow$Col.) always output almost the same counts (i.e., high MIC) and the similar estimated density maps (i.e., high SSIM). In contrast, a large gap between the ensemble of all columns and the ground truth (Col.$\leftrightarrow$GT.) still exists. This comparison shows that there are substantial redundant parameters among columns, which makes multi-column architecture fails to learn the features across different scales. On the other hand, it indicates that existing multi-column networks tend to overfit the data and can not learn the essence of the ground truth.
@@ -40,7 +40,7 @@ In this paper, we propose a novel Multi-column Mutual Learning (McML) strategy t
 
 The main contribution of this work is the proposal of Multi-column Mutual Learning (McML) strategy to improve the learning of multi-column networks. The solution also provides the elegant views of how to explicitly supervise multi-column architectures to learn features with different scales and how to reduce the enormous redundant parameters and avoid overfitting, which are problems not yet fully understood in the literature.
 
-# Related Work 
+# Related Work
 
 ## Detection-based Methods
 
@@ -65,11 +65,11 @@ These state-of-the-art methods aim to improve the scale invariance of feature le
 The architecture of MCNN . It is a classical Multi-column Convolutional Neural Network. It employs different size of filters on three columns to obtain different scale features.
 
 
-# Multi-column Mutual Learning 
+# Multi-column Mutual Learning
 
  In this section, we present the proposed Multi-column Mutual Learning (McML) strategy. The problem formulation is first introduced in Sec. 3.1(#sec:background-and-challenge). Then the overview of our McML is described in Sec. 3.2(#sec:overview-of-McML). More details of McML are illustrated in Sec. 3.3(#sec:mutual-information-estimation) to 3.5(#sec:network-architecture).
 
-## Problem Formulation 
+## Problem Formulation
 
 Recent studies define crowd counting task is as a density regression problem . Given $N$ training images $\textbf=\, \cdots, x_\}$ as the training set, each image $x_$ is annotated with a total of $c_$ center points of pedestrians' heads $\textbf_^=\, P_,\cdots, P_}\}$. Typically, the ground truth density map $y_$ of image $x_$ is generated as, $$\label
 \vspace
@@ -87,7 +87,7 @@ Although the motivation for multi-column structures is straightforward, previous
 :::
 :::
 
-## Overview of McML 
+## Overview of McML
 
 
 In this section, we present an overview of Multi-column Mutual Learning (McML) strategy. For the sake of simplicity, we introduce the case of two columns as an example. As shown in Figure \fig:framework\(#fig:framework), our McML has two main innovations.
@@ -105,7 +105,7 @@ Typically, our proposed McML is also a mutual learning scheme. Two columns are a
 
 Specifically, we will introduce the mutual information estimation (i.e., computation of $\widehat}_$) in Sec. 3.3(#sec:mutual-information-estimation), the mutual learning scheme in Sec. 3.4(#sec:mutual-learning-process) and neural architectures of statistical networks in Sec. 3.5(#sec:network-architecture).
 
-## Mutual Information Estimation 
+## Mutual Information Estimation
 
 In this section, we first briefly introduce the definition of mutual information. Then we present the statistical network in details.
 
@@ -124,7 +124,7 @@ Randomly sampled $b$ images. Draw features from two columns as the joint distrib
 :::
 :::
 
-## Mutual Learning Scheme 
+## Mutual Learning Scheme
 
 Our proposed McML is a mutual learning scheme. For the sake of simplicity, we present the case of two columns as an example. As shown in Alg. \alg:mutual-learning\(#alg:mutual-learning), we alternately optimize two columns in each mini-batch until convergence. In each learning iteration, we randomly sample $b$ training images. Before optimizing column $\theta_1$, the mutual information is first estimated as prior knowledge to guide the parameter update. With forward of the network, the features of two column structures are sampled to update the statistical network $T_$ and estimate the mutual information $\widehat}_$ as Alg. \alg:mi_donsker_estimation\(#alg:mi_donsker_estimation). With the guidance of the mutual information, our McML can supervise column $\theta_1$ to learn as much as possible different scale features from column $\theta_2$. It is noted that we have fixed parameters of other columns (i.e., $\theta_2$) and statistical network ($T_\omega$), and only update column $\theta_1$. Since the size of input images are different, we have to update column structure on each image. After back-propagation of a total of $b$ images, the column $\theta_2$ will be optimized in similar steps.
 
@@ -160,7 +160,7 @@ Training set $X$, Ground truth $Y$. $\theta_1$, $\theta_2$ and $\omega \gets \te
 :::
 :::
 
-## Network Architectures 
+## Network Architectures
 
 We employ McML to improve three state-of-the-art networks, including MCNN , CSRNet , and ic-CNN . Table 2(#tab:statistics-network) shows the neural architecture of statistical networks. To better understand the details, Figure \fig:framework\(#fig:framework) gives a real example of two columns in MCNN . With sharing the parameters, no matter how many columns are adopted, each multi-column network only needs one single statistical network. The inputs of statistical networks are the features from different layers. We use convolutional layers with one output channel to reduce the feature dimension. Since training images have different size and inspired by the previous work , one spatial pyramid pooling (SPP) layer is applied to reshape the features from the last convolutional layer into a fixed dimension. Finally, two fully connected layers are employed as a classifier. Similar to , Leaky-ReLU  is used as the activation function for all convolutional layers, and no activation function for other layers.
 
@@ -188,9 +188,9 @@ We employ McML to improve three state-of-the-art networks, including MCNN , CSRN
 
 Specifically, MCNN adopts 3 column structures. Each column contains 4 convolutional layers. Intuitively, the statistical network of MCNN uses 4 convolutional layers to embed the features as Figure  \fig:framework\(#fig:framework). CSRNet is a single column network. The first 10 convolutional layers are from pre-trained VGG-16 . The last 6 dilated convolutional layers are utilized to estimate the crowd counts. The original version has 4 configurations for 6 dilated convolutional layers (i.e., different dilation rates). Here we treat 4 configurations as 4 different columns. Similarly, as shown in Table  2(#tab:statistics-network), the statistical network of CSRNet utilizes 6 convolutional layers to embed the features for 6 dilated convolutional layers in each column. ic-CNN contains two columns (i.e., Low Resolution (LR) and High Resolution (HR) columns). LR contains 11 convolutional layers and 2 max-pooling layers, and HR has 10 convolutional layers with 2 max-pooling layers and 2 deconvolutional layers. As Table 2(#tab:statistics-network) shows, the statistical network of ic-CNN uses 5 convolutional layers to embed features from corresponding 5 convolutional layers after the second max pooling layer at both columns.
 
-# Experiment 
+# Experiment
 
-## Experiment Settings 
+## Experiment Settings
 
 **Datasets**. To evaluate the effectiveness of our McML, we conduct experiments on four crowd counting datasets, i.e., ShanghaiTech , UCF_CC_50 , UCSD , and WorldExpo'10 . Specifically, ShanghaiTech dataset consists of two parts: Part_A and Part_B. Part_A is collected from the internet and usually has very high crowd density. Part_B is from busy streets and has a relatively sparse crowd density. UCF_CC_50 is mainly collected from Flickr and contains images of extremely dense crowds. UCSD and WorldExpo'10 are both collected from actual surveillance cameras and have low resolution and sparse crowd density. More details of datasets split are illustrated in supplementary material.
 
@@ -229,7 +229,7 @@ MSE=\sqrt\sum_^N\left ( Z_i-Z_i^ \right )^2},}$$ where $Z_i$ is the estimated cr
 
 :::
 
-## Ablation Studies 
+## Ablation Studies
 
 We have conduct extensive ablation studies on our McML.
 
@@ -276,7 +276,7 @@ The values of α.
 
 **The weight of $\mathbf$**. We have verified the impact of the weight of $\alpha$. To get a more accurate setting, we perform a grid search with the step of 0.1. The best values of $\alpha$ for different datasets are illustated in Table 3(#tab:value-a). Since ShanghaiTech Part A and UCF_CC_50 have more substantial scale changes, they have a larger $\alpha$ than other datasets. We assume that the weight of $\alpha$ positively correlates to the degree of scale changes.
 
-## Comparisons with State-of-the-art 
+## Comparisons with State-of-the-art
 
 We demonstrate the efficiency of our McML on four challenging crowd counting datasets. Tables \tab:stoa-1\(#tab:stoa-1) and 4(#tab:sota-2) show the comparison with the other state-of-the-art methods. We observe that McML can significantly improve three baselines (i.e., MCNN, CSRNet, and ic-CNN) on all datasets. Notably, after using McML, the optimized CSRNet and ic-CNN also obviously outperform the other state-of-the-art approaches. It fully demonstrates that our method can not only be applied to any multi-column network but also works on both dense and sparse crowd scenes. Additionally, although ic-CNN also propose an alternate training process, our McML can still achieve better results than the original ic-CNN. It means that our McML is more effective than ic-CNN.
 
@@ -325,7 +325,7 @@ For ShanghaiTech dataset, McML significantly boosts MCNN, CSRNet, and ic-CNN wit
 :::
 :::
 
-## Why does McML Work 
+## Why does McML Work
 
 We attempt to give more insights to show why our McML works. The statistical analysis is illustrated in Table 5(#tab:why). Compared with the results without McML (in Table 1(#tab:Multi-columns-problem)), we observe that McML can significantly reduce Maximal Information Coefficient (MIC) and Structural SIMilarity (SSIM) between columns. It denotes that our method can indeed reduce the redundant parameters of columns and avoid overfitting. On the other hand, McML can efficiently improve MIC and SSIM between the ensemble of all columns and the ground truth. It means that our method can guide multi-column structures to learn different scale features and improve the accuracy of crowd counting.
 
@@ -351,7 +351,7 @@ The result analysis of our proposed McML. The values in the table are the averag
 
 To further verify that our McML can indeed guide multi-column networks to learn different scales, we showcase the generated density maps from different columns of MCNN in Figure \fig:result\(#fig:result). These four examples typically contain different crowd densities, occlusions, and scale changes. We observe that estimated density maps of McML have more different salient areas than the original MCNN. It means that our method can indeed guide multi-column structures to focus on different scale information (i.e., different people/head sizes). It is noted that the ground truth itself is generated with center points of pedestrians' heads, which inherently contains inaccurate information. Thus the result of our method is still unable to produce the same density map to the ground truth.
 
-# Conclusion 
+# Conclusion
 
 In this paper, we propose a novel learning strategy called Multi-column Mutual learning (McML) for crowd counting, which can improve the scale invariance of feature learning and reduce parameter redundancy to avoid overfitting. It could be applied to all existing CNN-based multi-column networks and is end-to-end trainable. Experiments on four challenging datasets fully demonstrate that it can significantly improve all baselines and outperforms the other state-of-the-art methods. In summary, this work provides the elegant views of effectively using multi-column architectures to improve the scale invariance. In future work, we will study how to handle different image scales and resolutions in the ground truth generation.
 

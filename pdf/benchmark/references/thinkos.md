@@ -1,7 +1,7 @@
 
 
 
-3 Think OS  
+3 Think OS
 A Brief Introduction to Operating Systems
 :::
 
@@ -10,13 +10,13 @@ Version 0.7.4
 
 
 
-3 Think OS  
+3 Think OS
 A Brief Introduction to Operating Systems
 :::
 
 Version 0.7.4
 
-Allen B. Downey  
+Allen B. Downey
 
 Green Tea Press
 
@@ -26,8 +26,8 @@ Needham, Massachusetts
 Copyright © 2015 Allen B. Downey.
 
 
-Green Tea Press  
-9 Washburn Ave  
+Green Tea Press
+9 Washburn Ave
 Needham MA 02492
 :::
 
@@ -84,11 +84,11 @@ Chapter 10 is about POSIX condition variables and the producer/consumer problem.
 
 Chapter 11 is about using POSIX semaphores and implementing semaphores in C.
 
-## A note on this draft 
+## A note on this draft
 
 The current version of this book is an early draft. While I am working on the text, I have not yet included the figures. So there are a few places where, I'm sure, the explanation will be greatly improved when the figures are ready.
 
-## Using the code 
+## Using the code
 
 Example code for this book is available from . Git is a version control system that allows you to keep track of the files that make up a project. A collection of files under Git's control is called a **repository**. GitHub is a hosting service that provides storage for Git repositories and a convenient web interface.
 
@@ -100,7 +100,7 @@ The GitHub homepage for my repository provides several ways to work with the cod
 
 - If you don't want to use Git at all, you can download the files in a Zip file using the button in the lower-right corner of the GitHub page.
 
-## Contributor List 
+## Contributor List
 
 If you have a suggestion or correction, please send email to `downey@allendowney.com`. If I make a change based on your feedback, I will add you to the contributor list (unless you ask to be omitted).
 
@@ -180,7 +180,7 @@ The steps of compilation are:
 
 Normally when you run `gcc`, it runs all of these steps and generates an executable file. For example, here is a minimal C program:
 
-    #include 
+    #include
     int main()
     {
         printf("Hello World\n");
@@ -339,7 +339,7 @@ Most operating systems provide a fundamental set of capabilities to isolate proc
 
 As a programmer, you don't need to know much about how these capabilities are implemented. But if you are curious, you will find a lot of interesting things going on under the metaphorical hood. And if you know what's going on, it can make you a better programmer.
 
-## UNIX processes 
+## UNIX processes
 
 While I write this book, the process I am most aware of is my text editor, emacs. Every once in a while I switch to a terminal window, which is a window running a UNIX shell that provides a command-line interface.
 
@@ -468,8 +468,8 @@ The arrangement of these segments is determined partly by the compiler and partl
 
 To determine the layout of these segments on your system, try running this program, which is in `aspace.c` in the repository for this book (see Section 1.1(#code)).
 
-    #include 
-    #include 
+    #include
+    #include
 
     int global;
 
@@ -529,7 +529,7 @@ The keyword `static` indicates that `counter` is a static local variable. The in
 
 If you add this function to `aspace.c` you can confirm that `counter` is allocated in the global segment along with global variables, not in the stack.
 
-## Address translation 
+## Address translation
 
 How does a virtual address (VA) get translated to a physical address (PA)? The basic mechanism is simple, but a simple implementation would be too slow and take too much space. So actual implementations are a bit more complicated.
 
@@ -952,7 +952,7 @@ If you use a library that allocates memory, you should be disciplined in your us
 
 Often there is a trade-off between safe memory management and performance. For example, the most common source of memory errors is writing beyond the bounds of an array. The obvious remedy for this problem is bounds checking; that is, every access to the array should check whether the index is out of bounds. High-level libraries that provide array-like structures usually perform bounds checking. But C arrays and most low-level libraries do not.
 
-## Memory leaks 
+## Memory leaks
 
 There is one more memory error that may or may not deserve a paddling. If you allocate a chunk of memory and never free it, that's a "memory leak".
 
@@ -1116,12 +1116,12 @@ The important part of the program is this loop:
         do {
             sec0 = get_seconds();
 
-            for (index = 0; index < limit; index += stride) 
+            for (index = 0; index < limit; index += stride)
                 arrayindex = arrayindex + 1;
-            
-            iters = iters + 1; 
+
+            iters = iters + 1;
             sec = sec + (get_seconds() - sec0);
-            
+
         } while (sec < 0.1);
 
 The inner `for` loop traverses the array. `limit` determines how much of the array it traverses; `stride` determines how many elements it skips over. For example, if `limit` is 16 and `stride` is 4, the loop would access elements 0, 4, 8, and 12.
@@ -1146,10 +1146,10 @@ To isolate the time to access the elements of the array, the program runs a seco
         iters2 = 0;
         do {
             sec0 = get_seconds();
-            
-            for (index = 0; index < limit; index += stride) 
+
+            for (index = 0; index < limit; index += stride)
                 temp = temp + index;
-            
+
             iters2 = iters2 + 1;
             sec = sec - (get_seconds() - sec0);
 
@@ -1447,10 +1447,10 @@ Using Pthreads is like using most C libraries:
 
 For my examples, I include the following headers:
 
-    #include 
-    #include 
-    #include 
-    #include 
+    #include
+    #include
+    #include
+    #include
 
 The first two are standard; the third is for Pthreads and the fourth is for semaphores. To compile with the Pthread library in `gcc`, you can use the `-l` option on the command line:
 
@@ -1510,7 +1510,7 @@ The parameter of `entry` has to be declared as a `void` pointer, but in this pro
 As a simple example, `child_code` prints the value of the shared counter and increments it.
 
     void child_code(Shared *shared)
-    {  
+    {
         printf("counter = %d\n", shared->counter);
         shared->counter++;
     }
@@ -1649,7 +1649,7 @@ One of the problems with this API is that `pthread_mutex_t` behaves like a struc
 
 My code makes it easier to get that right. It defines a type, `Mutex`, which is just a more readable name for `pthread_mutex_t`:
 
-    #include 
+    #include
 
     typedef pthread_mutex_t Mutex;
 
@@ -1659,7 +1659,7 @@ Then it defines `make_mutex`, which allocates space and initializes the mutex:
     {
         Mutex *mutex = check_malloc(sizeof(Mutex));
         int n = pthread_mutex_init(mutex, NULL);
-        if (n != 0) perror_exit("make_lock failed"); 
+        if (n != 0) perror_exit("make_lock failed");
         return mutex;
     }
 
@@ -1681,11 +1681,11 @@ The functions to lock and unlock the mutex are simple wrappers for POSIX functio
 
 This code is in `mutex.c` and the header file `mutex.h`.
 
-# Condition variables 
+# Condition variables
 
 Many simple synchronization problems can be solved using mutexes as shown in the previous chapter. In this chapter I introduce a bigger challenge, the well-known "Producer-Consumer problem", and a new tool to solve it, the condition variable.
 
-## The work queue 
+## The work queue
 
 In some multi-threaded programs, threads are organized to perform different tasks. Often they communicate with each other using a queue, where some threads, called "producers", put data into the queue and other threads, called "consumers", take data out.
 
@@ -1733,7 +1733,7 @@ Now we can add elements to the queue using `queue_push`:
         if (queue_full(queue)) {
             perror_exit("queue is full");
         }
-      
+
         queue->arrayqueue->next_in = item;
         queue->next_in = queue_incr(queue, queue->next_in);
     }
@@ -1764,7 +1764,7 @@ Now we can write `queue_pop`, which removes and returns the next element from th
         if (queue_empty(queue)) {
             perror_exit("queue is empty");
         }
-      
+
         int item = queue->arrayqueue->next_out;
         queue->next_out = queue_incr(queue, queue->next_out);
         return item;
@@ -1772,7 +1772,7 @@ Now we can write `queue_pop`, which removes and returns the next element from th
 
 If you try to pop from an empty queue, `queue_pop` prints an error message and exits.
 
-## Producers and consumers 
+## Producers and consumers
 
 Now let's make some threads to access this queue. Here's the producer code:
 
@@ -1867,7 +1867,7 @@ Next we add synchronization code to `queue_push`:
           mutex_unlock(queue->mutex);   //-- new
           perror_exit("queue is full");
         }
-      
+
         queue->arrayqueue->next_in = item;
         queue->next_in = queue_incr(queue, queue->next_in);
         mutex_unlock(queue->mutex);   //-- new
@@ -1883,7 +1883,7 @@ The synchronization code for `queue_pop` is similar:
           mutex_unlock(queue->mutex);
           perror_exit("queue is empty");
         }
-      
+
         int item = queue->arrayqueue->next_out;
         queue->next_out = queue_incr(queue, queue->next_out);
         mutex_unlock(queue->mutex);
@@ -1896,7 +1896,7 @@ With this additional code, the queue is thread safe; if you run it, you should n
 
 The next step is to add condition variables.
 
-## Condition variables 
+## Condition variables
 
 A condition variable is a data structure associated with a condition; it allows threads to block until the condition becomes true. For example, `thread_pop` might want check whether the queue is empty and, if so, wait for a condition like "queue not empty".
 
@@ -1936,7 +1936,7 @@ Now in `queue_pop`, if we find the queue empty, we don't exit; instead we use th
       while (queue_empty(queue)) {
         cond_wait(queue->nonempty, queue->mutex);  //-- new
       }
-      
+
       int item = queue->arrayqueue->next_out;
       queue->next_out = queue_incr(queue, queue->next_out);
       mutex_unlock(queue->mutex);
@@ -2001,10 +2001,10 @@ Here's the typedef:
 `make_cond` allocates space, initializes the condition variable, and returns a pointer:
 
     Cond *make_cond() {
-        Cond *cond = check_malloc(sizeof(Cond)); 
+        Cond *cond = check_malloc(sizeof(Cond));
         int n = pthread_cond_init(cond, NULL);
         if (n != 0) perror_exit("make_cond failed");
-     
+
         return cond;
     }
 
@@ -2149,7 +2149,7 @@ Here is the new version of `queue_pop`:
     int queue_pop(Queue *queue) {
       semaphore_wait(queue->items);
       semaphore_wait(queue->mutex);
-      
+
       int item = queue->arrayqueue->next_out;
       queue->next_out = queue_incr(queue, queue->next_out);
 
@@ -2166,7 +2166,7 @@ Using the code in the repository for this book, you should be able to compile an
     $ make queue_sem
     $ ./queue_sem
 
-## Make your own semaphores 
+## Make your own semaphores
 
 Any problem that can be solved with semaphores can also be solved with condition variables and mutexes. We can prove that's true by using condition variables and mutexes to implement a semaphore.
 

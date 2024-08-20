@@ -10,9 +10,9 @@ from pydantic import BaseModel
 class ChunkExtractionInputParams(BaseModel):
     overlap: int = 0
     chunk_size: int = 100
-    text_splitter: Literal[
-        "char", "recursive", "markdown", "html", "json"
-    ] = "recursive"
+    text_splitter: Literal["char", "recursive", "markdown", "html", "json"] = (
+        "recursive"
+    )
     headers_to_split_on: List[str] = []
 
 

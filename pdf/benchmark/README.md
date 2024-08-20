@@ -3,7 +3,7 @@
 ## Start Indexify Server
 
 
-```bash 
+```bash
 curl https://getindexify.ai | sh
 ./indexify server -d
 ```
