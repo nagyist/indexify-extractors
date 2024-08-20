@@ -23,8 +23,8 @@ EXTRACTOR_MODULE_PATH = os.path.join(EXTRACTORS_PATH, EXTRACTORS_MODULE)
 class ExtractorPayload(BaseModel):
     data: bytes
     content_type: str
-    extract_args: Dict = None
-    class_args: Dict = None
+    extract_args: Optional[Dict] = None
+    class_args: Optional[Dict] = None
 
 
 def create_pydantic_model_from_class_init_args(cls):
