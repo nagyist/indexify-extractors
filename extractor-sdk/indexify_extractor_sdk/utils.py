@@ -3,7 +3,7 @@ import platform
 from itertools import islice
 
 import fsspec
-import requests
+import httpx 
 from rich.console import Console
 
 console = Console()
@@ -20,7 +20,7 @@ def batched(iterable, n):
 
 def log_event(event, value):
     try:
-        requests.post(
+        httpx.post(
             "https://getindexify.ai/api/analytics",
             json={
                 "event": event,

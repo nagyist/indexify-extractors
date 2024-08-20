@@ -103,17 +103,17 @@ aio = ["azure-core[aio] (>=1.28.0)"]
 
 [[package]]
 name = "boto3"
-version = "1.35.0"
+version = "1.35.1"
 description = "The AWS SDK for Python"
 optional = false
 python-versions = ">=3.8"
 files = [
-    {file = "boto3-1.35.0-py3-none-any.whl", hash = "sha256:ada32dab854c46a877cf967b8a55ab1a7d356c3c87f1c8bd556d446ff03dfd95"},
-    {file = "boto3-1.35.0.tar.gz", hash = "sha256:bdc242e3ea81decc6ea551b04b2c122f088c29269d8e093b55862946aa0fcfc6"},
+    {file = "boto3-1.35.1-py3-none-any.whl", hash = "sha256:9fe1a97de136a89d2957e41e3591a7648a6e08d63165255b4cc69c5ba1e2a177"},
+    {file = "boto3-1.35.1.tar.gz", hash = "sha256:9028dd814c7f06bc92822d1fabdd8b68fe39b5993da5ca7acd7f7c6f7c7c332f"},
 ]
 
 [package.dependencies]
-botocore = ">=1.35.0,<1.36.0"
+botocore = ">=1.35.1,<1.36.0"
 jmespath = ">=0.7.1,<2.0.0"
 s3transfer = ">=0.10.0,<0.11.0"
 
@@ -122,13 +122,13 @@ crt = ["botocore[crt] (>=1.21.0,<2.0a0)"]
 
 [[package]]
 name = "botocore"
-version = "1.35.0"
+version = "1.35.1"
 description = "Low-level, data-driven core of boto 3."
 optional = false
 python-versions = ">=3.8"
 files = [
-    {file = "botocore-1.35.0-py3-none-any.whl", hash = "sha256:a3c96fe0b6afe7d00bad6ffbe73f2610953065fcdf0ed697eba4e1e5287cc84f"},
-    {file = "botocore-1.35.0.tar.gz", hash = "sha256:6ab2f5a5cbdaa639599e3478c65462c6d6a10173dc8b941bfc69b0c9eb548f45"},
+    {file = "botocore-1.35.1-py3-none-any.whl", hash = "sha256:bce42967d0f03b79cf25b2b6a36221fb2fb15f98e6fa4155b66b672ab192013b"},
+    {file = "botocore-1.35.1.tar.gz", hash = "sha256:e599cef6305e950a212f85adb86c1f4713d4b2678b3c2ec54df6b8e2dbe9ef2f"},
 ]
 
 [package.dependencies]
@@ -830,13 +830,13 @@ trio = ["trio (>=0.22.0,<0.26.0)"]
 
 [[package]]
 name = "httpx"
-version = "0.26.0"
+version = "0.27.0"
 description = "The next generation HTTP client."
 optional = false
 python-versions = ">=3.8"
 files = [
-    {file = "httpx-0.26.0-py3-none-any.whl", hash = "sha256:8915f5a3627c4d47b73e8202457cb28f1266982d1159bd5779d86a80c0eab1cd"},
-    {file = "httpx-0.26.0.tar.gz", hash = "sha256:451b55c30d5185ea6b23c2c793abf9bb237d2a7dfb901ced6ff69ad37ec1dfaf"},
+    {file = "httpx-0.27.0-py3-none-any.whl", hash = "sha256:71d5465162c13681bff01ad59b2cc68dd838ea1f10e51574bac27103f00c91a5"},
+    {file = "httpx-0.27.0.tar.gz", hash = "sha256:a0cb88a46f32dc874e04ee956e4c2764aba2aa228f650b06788ba6bda2962ab5"},
 ]
 
 [package.dependencies]
@@ -877,19 +877,19 @@ files = [
 
 [[package]]
 name = "indexify"
-version = "0.0.37"
+version = "0.0.39"
 description = "Python Client for Indexify"
 optional = false
 python-versions = "<4.0,>=3.9"
 files = [
-    {file = "indexify-0.0.37-py3-none-any.whl", hash = "sha256:ba3c15fcd5323103d15a7ecb6c3c24b08ab90a99a2ddd9e311bf53e9fcd5ab83"},
-    {file = "indexify-0.0.37.tar.gz", hash = "sha256:b00548f2dd818e14a50a1fc0a5206fdc48aa24c6955884f75fe170a8187a5876"},
+    {file = "indexify-0.0.39-py3-none-any.whl", hash = "sha256:29916d329553185988900b7f22e1be3ae832caf378fab7024d8e088f04a7aa13"},
+    {file = "indexify-0.0.39.tar.gz", hash = "sha256:0685d4dcad8810a9e9d7833354675398715ad63079e509aeae2d99643919e4d1"},
 ]
 
 [package.dependencies]
-httpx = {version = ">=0.26,<0.27", extras = ["http2"]}
+httpx = {version = ">=0,<1", extras = ["http2"]}
 pydantic = ">=2.8,<3.0"
-pyyaml = ">=6.0.1,<7.0.0"
+pyyaml = ">=6,<7"
 
 [[package]]
 name = "iniconfig"
@@ -1530,13 +1530,13 @@ files = [
 
 [[package]]
 name = "requests"
-version = "2.31.0"
+version = "2.32.3"
 description = "Python HTTP for Humans."
 optional = false
-python-versions = ">=3.7"
+python-versions = ">=3.8"
 files = [
-    {file = "requests-2.31.0-py3-none-any.whl", hash = "sha256:58cd2187c01e70e6e26505bca751777aa9f2ee0b7f4300988b709f44e013003f"},
-    {file = "requests-2.31.0.tar.gz", hash = "sha256:942c5a758f98d790eaed1a29cb6eefc7ffb0d1cf7af05c3d2791656dbd6ad1e1"},
+    {file = "requests-2.32.3-py3-none-any.whl", hash = "sha256:70761cfe03c773ceb22aa2f671b4757976145175cdfca038c02654d061d6dcc6"},
+    {file = "requests-2.32.3.tar.gz", hash = "sha256:55365417734eb18255590a9ff9eb97e9e1da868d4ccd6402399eaf68af20a760"},
 ]
 
 [package.dependencies]
@@ -1845,4 +1845,4 @@ files = [
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.9"
-content-hash = "c9c03b14701a1f150f4add041670d1113f813b0d0b411e2e9a900aa9d03cb9aa"
+content-hash = "da09717626ffd179086ac405fc84a3fe0cb3a388a13e3b17d96e743b0b957c8f"
