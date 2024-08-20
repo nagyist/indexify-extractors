@@ -53,7 +53,7 @@ class MoondreamExtractor(Extractor):
     ) -> List[List[Union[Feature, Content]]]:
         images = []
         prompts = []
-        for (content, config) in zip(content_list, params):
+        for content, config in zip(content_list, params):
             image = Image.open(io.BytesIO(content.data))
             images.append(image)
             prompts.append(config.prompt)

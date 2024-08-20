@@ -515,6 +515,7 @@ class GetExtractionGraphAnalyticsResponse(_message.Message):
             key: _Optional[str] = ...,
             value: _Optional[_Union[TaskAnalytics, _Mapping]] = ...,
         ) -> None: ...
+
     TASK_ANALYTICS_FIELD_NUMBER: _ClassVar[int]
     task_analytics: _containers.MessageMap[str, TaskAnalytics]
     def __init__(
@@ -556,6 +557,7 @@ class Task(_message.Message):
         def __init__(
             self, key: _Optional[str] = ..., value: _Optional[str] = ...
         ) -> None: ...
+
     ID_FIELD_NUMBER: _ClassVar[int]
     EXTRACTOR_FIELD_NUMBER: _ClassVar[int]
     NAMESPACE_FIELD_NUMBER: _ClassVar[int]
@@ -631,6 +633,7 @@ class Extractor(_message.Message):
         def __init__(
             self, key: _Optional[str] = ..., value: _Optional[str] = ...
         ) -> None: ...
+
     NAME_FIELD_NUMBER: _ClassVar[int]
     DESCRIPTION_FIELD_NUMBER: _ClassVar[int]
     INPUT_PARAMS_FIELD_NUMBER: _ClassVar[int]
@@ -823,6 +826,7 @@ class ExtractionPolicy(_message.Message):
         def __init__(
             self, key: _Optional[str] = ..., value: _Optional[str] = ...
         ) -> None: ...
+
     ID_FIELD_NUMBER: _ClassVar[int]
     EXTRACTOR_FIELD_NUMBER: _ClassVar[int]
     NAME_FIELD_NUMBER: _ClassVar[int]
@@ -930,6 +934,7 @@ class CreateExtractionGraphResponse(_message.Message):
             key: _Optional[str] = ...,
             value: _Optional[_Union[ExtractionPolicy, _Mapping]] = ...,
         ) -> None: ...
+
     GRAPH_ID_FIELD_NUMBER: _ClassVar[int]
     EXTRACTORS_FIELD_NUMBER: _ClassVar[int]
     POLICIES_FIELD_NUMBER: _ClassVar[int]
@@ -974,6 +979,7 @@ class ExtractionPolicyResponse(_message.Message):
         def __init__(
             self, key: _Optional[str] = ..., value: _Optional[str] = ...
         ) -> None: ...
+
     CREATED_AT_FIELD_NUMBER: _ClassVar[int]
     EXTRACTOR_FIELD_NUMBER: _ClassVar[int]
     EXTRACTION_POLICY_FIELD_NUMBER: _ClassVar[int]
@@ -1033,6 +1039,7 @@ class ContentMetadata(_message.Message):
         def __init__(
             self, key: _Optional[str] = ..., value: _Optional[int] = ...
         ) -> None: ...
+
     ID_FIELD_NUMBER: _ClassVar[int]
     FILE_NAME_FIELD_NUMBER: _ClassVar[int]
     PARENT_ID_FIELD_NUMBER: _ClassVar[int]
@@ -1350,6 +1357,7 @@ class RaftMetricsSnapshotResponse(_message.Message):
             key: _Optional[str] = ...,
             value: _Optional[_Union[Uint64List, _Mapping]] = ...,
         ) -> None: ...
+
     FAIL_CONNECT_TO_PEER_FIELD_NUMBER: _ClassVar[int]
     SENT_BYTES_FIELD_NUMBER: _ClassVar[int]
     RECV_BYTES_FIELD_NUMBER: _ClassVar[int]
@@ -1430,6 +1438,7 @@ class TaskAssignments(_message.Message):
         def __init__(
             self, key: _Optional[str] = ..., value: _Optional[str] = ...
         ) -> None: ...
+
     ASSIGNMENTS_FIELD_NUMBER: _ClassVar[int]
     assignments: _containers.ScalarMap[str, str]
     def __init__(self, assignments: _Optional[_Mapping[str, str]] = ...) -> None: ...
@@ -1503,6 +1512,7 @@ class UpdateLabelsRequest(_message.Message):
             key: _Optional[str] = ...,
             value: _Optional[_Union[_struct_pb2.Value, _Mapping]] = ...,
         ) -> None: ...
+
     NAMESPACE_FIELD_NUMBER: _ClassVar[int]
     CONTENT_ID_FIELD_NUMBER: _ClassVar[int]
     LABELS_FIELD_NUMBER: _ClassVar[int]

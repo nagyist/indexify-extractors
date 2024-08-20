@@ -37,13 +37,13 @@ if _descriptor._USE_C_DESCRIPTORS == False:
     _globals["_EXTRACTIONPOLICY_OUTPUTTABLEMAPPINGENTRY"]._options = None
     _globals["_EXTRACTIONPOLICY_OUTPUTTABLEMAPPINGENTRY"]._serialized_options = b"8\001"
     _globals["_CREATEEXTRACTIONGRAPHRESPONSE_EXTRACTORSENTRY"]._options = None
-    _globals[
-        "_CREATEEXTRACTIONGRAPHRESPONSE_EXTRACTORSENTRY"
-    ]._serialized_options = b"8\001"
+    _globals["_CREATEEXTRACTIONGRAPHRESPONSE_EXTRACTORSENTRY"]._serialized_options = (
+        b"8\001"
+    )
     _globals["_CREATEEXTRACTIONGRAPHRESPONSE_POLICIESENTRY"]._options = None
-    _globals[
-        "_CREATEEXTRACTIONGRAPHRESPONSE_POLICIESENTRY"
-    ]._serialized_options = b"8\001"
+    _globals["_CREATEEXTRACTIONGRAPHRESPONSE_POLICIESENTRY"]._serialized_options = (
+        b"8\001"
+    )
     _globals["_EXTRACTIONPOLICYRESPONSE_INDEXNAMETABLEMAPPINGENTRY"]._options = None
     _globals[
         "_EXTRACTIONPOLICYRESPONSE_INDEXNAMETABLEMAPPINGENTRY"
@@ -61,17 +61,17 @@ if _descriptor._USE_C_DESCRIPTORS == False:
         "_RAFTMETRICSSNAPSHOTRESPONSE_FAILCONNECTTOPEERENTRY"
     ]._serialized_options = b"8\001"
     _globals["_RAFTMETRICSSNAPSHOTRESPONSE_SENTBYTESENTRY"]._options = None
-    _globals[
-        "_RAFTMETRICSSNAPSHOTRESPONSE_SENTBYTESENTRY"
-    ]._serialized_options = b"8\001"
+    _globals["_RAFTMETRICSSNAPSHOTRESPONSE_SENTBYTESENTRY"]._serialized_options = (
+        b"8\001"
+    )
     _globals["_RAFTMETRICSSNAPSHOTRESPONSE_RECVBYTESENTRY"]._options = None
-    _globals[
-        "_RAFTMETRICSSNAPSHOTRESPONSE_RECVBYTESENTRY"
-    ]._serialized_options = b"8\001"
+    _globals["_RAFTMETRICSSNAPSHOTRESPONSE_RECVBYTESENTRY"]._serialized_options = (
+        b"8\001"
+    )
     _globals["_RAFTMETRICSSNAPSHOTRESPONSE_SENTFAILURESENTRY"]._options = None
-    _globals[
-        "_RAFTMETRICSSNAPSHOTRESPONSE_SENTFAILURESENTRY"
-    ]._serialized_options = b"8\001"
+    _globals["_RAFTMETRICSSNAPSHOTRESPONSE_SENTFAILURESENTRY"]._serialized_options = (
+        b"8\001"
+    )
     _globals["_RAFTMETRICSSNAPSHOTRESPONSE_SNAPSHOTSENDSUCCESSENTRY"]._options = None
     _globals[
         "_RAFTMETRICSSNAPSHOTRESPONSE_SNAPSHOTSENDSUCCESSENTRY"
@@ -265,9 +265,9 @@ if _descriptor._USE_C_DESCRIPTORS == False:
     _globals[
         "_EXTRACTIONPOLICYRESPONSE_INDEXNAMETABLEMAPPINGENTRY"
     ]._serialized_start = 6905
-    _globals[
-        "_EXTRACTIONPOLICYRESPONSE_INDEXNAMETABLEMAPPINGENTRY"
-    ]._serialized_end = 6965
+    _globals["_EXTRACTIONPOLICYRESPONSE_INDEXNAMETABLEMAPPINGENTRY"]._serialized_end = (
+        6965
+    )
     _globals[
         "_EXTRACTIONPOLICYRESPONSE_OUTPUTINDEXNAMEMAPPINGENTRY"
     ]._serialized_start = 6967
@@ -311,9 +311,9 @@ if _descriptor._USE_C_DESCRIPTORS == False:
     _globals[
         "_RAFTMETRICSSNAPSHOTRESPONSE_FAILCONNECTTOPEERENTRY"
     ]._serialized_start = 9951
-    _globals[
-        "_RAFTMETRICSSNAPSHOTRESPONSE_FAILCONNECTTOPEERENTRY"
-    ]._serialized_end = 10007
+    _globals["_RAFTMETRICSSNAPSHOTRESPONSE_FAILCONNECTTOPEERENTRY"]._serialized_end = (
+        10007
+    )
     _globals["_RAFTMETRICSSNAPSHOTRESPONSE_SENTBYTESENTRY"]._serialized_start = 10009
     _globals["_RAFTMETRICSSNAPSHOTRESPONSE_SENTBYTESENTRY"]._serialized_end = 10057
     _globals["_RAFTMETRICSSNAPSHOTRESPONSE_RECVBYTESENTRY"]._serialized_start = 10059

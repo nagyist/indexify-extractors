@@ -1,7 +1,7 @@
 
 
 
-3 Think DSP  
+3 Think DSP
 Digital Signal Processing in Python
 :::
 
@@ -10,13 +10,13 @@ Version 1.1.4
 
 
 
-3 Think DSP  
+3 Think DSP
 Digital Signal Processing in Python
 :::
 
 Version 1.1.4
 
-Allen B. Downey  
+Allen B. Downey
 
 Green Tea Press
 
@@ -26,8 +26,8 @@ Needham, Massachusetts
 Copyright © 2014 Allen B. Downey.
 
 
-Green Tea Press  
-9 Washburn Ave  
+Green Tea Press
+9 Washburn Ave
 Needham MA 02492
 :::
 
@@ -70,7 +70,7 @@ I use NumPy and SciPy extensively. If you are familiar with them already, that's
 
 I assume that the reader knows basic mathematics, including complex numbers. You don't need much calculus; if you understand the concepts of integration and differentiation, that will do. I use some linear algebra, but I will explain it as we go along.
 
-## Using the code 
+## Using the code
 
 The code and sound samples used in this book are available from . Git is a version control system that allows you to keep track of the files that make up a project. A collection of files under Git's control is called a "repository". GitHub is a hosting service that provides storage for Git repositories and a convenient web interface.
 
@@ -124,7 +124,7 @@ View notebooks on nbviewer
 
 Good luck, and have fun!
 
-## Contributor List 
+## Contributor List
 
 If you have a suggestion or correction, please send email to `downey@allendowney.com`. If I make a change based on your feedback, I will add you to the contributor list (unless you ask to be omitted).
 
@@ -151,7 +151,7 @@ Unfortunately, most Freesound users don't make their real names available, so I 
 
 :::
 
-# Sounds and signals 
+# Sounds and signals
 
 A **signal** represents a quantity that varies in time. That definition is pretty abstract, so let's start with a concrete example: sound. Sound is variation in air pressure. A sound signal represents variations in air pressure over time.
 
@@ -165,7 +165,7 @@ But we start with simple one-dimensional sound.
 
 The code for this chapter is in `chap01.ipynb`, which is in the repository for this book (see Section 1.2(#code)). You can also view it at .
 
-## Periodic signals 
+## Periodic signals
 
 
 
@@ -360,7 +360,7 @@ But Wave provides methods that perform many common operations. For example, the 
 
 You can read the documentation of these methods and others at .
 
-## Signal objects 
+## Signal objects
 
 Signal is a parent class that provides functions common to all kinds of signals, like `make_wave`. Child classes inherit these methods and provide `evaluate`, which evaluates the signal at a given sequence of times.
 
@@ -452,7 +452,7 @@ I'll also introduce one of the most important phenomena in digital signal proces
 
 The code for this chapter is in `chap02.ipynb`, which is in the repository for this book (see Section 1.2(#code)). You can also view it at .
 
-## Triangle waves 
+## Triangle waves
 
 A sinusoid contains only one frequency component, so its spectrum has only one peak. More complicated waveforms, like the violin recording, yield DFTs with many peaks. In this section we investigate the relationship between waveforms and their spectrums.
 
@@ -508,7 +508,7 @@ But one surprise is that there are no peaks at the even multiples: 400, 800, etc
 
 Another feature of this spectrum is the relationship between the amplitude and frequency of the harmonics. Their amplitude drops off in proportion to frequency squared. For example the frequency ratio of the first two harmonics (200 and 600 Hz) is 3, and the amplitude ratio is approximately 9. The frequency ratio of the next two harmonics (600 and 1000 Hz) is 1.7, and the amplitude ratio is approximately $1.7^2 = 2.9$. This relationship is called the **harmonic structure**.
 
-## Square waves 
+## Square waves
 
 
 
@@ -689,7 +689,7 @@ Solutions to these exercises are in `chap02soln.ipynb`.
 *Hint: There are two ways you could approach this: you could construct the signal you want by adding up sinusoids, or you could start with a signal that is similar to what you want and modify it.*
 :::
 
-# Non-periodic signals 
+# Non-periodic signals
 
 The signals we have worked with so far are periodic, which means that they repeat forever. It also means that the frequency components they contain do not change over time. In this chapter, we consider non-periodic signals, whose frequency components *do* change over time. In other words, pretty much all sound signals.
 
@@ -785,7 +785,7 @@ That's it; everything else is the same as Chirp. Here's the code that makes one:
 
 You can listen to these examples in `chap03.ipynb` and compare the linear and exponential chirps.
 
-## Spectrum of a chirp 
+## Spectrum of a chirp
 
 
 
@@ -833,7 +833,7 @@ The spectrogram shows clearly that frequency increases linearly over time. Simil
 
 However, notice that the peak in each column is blurred across 2--3 cells. This blurring reflects the limited resolution of the spectrogram.
 
-## The Gabor limit 
+## The Gabor limit
 
 The **time resolution** of the spectrogram is the duration of the segments, which corresponds to the width of the cells in the spectrogram. Since each segment is 512 frames, and there are 11,025 frames per second, the duration of each segment is about 0.046 seconds.
 
@@ -923,7 +923,7 @@ Now that we understand windowing, we can understand the implementation of spectr
             i, j = 0, seg_length
             step = seg_length / 2
 
-            spec_map = 
+            spec_map =
 
             while j < len(self.ys):
                 segment = self.slice(i, j)
@@ -1098,7 +1098,7 @@ Like Spectrum, IntegratedSpectrum provides `plot_power`, so we can compute and p
 
 The result, shown in Figure 5.3(#fig.whitenoise2), is a straight line, which indicates that power at all frequencies is constant, on average. Noise with equal power at all frequencies is called **white noise** by analogy with light, because an equal mixture of light at all visible frequencies is white.
 
-## Brownian noise 
+## Brownian noise
 
 
 
@@ -1169,7 +1169,7 @@ For Brownian noise, the slope of the power spectrum is -2 (we'll see why in Chap
 
 Brownian noise is also called **red noise**, for the same reason that white noise is called "white". If you combine visible light with power proportional to $1/f^2$, most of the power would be at the low-frequency end of the spectrum, which is red. Brownian noise is also sometimes called "brown noise", but I think that's confusing, so I won't use it.
 
-## Pink Noise 
+## Pink Noise
 
 
 
@@ -1337,7 +1337,7 @@ Figure 6.1(#fig.autocorr1) shows what the first few periods of these waves look 
 
     >>> corr_matrix = np.corrcoef(wave1.ys, wave2.ys, ddof=0)
      1.    0.54
-      0.54  1.  
+      0.54  1.
 
 The option `ddof=0` indicates that `corrcoef` should divide by $N$, as in the equation above, rather than use the default, $N-1$.
 
@@ -1403,7 +1403,7 @@ Since pink noise is in some sense between Brownian noise and UU noise, we might 
 
 With parameter $\beta=1$, I got a serial correlation of 0.851. As we vary the parameter from $\beta=0$, which is uncorrelated noise, to $\beta=2$, which is Brownian, serial correlation ranges from 0 to almost 1, as shown in Figure 6.3(#fig.autocorr3).
 
-## Autocorrelation 
+## Autocorrelation
 
 In the previous section we computed the correlation between each value and the next, so we shifted the elements of the array by 1. But we can easily compute serial correlations with different lags.
 
@@ -1495,7 +1495,7 @@ Figure 6.8(#fig.autocorr8) shows the autocorrelation function for the segment st
 
 The estimated fundamental frequency is 437 Hz. To evaluate the precision of the estimate, we can run the same computation with lags 100 and 102, which correspond to frequencies 432 and 441 Hz. The frequency precision using autocorrelation is less than 10 Hz, compared with 100 Hz using the spectrum. In musical terms, the expected error is about 30 cents (a third of a semitone).
 
-## Correlation as dot product 
+## Correlation as dot product
 
 I started the chapter with this definition of Pearson's correlation coefficient: $$\rho = \frac$$ Then I used $\rho$ to define serial correlation and autocorrelation. That's consistent with how these terms are used in statistics, but in the context of signal processing, the definitions are a little different.
 
@@ -1505,7 +1505,7 @@ If you think of $x$ and $y$ as vectors, you might recognize this formula as the 
 
 The dot product indicates the degree to which the signals are similar. If they are normalized so their standard deviations are 1, $$x \cdot y = \cos \theta$$ where $\theta$ is the angle between the vectors. And that explains why Figure 6.2(#fig.autocorr2) is a cosine curve.
 
-## Using NumPy 
+## Using NumPy
 
 
 
@@ -1562,7 +1562,7 @@ Solutions to these exercises are in `chap05soln.ipynb`.
 *Vi Hart has an excellent video called "What is up with Noises? (The Science and Mathematics of Sound, Frequency, and Pitch)"; it demonstrates the missing fundamental phenomenon and explains how pitch perception works (at least, to the degree that we know). Watch it at .*
 :::
 
-# Discrete cosine transform 
+# Discrete cosine transform
 
 The topic of this chapter is the **Discrete Cosine Transform** (DCT), which is used in MP3 and related formats for compressing music; JPEG and similar formats for images; and the MPEG family of formats for video.
 
@@ -1580,7 +1580,7 @@ Here are the steps to get there:
 
 The code for this chapter is in ` chap06.ipynb` which is in the repository for this book (see Section 1.2(#code)). You can also view it at .
 
-## Synthesis 
+## Synthesis
 
 Suppose I give you a list of amplitudes and a list of frequencies, and ask you to construct a signal that is the sum of these frequency components. Using objects in the `thinkdsp` module, there is a simple way to perform this operation, which is called **synthesis**:
 
@@ -1612,7 +1612,7 @@ This example makes a signal that contains a fundamental frequency at 100 Hz and 
 
 Conceptually, synthesis is pretty simple. But in this form it doesn't help much with **analysis**, which is the inverse problem: given the wave, how do we identify the frequency components and their amplitudes?
 
-## Synthesis with arrays 
+## Synthesis with arrays
 
 
 
@@ -1686,7 +1686,7 @@ For simplicity, I'll use the first 4 samples from the signal. Using the values o
 
 And sure enough, `amps2` is
 
-     0.6   0.25  0.1   0.05 
+     0.6   0.25  0.1   0.05
 
 This algorithm works, but it is slow. Solving a linear system of equations takes time proportional to $n^3$, where $n$ is the number of columns in $M$. We can do better.
 
@@ -1719,9 +1719,9 @@ Since the frame rate is $N$ samples per time unit, the Nyquist frequency is `N /
 
 With these values of `ts` and `fs`, the matrix, $M$, is:
 
-     1.     1.     1.     1.   
+     1.     1.     1.     1.
       1.     0.707  0.    -0.707
-      1.     0.    -1.    -0.   
+      1.     0.    -1.    -0.
       1.    -0.707 -0.     0.707
 
 You might recognize 0.707 as an approximation of $\sqrt/2$, which is $\cos \pi/4$. You also might notice that this matrix is **symmetric**, which means that the element at $(j, k)$ always equals the element at $(k, j)$. This implies that $M$ is its own transpose; that is, $M^T = M$.
@@ -1735,7 +1735,7 @@ But sadly, $M$ is not orthogonal. If we compute $M^TM$, we get:
 
 And that's not the identity matrix.
 
-## DCT-IV 
+## DCT-IV
 
 But if we choose `ts` and `fs` carefully, we can make $M$ orthogonal. There are several ways to do it, which is why there are several versions of the discrete cosine transform (DCT).
 
@@ -1897,7 +1897,7 @@ For the following exercises, I provide some starter code in `chap06starter.ipynb
 **Exercise 7.3**. *In the repository for this book you will find a Jupyter notebook called `phase.ipynb` that explores the effect of phase on sound perception. Read through this notebook and run the examples. Choose another segment of sound and run the same experiments. Can you find any general relationships between the phase structure of a sound and how we perceive it?*
 :::
 
-# Discrete Fourier Transform 
+# Discrete Fourier Transform
 
 We've been using the discrete Fourier transform (DFT) since Chapter 2(#sounds), but I haven't explained how it works. Now is the time.
 
@@ -2038,7 +2038,7 @@ Taking the second point of view, we can split the previous signal into its real 
 
 Figure 8.1(#fig.dft1) shows a segment of the result. The real part is a sum of cosines; the imaginary part is a sum of sines. Although the waveforms look different, they contain the same frequency components in the same proportions. To our ears, they sound the same (in general, we don't hear phase offsets).
 
-## Synthesis with matrices 
+## Synthesis with matrices
 
 As we saw in Section 7.2(#synthesis), we can also express the synthesis problem in terms of matrix multiplication:
 
@@ -2155,7 +2155,7 @@ Again, the result is correct within the tolerance of floating-point arithmetic.
 
      0.60+0.j  0.25+0.j  0.10-0.j  0.05-0.j
 
-## DFT 
+## DFT
 
 As a function, `analyze2` would be hard to use because it only works if `fs` and `ts` are chosen correctly. Instead, I will rewrite it to take just `ys` and compute `fs` and `ts` itself.
 
@@ -2424,7 +2424,7 @@ Ratio of spectrums for the square wave, before and after smoothing.
 
 Figure 9.4(#fig.convolution5) shows the result. As expected, the ratio is high for low frequencies and drops off at a cutoff frequency near 4000 Hz. But there is another feature we did not expect: above the cutoff, the ratio bounces around between 0 and 0.2. What's up with that?
 
-## The convolution theorem 
+## The convolution theorem
 
 
 
@@ -2470,7 +2470,7 @@ As a low-pass filter, Gaussian smoothing is better than a simple moving average.
 
 The reason it does so well is that the DFT of a Gaussian curve is also a Gaussian curve. So the ratio drops off in proportion to $\exp(-f^2)$, which is much faster than $1/f$.
 
-## Efficient convolution 
+## Efficient convolution
 
 One of the reasons the FFT is such an important algorithm is that, combined with the Convolution Theorem, it provides an efficient way to compute convolution, cross-correlation, and autocorrelation.
 
@@ -2574,7 +2574,7 @@ Solutions to these exercises are in `chap08soln.ipynb`.
 *Experiment with a few different windows and a few different sizes.*
 :::
 
-# Differentiation and Integration 
+# Differentiation and Integration
 
 This chapter picks up where the previous chapter left off, looking at the relationship between windows in the time domain and filters in the frequency domain.
 
@@ -2582,7 +2582,7 @@ In particular, we'll look at the effect of a finite difference window, which app
 
 The code for this chapter is in `chap09.ipynb`, which is in the repository for this book (see Section 1.2(#code)). You can also view it at .
 
-## Finite differences 
+## Finite differences
 
 In Section 9.1(#smoothing), we applied a smoothing window to the stock price of Facebook and found that a smoothing window in the time domain corresponds to a low-pass filter in the frequency domain.
 
@@ -2638,7 +2638,7 @@ Filters corresponding to the diff and differentiate operators (left) and integra
 
 Figure 10.3(#fig.diff_int3) shows the result. The finite difference window corresponds to a high pass filter: its amplitude increases with frequency, linearly for low frequencies, and then sublinearly after that. In the next section, we'll see why.
 
-## Differentiation 
+## Differentiation
 
 The window we used in the previous section is a numerical approximation of the first derivative, so the filter approximates the effect of differentiation.
 
@@ -2753,7 +2753,7 @@ A sawtooth wave and its spectrum.
 
 If we provide this "constant of integration", the results are identical, which confirms that this integration filter is the correct inverse of the differentiation filter.
 
-## Cumulative sum 
+## Cumulative sum
 
 In the same way that the diff operator approximates differentiation, the cumulative sum approximates integration. I'll demonstrate with a Sawtooth signal.
 
@@ -2862,7 +2862,7 @@ Solutions to these exercises are in `chap09soln.ipynb`.
 *Plot the filters that corresponds to the 2nd difference and the 2nd derivative and compare them. Hint: In order to get the filters on the same scale, use a wave with framerate 1.*
 :::
 
-# LTI systems 
+# LTI systems
 
 This chapter presents the theory of signals and systems, using musical acoustics as an example. It explains an important application of the Convolution Theorem, characterization of linear, time-invariant systems (which I'll define soon).
 
@@ -2922,7 +2922,7 @@ The spectrum is all ones; that is, an impulse is the sum of components with equa
 
 When you test a system by inputting an impulse, you are testing the response of the system at all frequencies. And you can test them all at the same time because the system is linear, so simultaneous tests don't interfere with each other.
 
-## Windows and filters 
+## Windows and filters
 
 To show why this kind of system characterization works, I will start with a simple example: a 2-element moving average. We can think of this operation as a system that takes a signal as an input and produces a slightly smoother signal as an output.
 
@@ -2959,7 +2959,7 @@ This example demonstrates two things:
 
 - Therefore, the impulse response is identical to the convolution window that characterizes the system.
 
-## Acoustic response 
+## Acoustic response
 
 To characterize the acoustic response of a room or open space, a simple way to generate an impulse is to pop a balloon or fire a gun. A gunshot puts an impulse into the system; the sound you hear is the impulse response.
 
@@ -3013,7 +3013,7 @@ Figure 11.3(#fig.systems7) shows the input (top) and output (bottom) of the syst
 
 There's one thing I glossed over in this example that I'll mention in case it bothers anyone. The violin recording I started with has already been transformed by one system: the room where it was recorded. So what I really computed in my example is the sound of the violin after two transformations. To properly simulate the sound of a violin in a different room, I should have characterized the room where the violin was recorded and applied the inverse of that transfer function first.
 
-## Systems and convolution 
+## Systems and convolution
 
 
 
@@ -3200,7 +3200,7 @@ You can hear the result in `chap11.ipynb`; it sounds like a series of four beeps
 
 The point of this example is just to demonstrate that convolution with impulses makes shifted, scaled copies. This result will be useful in the next section.
 
-## Amplitude modulation 
+## Amplitude modulation
 
 
 

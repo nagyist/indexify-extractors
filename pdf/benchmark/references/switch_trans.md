@@ -7,7 +7,7 @@ mixture-of-experts, natural language processing, sparsity, large-scale machine l
 Large scale training has been an effective path towards flexible and powerful neural language models `\citep`. Simple architectures---backed by a generous computational budget, data set size and parameter count---surpass more complicated algorithms `\citep`. An approach followed in `\citet` expands the model size of a densely-activated Transformer `\citep`. While effective, it is also extremely computationally intensive `\citep`. Inspired by the success of model scale, but seeking greater computational efficiency, we instead propose a *sparsely-activated* expert model: the Switch Transformer. In our case the sparsity comes from activating a *subset* of the neural network weights for each incoming example.
 
 
- 
+
 Scaling and sample efficiency of Switch Transformers. Left Plot: Scaling properties for increasingly sparse (more experts) Switch Transformers. Right Plot: Negative log perplexity comparing Switch Transformers to T5  models using the same compute budget.
 
 
@@ -35,7 +35,7 @@ Heeding these results, we investigate a fourth axis: increase the *parameter cou
 
 
 
-Illustration of a Switch Transformer encoder block. We replace the dense feed forward network (FFN) layer present in the Transformer with a sparse Switch FFN layer (light blue). The layer operates independently on the tokens in the sequence. We diagram two tokens (x1 = “More" and x2 = “Parameters" below) being routed (solid lines) across four FFN experts, where the router independently routes each token. The switch FFN layer returns the output of the selected FFN multiplied by the router gate value (dotted-line). 
+Illustration of a Switch Transformer encoder block. We replace the dense feed forward network (FFN) layer present in the Transformer with a sparse Switch FFN layer (light blue). The layer operates independently on the tokens in the sequence. We diagram two tokens (x1 = “More" and x2 = “Parameters" below) being routed (solid lines) across four FFN experts, where the router independently routes each token. The switch FFN layer returns the output of the selected FFN multiplied by the router gate value (dotted-line).
 
 
 ## Simplifying Sparse Routing
@@ -52,7 +52,7 @@ The benefits for the Switch layer are three-fold: **(1)** The router computation
 Illustration of token routing dynamics. Each expert processes a fixed batch-size of tokens modulated by the capacity factor. Each token is routed to the expert with the highest router probability, but each expert has a fixed batch size of (total_tokens / num_experts) × capacity_factor. If the tokens are unevenly dispatched then certain experts will overflow (denoted by dotted red lines), resulting in these tokens not being processed by this layer. A larger capacity factor alleviates this overflow issue, but also increases computation and communication costs (depicted by padded white/empty slots).
 
 
-## Efficient Sparse Routing 
+## Efficient Sparse Routing
 
 We use Mesh-Tensorflow (MTF) `\citep` which is a library, with similar semantics and API to Tensorflow `\citep` that facilitates efficient distributed data and model parallel architectures. It does so by abstracting the physical set of cores to a logical mesh of processors. Tensors and computations may then be sharded per named dimensions, facilitating easy partitioning of models across dimensions. We design our model with TPUs in mind, which require statically declared sizes. Below we describe our distributed Switch Transformer implementation.
 
@@ -151,7 +151,7 @@ Fine-tuning regularization results. A sweep of dropout rates while fine-tuning S
 
 We thus propose a simple way to alleviate this issue during fine-tuning: increase the dropout inside the experts, which we name as *expert dropout*. During fine-tuning we simply increase the dropout rate by a significant amount only at the interim feed-forward computation at each expert layer. Table 4(#tab:expert_dropout) has the results for our expert dropout protocol. We observe that simply increasing the dropout across all layers leads to worse performance. However, setting a smaller dropout rate (0.1) at non-expert layers and a much larger dropout rate (0.4) at expert layers leads to performance improvements on four smaller downstream tasks.
 
-# Scaling Properties 
+# Scaling Properties
 
 We present a study of the *scaling properties* of the Switch Transformer architecture during pre-training. Per `\citet`, we consider a regime where the model is not bottlenecked by either the computational budget or amount of data. To avoid the data bottleneck, we use the large C4 corpus with over 180B target tokens `\citep` and we train until diminishing returns are observed.
 
@@ -162,7 +162,7 @@ The number of experts is the most efficient dimension for scaling our model. Inc
 Figure 4(#fig:scaling) demonstrates consistent scaling benefits with the number of experts when training all models for a fixed number of steps. We observe a clear trend: when keeping the FLOPS per token fixed, having more parameters (experts) speeds up training. The left Figure demonstrates consistent scaling properties (with fixed FLOPS per token) between sparse model parameters and test loss. This reveals the advantage of scaling along this additional axis of sparse model parameters. Our right Figure measures sample efficiency of a dense model variant and four FLOP-matched sparse variants. We find that increasing the number of experts leads to more sample efficient models. Our Switch-Base 64 expert model achieves the same performance of the T5-Base model at step 60k at step 450k, which is a  7.5x speedup in terms of step time. In addition, consistent with the findings of `\citet`, we find that larger models are also more *sample efficient*---learning more quickly for a fixed number of observed tokens.
 
 
- 
+
 Scaling properties of the Switch Transformer. Left Plot: We measure the quality improvement, as measured by perplexity, as the parameters increase by scaling the number of experts. The top-left point corresponds to the T5-Base model with 223M parameters. Moving from top-left to bottom-right, we double the number of experts from 2, 4, 8 and so on until the bottom-right point of a 256 expert model with 14.7B parameters. Despite all models using an equal computational budget, we observe consistent improvements scaling the number of experts. Right Plot: Negative log perplexity per step sweeping over the number of experts. The dense baseline is shown with the purple line and we note improved sample efficiency of our Switch-Base models.
 
 
@@ -184,7 +184,7 @@ Figures 5(#fig:speed_quality_pareto) and 6(#fig:dense_vs_expert_scaling) address
 The above analysis shows that a computationally-matched dense model is outpaced by its Switch counterpart. Figure 6(#fig:dense_vs_expert_scaling) considers a different scenario: what if we instead had allocated our resources to a larger dense model? We do so now, measuring Switch-Base against the next strong baseline, *T5-Large*. But despite T5-Large applying 3.5x more FLOPs per token, Switch-Base is still more sample efficient and yields a 2.5x speedup. Furthermore, more gains can be had simply by designing a new, larger sparse version, Switch-Large, which is FLOP-matched to T5-Large. We do this and demonstrate superior scaling and fine-tuning in the following section.
 
 
- 
+
 Scaling Transformer models with Switch layers or with standard dense model scaling. Left Plot: Switch-Base is more sample efficient than both the T5-Base, and T5-Large variant, which applies 3.5x more FLOPS per token. Right Plot: As before, on a wall-clock basis, we find that Switch-Base is still faster, and yields a 2.5x speedup over T5-Large.
 
 
@@ -326,17 +326,17 @@ We now consider a scenario where all cores are allocated exclusively to the mode
 
 It is common to mix both model and data parallelism for large scale models, which was done in the largest T5 models  `\citep` and in GPT-3  `\citep`. With a total of $N = n \times m$ cores, now each core will be responsible for $B / n$ tokens and $d_ / m$ of both the weights and intermediate activation. In the forward and backward pass each core communicates a tensor of size $B / n, d_$ in an all-reduce operation.
 
-## Expert and Data Parallelism 
+## Expert and Data Parallelism
 
 Next we describe the partitioning strategy for expert and data parallelism. Switch Transformers will allocate all of their cores to the data partitioning dimension $n$, which will also correspond to the number of experts in the model. For each token per core a router locally computes assignments to the experts. The output is a binary matrix of size \$n$, $B / n$, $E$, $C$\ which is partitioned across the first dimension and determines expert assignment. This binary matrix is then used to do a gather via matrix multiplication with the input tensor of \$n$, $B / n$, $d_$\. $$\text(n, B / n, d_, n, B / n, E, C, \text=B / n)$$ resulting in the final tensor of shape \$n$, $E$, $C$, $d_$\, which is sharded across the first dimension. Because each core has its own expert, we do an all-to-all communication of size \$E$, $C$, $d_$\ to now shard the $E$ dimension instead of the $n$-dimension. There are additional communication costs of bfloat16 tensors of size $E \times C \times d_$ in the forward pass to analogusly receive the tokens from each expert located on different cores. See Appendix 15(#sec:pseudo_code) for a detailed analysis of the expert partitioning code.
 
-## Expert, Model and Data Parallelism 
+## Expert, Model and Data Parallelism
 
 In the design of our best model, we seek to balance the FLOPS per token and the parameter count. When we scale the number of experts, we increase the number of parameters, but do not change the FLOPs per token. In order to increase FLOPs, we must also increase the $d_$ dimension (which also increases parameters, but at a slower rate). This presents a trade-off: as we increase $d_$ we will run out of memory per core, which then necessitates increasing $m$. But since we have a fixed number of cores $N$, and $N=n \times m$, we must decrease $n$, which forces use of a smaller batch-size (in order to hold tokens per core constant).
 
 When combining both model and expert-parallelism, we will have all-to-all communication costs from routing the tokens to the correct experts along with the internal all-reduce communications from the model parallelism. Balancing the FLOPS, communication costs and memory per core becomes quite complex when combining all three methods where the best mapping is empirically determined. See our further analysis in section 5.6(#sec:trillion_results) for how the number of experts effects the downstream performance as well.
 
-## Towards Trillion Parameter Models 
+## Towards Trillion Parameter Models
 
 Combining expert, model and data parallelism, we design two large Switch Transformer models, one with 395 billion and 1.6 trillion parameters, respectively. We study how these models perform on both up-stream pre-training as language models and their downstream fine-tuning performance. The parameters, FLOPs per sequence and hyper-parameters of the two different models are listed below in Table \tab: model_params\(#tab: model_params). Standard hyper-parameters of the Transformer, including $d_$, $d_$, $d_$, number of heads and number of layers are described, as well as a less common feature, $FFN_$, which refers to a variation of the FFN layer where the expansion matrix is substituted with two sets of weights which are non-linearly combined `\citep`.
 
@@ -403,7 +403,7 @@ This list could easily be extended, but we hope this gives a flavor for the type
 
 Switch Transformers are scalable and effective natural language learners. We simplify Mixture of Experts to produce an architecture that is easy to understand, stable to train and vastly more sample efficient than equivalently-sized dense models. We find that these models excel across a diverse set of natural language tasks and in different training regimes, including pre-training, fine-tuning and multi-task training. These advances make it possible to train models with hundreds of billion to trillion parameters and which achieve substantial speedups relative to dense T5 baselines. We hope our work motivates sparse models as an effective architecture and that this encourages researchers and practitioners to consider these flexible models in natural language tasks, and beyond.
 
-# Switch for Attention 
+# Switch for Attention
 
 `\citet` designed MoE Transformers `\citep` by adding MoE layers into the dense feedfoward network (FFN) computations of the Transformer. Similarly, our work also replaced the FFN layer in the Transformer, but we briefly explore here an alternate design. We add Switch layers into the Transformer *Self-Attention* layers. To do so, we replace the trainable weight matrices that produce the queries, keys and values with Switch layers as seen in Figure 10(#fig:experts_attention).
 
@@ -458,7 +458,7 @@ Router Exploration Strategies. Quality of the Switch Transformer, measured by th
 
 To introduce exploration, we consider several approaches: 1) deterministic or argmax 2) sampling from the softmax distribution 3) input dropout on the incoming representation 4) multiplicative jitter noise on the incoming representation. The resulting impact on model quality is reported in Table 10(#tab: top1_noise). Throughout this work, we use input jitter to inject noise as we have found it to empirically perform the best.
 
-# Switch Transformers in Lower Compute Regimes 
+# Switch Transformers in Lower Compute Regimes
 
 Switch Transformer is also an effective architecture at small scales as well as in regimes with thousands of cores and trillions of parameters. Many of our prior experiments were at the scale of 10B+ parameter models, but we show in Figure 12(#fig: few_experts) as few as 2 experts produce compelling gains over a FLOP-matched counterpart. Even if a super computer is not readily available, training Switch Transformers with 2, 4, or 8 experts (as we typically recommend one expert per core) results in solid improvements over T5 dense baselines.
 
@@ -467,18 +467,18 @@ Switch Transformer is also an effective architecture at small scales as well as 
 Switch Transformer with few experts. Switch Transformer improves over the baseline even with very few experts. Here we show scaling properties at very small scales, where we improve over the T5-Base model using 2, 4, and 8 experts.
 
 
-# Relation of Upstream to Downstream Model Performance 
+# Relation of Upstream to Downstream Model Performance
 
 There is no guarantee that a model's quality on a pre-training objective will translate to downstream task results. Figure 13(#fig:downstream_scaling) presents the correlation of the upstream model quality, for both dense and Switch models, on the C4 pre-training task with two downstream task measures: average SuperGLUE performance and TriviaQA score. We choose these two tasks as one probes the model's reasoning and the other factual knowledge.
 
 
- 
+
 Upstream pre-trained quality to downstream model quality. We correlate the upstream performance with downstream quality on both SuperGLUE and TriviaQA (SOTA recorded without SSM), reasoning and knowledge-heavy benchmarks, respectively (validation sets). We find that, as with the baseline, the Switch model scales with improvements in the upstream pre-training task. For SuperGLUE, we find a loosely linear relation between negative log perplexity and the average SuperGLUE score. However, the dense model often performs better for a fixed perplexity, particularly in the large-scale regime. Conversely, on the knowledge-heavy task, TriviaQA, we find that the Switch Transformer may follow an improved scaling relationship – for a given upstream perplexity, it does better than a dense counterpart. Further statistics (expensive to collect and left to future work) would be necessary to confirm these observations.
 
 
 We find a consistent correlation, indicating that for both baseline and Switch models, improved pre-training leads to better downstream results. Additionally, for a fixed upstream perplexity we find that both Switch and dense models perform similarly in the small to medium model size regime. However, in the largest model regime (T5-11B/T5-XXL) our largest Switch models, as mentioned in Section 5.6(#sec:trillion_results), do not always translate their upstream perplexity well to downstream fine-tuning on the SuperGLUE task. This warrants future investigation and study to fully realize the potential of sparse models. Understanding the fine-tuning dynamics with expert-models is very complicated and is dependent on regularization, load-balancing, and fine-tuning hyper-parameters.
 
-# Pseudo Code for Switch Transformers 
+# Pseudo Code for Switch Transformers
 
 Pseudocode for Switch Transformers in Mesh Tensorflow `\citep`. No model parallelism is being used for the below code (see 5.4(#sec: expert_data_parallelism) for more details).
 
@@ -495,12 +495,12 @@ def load_balance_loss(router_probs, expert_mask):
     # For each core, get the fraction of tokens routed to each expert.
     # density_1 shape: num_cores, num_experts
     density_1 = mtf.reduce_mean(expert_mask, reduced_dim=tokens_per_core)
-    
+
     # For each core, get fraction of probability mass assigned to each expert
     # from the router across all tokens.
     # density_1_proxy shape: num_cores, num_experts
     density_1_proxy = mtf.reduce_mean(router_probs, reduced_dim=tokens_per_core)
-    
+
     # density_l for a single core: vector of length num_experts that sums to 1.
     # density_l_proxy for a single core: vector of length num_experts that sums to 1.
     # Want both vectors to have uniform allocation (1/num_experts) across all num_expert elements.
@@ -514,36 +514,36 @@ Pseudo code for the load balance loss for Switch Transformers in Mesh Tensorflow
 import mesh_tensorflow as mtf
 
 def router(inputs, capacity_factor):
-    &quot;&quot;&quot;Produce the combine and dispatch tensors used for sending and 
+    &quot;&quot;&quot;Produce the combine and dispatch tensors used for sending and
     receiving tokens from their highest probability expert. &quot;&quot;&quot;
     # Core layout is split across num_cores for all tensors and operations.
     # inputs shape: num_cores, tokens_per_core, d_model
-    
+
     router_weights = mtf.Variable(shape=d_model, num_experts)
-    
+
     # router_logits shape: num_cores, tokens_per_core, num_experts
     router_logits = mtf.einsum(inputs, router_weights, reduced_dim=d_model)
-    
+
     if is_training:
         # Add noise for exploration across experts.
         router_logits += mtf.random_uniform(shape=router_logits.shape, minval=1-eps, maxval=1+eps)
-    
+
     # Convert input to softmax operation from bfloat16 to float32 for stability.
     router_logits = mtf.to_float32(router_logits)
-    
+
     # Probabilities for each token of what expert it should be sent to.
     router_probs = mtf.softmax(router_logits, axis=-1)
-    
+
     # Get the top-1 expert for each token. expert_gate is the top-1 probability
     # from the router for each token. expert_index is what expert each token
     # is going to be routed to.
     # expert_gate shape: num_cores, tokens_per_core
     # expert_index shape: num_cores, tokens_per_core
     expert_gate, expert_index = mtf.top_1(router_probs, reduced_dim=num_experts)
-    
+
     # expert_mask shape: num_cores, tokens_per_core, num_experts
     expert_mask = mtf.one_hot(expert_index, dimension=num_experts)
-    
+
     # Compute load balancing loss.
     aux_loss = load_balance_loss(router_probs, expert_mask)
 
@@ -552,30 +552,30 @@ def router(inputs, capacity_factor):
     # make sure that not more that expert_capacity examples can be routed to
     # each expert.
     position_in_expert = mtf.cumsum(expert_mask, dimension=tokens_per_core) * expert_mask
-    
+
     # Keep only tokens that fit within expert_capacity.
     expert_mask *= mtf.less(position_in_expert, expert_capacity)
     expert_mask_flat = mtf.reduce_sum(expert_mask, reduced_dim=experts_dim)
 
-    # Mask out the experts that have overflowed the expert capacity. 
+    # Mask out the experts that have overflowed the expert capacity.
     expert_gate *= expert_mask_flat
-    
+
     # combine_tensor used for combining expert outputs and scaling with router probability.
     # combine_tensor shape: num_cores, tokens_per_core, num_experts, expert_capacity
     combine_tensor = (
         expert_gate * expert_mask_flat *
         mtf.one_hot(expert_index, dimension=num_experts) *
         mtf.one_hot(position_in_expert, dimension=expert_capacity))
-    
+
     # Cast back outputs to bfloat16 for the rest of the layer.
     combine_tensor = mtf.to_bfloat16(combine_tensor)
-    
+
     # Create binary dispatch tensor that is 1 if the token gets routed to the corresponding expert.
     # dispatch_tensor shape: num_cores, tokens_per_core, num_experts, expert_capacity
     dispatch_tensor = mtf.cast(combine_tensor, tf.bool)
-    
+
     return dispatch_tensor, combine_tensor, aux_loss
-    
+
 Pseudo code for the router for Switch Transformers in Mesh Tensorflow.
 
 
@@ -590,7 +590,7 @@ def switch_layer(inputs, n, capacity_factor, num_experts):
     # capacity_factor = extra buffer for each expert.
     # inputs shape: batch, seq_len, d_model
     batch, seq_len, d_model = inputs.get_shape()
-    
+
     # Each core will route tokens_per_core tokens to the correct experts.
     tokens_per_core = batch * seq_len / num_cores
 
@@ -603,7 +603,7 @@ def switch_layer(inputs, n, capacity_factor, num_experts):
     # shape: batch, seq_len, d_model -&gt; num_cores, tokens_per_core, d_model
     # Core layout: n, 1, 1 -&gt; n, 1, 1
     inputs = mtf.reshape(inputs, num_cores, tokens_per_core, d_model)
-    
+
     # Core Layout: n, 1, 1 -&gt; n, 1, 1, 1, n, 1, 1, 1
     # dispatch_tensor (boolean) shape: num_cores, tokens_per_core, num_experts, expert_capacity
     # dispatch_tensor is used for routing tokens to the correct expert.
@@ -611,35 +611,35 @@ def switch_layer(inputs, n, capacity_factor, num_experts):
     # combine_tensor used for combining expert outputs and scaling with router
     # probability.
     dispatch_tensor, combine_tensor, aux_loss = router(inputs, expert_capacity)
-    
-    # Matmul with large boolean tensor to assign tokens to the correct expert. 
+
+    # Matmul with large boolean tensor to assign tokens to the correct expert.
     # Core Layout: n, 1, 1, -&gt; 1, n, 1, 1
     # expert_inputs shape: num_experts, num_cores, expert_capacity, d_model
     expert_inputs = mtf.einsum(inputs, dispatch_tensor, reduce_dims=tokens_per_core)
-    
-    # All-to-All communication. Cores split across num_cores and now we want to split 
-    # across num_experts. This sends tokens, routed locally, to the correct expert now 
+
+    # All-to-All communication. Cores split across num_cores and now we want to split
+    # across num_experts. This sends tokens, routed locally, to the correct expert now
     # split across different cores.
     # Core layout: 1, n, 1, 1 -&gt; n, 1, 1, 1
     expert_inputs = mtf.reshape(expert_inputs, num_experts, num_cores, expert_capacity, d_model)
-    
-    # Standard feed forward computation, where each expert will have its own 
+
+    # Standard feed forward computation, where each expert will have its own
     # unique set of parameters.
-    # Total unique parameters created: num_experts * (d_model * d_ff * 2). 
+    # Total unique parameters created: num_experts * (d_model * d_ff * 2).
     # expert_outputs shape: num_experts, num_cores, expert_capacity, d_model
     expert_outputs = feed_forward(expert_inputs)
-    
-    # All-to-All communication. Cores are currently split across the experts 
+
+    # All-to-All communication. Cores are currently split across the experts
     # dimension, which needs to be switched back to being split across num_cores.
     # Core Layout: n, 1, 1, 1 -&gt; 1, n, 1, 1
     expert_outputs = mtf.reshape(expert_outputs, num_experts, num_cores, expert_capacity, d_model)
-    
+
     # Convert back to input shape and multiply outputs of experts by the routing probability.
     # expert_outputs shape: num_experts, num_cores, tokens_per_core, d_model
     # expert_outputs_combined shape: num_cores, tokens_per_core, d_model
     # Core Layout: 1, n, 1, 1 -&gt; n, 1, 1
     expert_outputs_combined = mtf.einsum(expert_outputs, combine_tensor, reduce_dims=tokens_per_core)
-    
+
     # Remove tokens_per_core shapes used for local routing dispatching to match input shape.
     # Core Layout: n, 1, 1 -&gt; n, 1, 1
     outputs = mtf.reshape(expert_outputs_combined, batch, seq_len, d_model)
@@ -649,9 +649,9 @@ def switch_layer(inputs, n, capacity_factor, num_experts):
 Pseudo code of the Switch Transformer layer in Mesh Tensorflow.
 
 
-^1: JAX code for Switch Transformer and all model checkpoints are available at 
+^1: JAX code for Switch Transformer and all model checkpoints are available at
 
-^2: Tensorflow code for Switch Transformer is available at 
+^2: Tensorflow code for Switch Transformer is available at
 
 ^3: Equal contribution.
 

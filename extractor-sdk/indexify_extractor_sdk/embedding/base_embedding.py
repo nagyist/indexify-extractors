@@ -30,8 +30,7 @@ class BaseEmbeddingExtractor(Extractor):
         return out
 
     @abstractmethod
-    def extract_embeddings(self, texts: List[str]) -> List[List[float]]:
-        ...
+    def extract_embeddings(self, texts: List[str]) -> List[List[float]]: ...
 
     def sample_input(self) -> Content:
         return Content.from_text("hello world")

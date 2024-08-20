@@ -20,7 +20,7 @@ A given audio file will go through the following steps:
 ```pip install --no-deps -r requirements.Darwin.txt```
 
 ### Install requirements for Linux on GPUs
-You might need to run the following script before running the extractor on Linux with CUDA - 
+You might need to run the following script before running the extractor on Linux with CUDA -
 ```
 export LD_LIBRARY_PATH=`python3 -c 'import os; import nvidia.cublas.lib; import nvidia.cudnn.lib; print(os.path.dirname(nvidia.cublas.lib.__file__) + ":" + os.path.dirname(nvidia.cudnn.lib.__file__))'`
 ```
@@ -86,6 +86,6 @@ short-podcast-clip.mp3
 
 
 ### Acknowledgements
-This extractor is based on the work of Mahmoud Ashraf's GitHub project [whisper-diarization](https://github.com/MahmoudAshraf97/whisper-diarization). 
+This extractor is based on the work of Mahmoud Ashraf's GitHub project [whisper-diarization](https://github.com/MahmoudAshraf97/whisper-diarization).
 
 Models used are [OpenAI's Whisper](https://github.com/openai/whisper) , [Faster Whisper](https://github.com/guillaumekln/faster-whisper) , [Nvidia NeMo](https://github.com/NVIDIA/NeMo) , and [Facebook's Demucs](https://github.com/facebookresearch/demucs)

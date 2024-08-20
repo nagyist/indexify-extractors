@@ -22,4 +22,3 @@ jobs:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
       - run: docker push ${{ github.event.inputs.extractor-name }}
-

@@ -30,7 +30,7 @@ In this paper, however, we aim to apply the dilated convolution method of , whic
 
 # Method
 
-## Dilated Convolutions for Multicolumn Networks 
+## Dilated Convolutions for Multicolumn Networks
 
 
 
@@ -69,13 +69,13 @@ UCF is a particularly challenging crowd counting dataset. There are only 50 imag
 
 We take 1600 random patches of size $150 \times 150$ for the training. For testing, we do not densely scan the image as in  but instead test on the whole image. In order to standardize the image sizes, we pad each image out with zeros until all images are $1024 \times 1024$. We then suppress output in the regions where we added padding when testing. This provides a cleaner resulting density map for these large crowds. The ground truth density maps are produced by annotating each object with a Gaussian of $\sigma = 15$.
 
-### TRANCOS Traffic Counting 
+### TRANCOS Traffic Counting
 
 TRANCOS is a traffic counting dataset that comes with its own metric . This metric is known as $GAME$, which stands for Grid Average Mean absolute Error. $GAME$ splits a given density map into $4^L$ grids, or subarrays, and obtains a mean absolute error within each grid separately. The value of $L$ is a parameter chosen by the user. These individual errors are summed to obtain the final error for a particular image. The intuition behind this metric is that it is desirable to penalize a density map whose overall count might match the ground truth, but whose shape does not match the ground truth . More formally, we define $$GAME(L) = \frac \cdot \sum_^ \left( \sum_^\lvert e_n^l - t_n^l \rvert \right)$$ where $N$ refers to the number of images, $L$ is the level parameter for $GAME$, $e_n^l$ is the predicted or estimated count in region $l$ of image $n$ and $t_n^l$ is the ground truth count in region $l$ of image $n$ .
 
 For training this dataset, we take 1600 randomly sampled patches of size $80 \times 80$. For testing this dataset, we take $80 \times 80$ non-overlapping patches which we can stitch back together into the full-sized $640 \times 480$ images. We trained the AMDCN network with density maps produced with a Gaussian of $\sigma = 15$ as specified in .
 
-### UCSD Crowd Counting 
+### UCSD Crowd Counting
 
 The UCSD crowd counting dataset consists of frames of video of a sidewalk. There are relatively few people in view at any given time (approximately 25 on average). Furthermore, because the dataset comes from a video, there are many nearly identical images in the dataset. For this dataset, there have been two different ways to split the data into train and test sets. Therefore, we report results using both methods of splitting the data. The first method consists of four different splits: maximal, downscale, upscale, and minimal. Minimal is particularly challenging as the train set contains only 10 images. Moreover, upscale appears to be the easiest for the majority of methods . The second method of splitting this data is much more succinct, leaving 1200 images in the testing set and 800 images in the training set . This split comes from the original paper, so we call it the original split .
 
@@ -95,7 +95,7 @@ When perspective maps are used, however, we follow the procedure as described in
 
 # Results
 
-## UCF Crowd Counting 
+## UCF Crowd Counting
 
 The UCF dataset is particularly challenging due to the large number of people in the images, the variety of the scenes, as well as the low number of training images. We see in Figure 1(#fig:sample_output) that because the UCF dataset has over 1000 people on average in each image, the shapes output by the network in the density map are not as well defined or separated as in the UCSD dataset.
 
@@ -116,7 +116,7 @@ Mean absolute error of various methods on UCF crowds
 :::
 :::
 
-## TRANCOS Traffic Counting 
+## TRANCOS Traffic Counting
 
 Our network performs very well on the TRANCOS dataset. Indeed, as confirmed by the GAME score, AMDCN produces the most accurate count and shape combined as compared to other methods. Table 2(#tab:trancos) shows that we achieve state of the art results as measured by the $GAME$ metric  across all levels.
 
@@ -134,7 +134,7 @@ Mean absolute error of various methods on TRANCOS traffic
 :::
 :::
 
-## UCSD Crowd Counting 
+## UCSD Crowd Counting
 
 
 
@@ -164,7 +164,7 @@ Results are shown in Table \tab:ucsd\(#tab:ucsd) and Figure \fig:ucsd_plots\(#fi
 :::
 :::
 
-## WorldExpo '10 Crowd Counting 
+## WorldExpo '10 Crowd Counting
 
 Our network performs reasonably well on the more challenging WorldExpo dataset. While it does not beat the state of the art, our results are comparable. What is more, we do not need to use the perspective maps to obtain these results. As seen in Table 3(#tab:worldexpo), the AMDCN is capable of incorporating the perspective effects without scaling the Gaussians with perspective information. This shows that it is possible to achieve counting results that approach the state of the art with much simpler labels for the counting training data.
 
@@ -182,7 +182,7 @@ Mean absolute error of various methods on WorldExpo crowds
 :::
 :::
 
-## Ablation Studies 
+## Ablation Studies
 
 
 
@@ -205,7 +205,7 @@ In addition to an analysis of performance on counting, a density regressor can a
 
 Indeed, the method of applying dilated filters to a multicolumn convolutional network in order to enable extracting features of a large number of scales can be applied to various other dense prediction tasks, such as object segmentation at multiple scales or single image depth map prediction. Though we have only conducted experiments on counting and used 5 columns, the architecture presented can be extended and adapted to a variety of tasks that require information at multiple scales.
 
-# Acknowledgment 
+# Acknowledgment
 
 This material is based upon work supported by the National Science Foundation under Grant No. 1359275 and 1659788. Any opinions, findings, and conclusions or recommendations expressed in this material are those of the authors and do not necessarily reflect the views of the National Science Foundation. Furthermore, we acknowledge Kyle Yee and Sridhama Prakhya for their helpful conversations and insights during the research process.
 

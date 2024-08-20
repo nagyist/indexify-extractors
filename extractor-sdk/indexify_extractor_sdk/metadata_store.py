@@ -18,7 +18,7 @@ class ExtractorMetadataStore:
             cur = conn.cursor()
             cur.execute(
                 f"""
-                    CREATE TABLE 
+                    CREATE TABLE
                     IF NOT EXISTS extractors (
                     id TEXT NOT NULL PRIMARY KEY,
                     name TEXT NOT NULL,
@@ -53,8 +53,8 @@ class ExtractorMetadataStore:
                 """
                 INSERT INTO extractors (id, name, description, input_params, input_mime_types, metadata_schemas, embedding_schemas)
                 VALUES (?, ?, ?, ?, ?, ?, ?)
-                ON CONFLICT(id) 
-                DO UPDATE SET 
+                ON CONFLICT(id)
+                DO UPDATE SET
                     id = excluded.id,
                     name = excluded.name,
                     description = excluded.description,
