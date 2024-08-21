@@ -3,7 +3,6 @@
   {"type": "embedding", "module_name": "clip_embedding.openai_clip_extractor:ClipEmbeddingExtractor", "name": "tensorlake/clip-extractor", "path": "embedding/clip_embedding"},
   {"type": "embedding", "module_name": "minilm-l6.minilm_l6:MiniLML6Extractor", "name": "tensorlake/minilm-l6", "path": "embedding/minilm-l6"},
   {"type": "embedding", "module_name": "mpnet.mpnet_base_v2:MPNetV2", "name": "tensorlake/mpnet", "path": "embedding/mpnet"},
-  {"type": "embedding", "module_name": "scibert.scibert_uncased:SciBERTExtractor", "name": "tensorlake/scibert", "path": "embedding/scibert"},
   {"type": "audio", "module_name": "whisper-asr.whisper_extractor:WhisperExtractor", "with_gpu": true, "name": "tensorlake/whisper-asr", "path": "audio/whisper-asr"},
   {"type": "audio", "module_name": "whisper-mlx.whisper_extractor:WhisperExtractor", "skip_deploy": true,"name": "tensorlake/whisper-mlx", "path": "audio/whisper-mlx"},
   {"type": "audio", "module_name": "groq.whisper:WhisperExtractor", "skip_deploy": true, "name": "tensorlake/whispergroq", "path": "audio/groq"},
