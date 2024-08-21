@@ -11,6 +11,7 @@ class ClipEmbeddingExtractor(Extractor):
     name = "tensorlake/clip-extractor"
     description = "OpenAI Clip Embedding Extractor"
     input_mime_types = ["image/jpeg", "image/png", "image/gif", "text/plain"]
+    embedding_indexes = {"embedding": Feature(dim=512)}
 
     def __init__(self):
         super(ClipEmbeddingExtractor, self).__init__()
@@ -46,4 +47,6 @@ class ClipEmbeddingExtractor(Extractor):
 
 
 if __name__ == "__main__":
-    ClipEmbeddingExtractor().extract_sample_input()
+    clip_extractor = ClipEmbeddingExtractor()
+    result = clip_extractor.extract(Content.from_text("hello world"))
+
