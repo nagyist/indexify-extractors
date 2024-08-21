@@ -15,7 +15,6 @@
   {"type": "invoices", "module_name": "idefics2json.receipt_extractor:ReceiptExtractor", "name": "tensorlake/idefics2json", "path": "invoices/idefics2json"},
   {"type": "pdf", "module_name": "pdfextractor.pdf_extractor:PDFExtractor", "name": "tensorlake/pdfextractor", "path": "pdf/pdfextractor"},
   {"type": "pdf", "module_name": "paddleocrextractor.paddle_ocr_extractor:PaddleOCRExtractor", "name": "tensorlake/paddleocr_extractor", "path": "pdf/paddleocrextractor"},
-  {"type": "pdf", "module_name": "unstructuredio.unstructured_pdf:UnstructuredIOExtractor", "name": "tensorlake/unstructuredio", "path": "pdf/unstructuredio"},
   {"type": "pdf", "module_name": "marker.markdown_extractor:MarkdownExtractor", "name": "tensorlake/marker", "with_gpu": true, "path": "pdf/marker"},
   {"type": "pdf", "module_name": "presentations.ppt_extractor:PPTExtractor", "name": "tensorlake/ppt", "path": "pdf/presentations"},
   {"type": "text", "module_name": "chunking.chunk_extractor:ChunkExtractor", "name": "tensorlake/chunk-extractor", "path": "text/chunking"},
