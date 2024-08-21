@@ -126,7 +126,7 @@ def install_local(extractor, install_system_dependencies=False):
     # FIX ME - This doesn't work on Mac
     # Meant to only work on Ubuntu
     if install_system_dependencies:
-        install_system_dependencies = wrapper._instance.system_dependencies
+        install_system_dependencies = wrapper.describe().system_dependencies
         os.system(f"sudo apt-get install -y {' '.join(install_system_dependencies)}")
     description = wrapper.describe()
 
