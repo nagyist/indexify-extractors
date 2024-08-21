@@ -12,7 +12,7 @@
   {"type": "video", "module_name": "audio-extractor.audio_extractor:AudioExtractor", "name": "tensorlake/audio-extractor", "path": "video/audio-extractor"},
   {"type": "image", "module_name": "yolo.yolo_extractor:YoloExtractor", "name": "tensorlake/yolo-extractor", "path": "image/yolo"},
   {"type": "image", "module_name": "moondream.moondream_extractor:MoondreamExtractor", "with_gpu": true, "name": "tensorlake/moondream", "path":"image/moondream"},
-  {"type": "image", "module_name": "florence.florence_extractor:FlorenceImageExtractor","with_gpu" : true, "with_cpu": false, "name": "tensorlake/florence", "path": "image/florence"},
+  {"type": "image", "module_name": "florence.florence_extractor:FlorenceImageExtractor","with_gpu" : true, "skip_deploy": true, "with_cpu": false, "name": "tensorlake/florence", "path": "image/florence"},
   {"type": "invoices", "module_name": "idefics2json.receipt_extractor:ReceiptExtractor", "name": "tensorlake/idefics2json", "path": "invoices/idefics2json"},
   {"type": "pdf", "module_name": "pdfextractor.pdf_extractor:PDFExtractor", "name": "tensorlake/pdfextractor", "path": "pdf/pdfextractor"},
   {"type": "pdf", "module_name": "paddleocrextractor.paddle_ocr_extractor:PaddleOCRExtractor", "name": "tensorlake/paddleocr_extractor", "path": "pdf/paddleocrextractor"},
