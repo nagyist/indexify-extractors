@@ -3,7 +3,7 @@ from typing import List, Union
 
 import clip
 import torch
-from indexify_extractor_sdk import Content, Extractor, Feature
+from indexify_extractor_sdk import Content, Extractor, Feature, EmbeddingSchema
 from PIL import Image
 
 
@@ -11,7 +11,7 @@ class ClipEmbeddingExtractor(Extractor):
     name = "tensorlake/clip-extractor"
     description = "OpenAI Clip Embedding Extractor"
     input_mime_types = ["image/jpeg", "image/png", "image/gif", "text/plain"]
-    embedding_indexes = {"embedding": Feature(dim=512)}
+    embedding_indexes = {"embedding": EmbeddingSchema(dim=512)}
 
     def __init__(self):
         super(ClipEmbeddingExtractor, self).__init__()
