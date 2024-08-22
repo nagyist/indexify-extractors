@@ -3,7 +3,8 @@ import os
 import sqlite3
 from typing import List
 
-from indexify.extractor_sdk import EmbeddingSchema
+from indexify.extractor_sdk import EmbeddingSchema, ExtractorMetadata
+from .base_extractor import ExtractorWrapper
 
 from .base_extractor import EXTRACTORS_PATH, ExtractorMetadata
 
@@ -31,6 +32,11 @@ class ExtractorMetadataStore:
                     """
             )
             conn.commit()
+        # Temporary hack until we redo the packaging
+        if os.environ.get("EXTRACTOR_PATH"):
+            wrapper: ExtractorMetadata = ExtractorWrapper.from_name(os.environ.get("EXTRACTOR_PATH"))
+            description = wrapper.describe()
+            self.save_description(os.environ.get("EXTRACTOR_PATH"), description)
 
     def save_description(self, id: str, description: ExtractorMetadata):
         with sqlite3.connect(self._path) as conn:

@@ -3,6 +3,7 @@ import json
 import ssl
 from concurrent.futures.process import BrokenProcessPool
 from typing import Dict, List, Optional, Union
+import os
 
 import grpc
 import websockets
@@ -182,12 +183,15 @@ class ExtractTask(asyncio.Task):
         content_batch: ContentBatch,
         **kwargs,
     ):
+        extractor_module_class = f"indexify_extractors.{extractor_module_class}"
+        if os.environ.get("EXTRACTOR_PATH"):
+            extractor_module_class = os.environ.get("EXTRACTOR_PATH")
         kwargs["name"] = "extract_content"
         kwargs["loop"] = asyncio.get_event_loop()
         super().__init__(
             extractor_worker.async_submit(
                 extractor=extractor_name,
-                extractor_module_class=f"indexify_extractors.{extractor_module_class}",
+                extractor_module_class=extractor_module_class,
                 inputs=content_batch.content_list,
             ),
             **kwargs,

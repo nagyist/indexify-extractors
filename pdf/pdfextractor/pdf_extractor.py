@@ -5,7 +5,8 @@ from typing import List, Literal, Optional, Union
 import fitz
 import pymupdf
 import pymupdf4llm
-from indexify_extractor_sdk import Content, Extractor, Feature
+import os
+from indexify.extractor_sdk import Content, Extractor, Feature
 from pydantic import BaseModel, Field
 
 from .utils.tt_module import get_tables
@@ -68,6 +69,8 @@ class PDFExtractor(Extractor):
                         )
 
             if "table" in params.output_types:
+                if os.environ.get("EXTRACTOR_PATH"):
+                    return []
                 tables = get_tables(content.data)
                 for page_index, content in tables.items():
                     feature = Feature.metadata({"page": page_index})
