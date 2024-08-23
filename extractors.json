@@ -5,8 +5,6 @@
   {"type": "embedding", "module_name": "mpnet.mpnet_base_v2:MPNetV2", "name": "tensorlake/mpnet", "path": "embedding/mpnet"},
   {"type": "embedding", "module_name": "openai-embedding.openai_embedding:OpenAIEmbeddingExtractor", "name": "tensorlake/openai-embedding-ada-002-extractor", "path": "embedding/openai-embedding"},
   {"type": "audio", "module_name": "whisper-asr.whisper_extractor:WhisperExtractor", "with_gpu": true, "name": "tensorlake/whisper-asr", "path": "audio/whisper-asr"},
-  {"type": "audio", "module_name": "whisper-mlx.whisper_extractor:WhisperExtractor", "skip_deploy": true,"name": "tensorlake/whisper-mlx", "path": "audio/whisper-mlx"},
-  {"type": "audio", "module_name": "groq.whisper:WhisperExtractor", "skip_deploy": true, "name": "tensorlake/whispergroq", "path": "audio/groq"},
   {"type": "audio", "module_name": "asrdiarization.asr_extractor:ASRExtractor", "with_gpu": true, "name": "tensorlake/asrdiarization", "path": "audio/asrdiarization"},
   {"type": "audio", "module_name": "fasterwhisper.fasterwhisper:FasterWhisper", "with_gpu": true, "name": "tensorlake/fasterwhisper", "path": "audio/fasterwhisper"},
   {"type": "video", "module_name": "audio-extractor.audio_extractor:AudioExtractor", "name": "tensorlake/audio-extractor", "path": "video/audio-extractor"},
