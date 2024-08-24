@@ -1,3 +1,4 @@
+import json
 from typing import List, Optional, Union, Literal
 
 from indexify.extractor_sdk import Content, Extractor, Feature
@@ -25,21 +26,23 @@ class PDFExtractor(Extractor):
         contents = []
         pdf_parser = PDFParser(data=content.data)
         pages: List[Page] = pdf_parser.parse()
+        page: Page
         for page in pages:
+            features = [Feature.metadata(json.dumps({"page_number": page.number}))]
             text = ""
             for fragment in page.fragments:
                 if fragment.fragment_type == PageFragmentType.TEXT:
                     text += fragment.text
                 if fragment.fragment_type == PageFragmentType.TABLE:
                     contents.append(
-                        Content(content_type="text/html", data=fragment.table.data)
+                        Content(content_type="text/html", data=fragment.table.data,features=features)
                     )
                 if fragment.fragment_type == PageFragmentType.FIGURE:
                     contents.append(
-                        Content(content_type="image/png", data=fragment.image.data)
+                        Content(content_type="image/png", data=fragment.image.data,features=features)
                     )
             if text != "":
-                contents.append(Content(content_type="text/plain", data=text))
+                contents.append(Content(content_type="text/plain", data=text, features=features))
         return contents
 
     def sample_input(self) -> Content:
