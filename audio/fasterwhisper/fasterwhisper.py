@@ -41,12 +41,8 @@ class FasterWhisper(Extractor):
                 }
             )
 
-        # Convert to JSON if needed
-        json_output = json.dumps(entries, indent=2)
-
-        # Return transformed content as needed
         return [
-            Content.from_json(json_output),
+            Content.from_json(entries),
         ]
 
     def sample_input(self) -> Content:
