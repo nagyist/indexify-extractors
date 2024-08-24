@@ -12,6 +12,12 @@ class InputParams(BaseModel):
     device: str = "cpu"
     compute_type: str = "int8"
 
+def seconds_to_hr_min_sec(seconds: float) -> str:
+    """Convert seconds to hr:min:sec format."""
+    hr = int(seconds // 3600)
+    min = int((seconds % 3600) // 60)
+    sec = int(seconds % 60)
+    return f"{hr:02}:{min:02}:{sec:02}"
 
 class FasterWhisper(Extractor):
     name = "tensorlake/fasterwhisper"
@@ -36,11 +42,12 @@ class FasterWhisper(Extractor):
         for segment in segments:
             entries.append(
                 {
-                    "timestamp": {"start": segment.start, "end": segment.end},
+                    "timestamp": {"start": seconds_to_hr_min_sec(segment.start), "end": seconds_to_hr_min_sec(segment.end)},
                     "text": segment.text.strip(),
                 }
             )
 
+    
         return [
             Content.from_json(entries),
         ]
