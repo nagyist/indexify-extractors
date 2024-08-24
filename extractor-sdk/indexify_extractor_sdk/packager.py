@@ -164,6 +164,8 @@ class ExtractorPackager:
 
     def _extract_validate_extractor_description(self) -> dict:
         extractor_cls = getattr(self.extractor_module, self.config["class_name"])
+        default_image = "nvidia/cuda:12.4.1-base-ubuntu22.04" if self.config.get("gpu", False) else  "ubuntu:22.04"
+        image_name = default_image if extractor_cls.base_image is None else extractor_cls.base_image
 
         # we don't need to initialize the class, just get the description
         extractor_description = {
@@ -171,6 +173,7 @@ class ExtractorPackager:
             "version": extractor_cls.version,
             "system_dependencies": extractor_cls.system_dependencies,
             "python_dependencies": self._get_python_dependencies(),
+            "base_image": image_name,
         }
 
         assert (
@@ -248,6 +251,7 @@ class ExtractorPackager:
                 ),
                 dev=self.config.get("dev", False),
                 gpu=self.config.get("gpu", False),
+                base_image=self.extractor_description["base_image"],
             )
             .render()
         )

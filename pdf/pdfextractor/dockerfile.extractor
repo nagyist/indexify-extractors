@@ -1,0 +1,37 @@
+FROM deepdoctection/deepdoctection:0.33
+
+WORKDIR /root/.indexify-extractors
+
+RUN apt-get update -y && \
+    apt-get -y install git lsb-release ca-certificates apt-transport-https
+
+RUN update-ca-certificates
+
+RUN apt-get install -y   && \
+    apt-get -y clean
+
+# SET ENV VAR EXTRACTOR_PATH. This is used by the indexify-extractor join command to find the extractor
+ENV EXTRACTOR_PATH indexify_extractors.pdf_extractor:PDFExtractor
+
+RUN pip3 install --no-input --upgrade pip && \
+    pip3 install --no-input wheel && \
+    pip3 install --no-input --extra-index-url https://download.pytorch.org/whl/cpu httpx
+
+
+COPY indexify_extractor_sdk indexify_extractor_sdk/indexify_extractor_sdk
+
+COPY README.md indexify_extractor_sdk/README.md
+COPY pyproject.toml indexify_extractor_sdk/pyproject.toml
+
+RUN cd indexify_extractor_sdk && pip3 install .
+
+
+# Copy over the extractor as indexify_extractors.pdfextractor.pdf_extractor.py into indexify_extractors/indexify_extractors.pdfextractor.pdf_extractor.py
+COPY . indexify_extractors/
+
+ENV TOKENIZERS_PARALLELISM=true
+
+# verify installation
+RUN indexify-extractor --help
+
+ENTRYPOINT ["indexify-extractor"]

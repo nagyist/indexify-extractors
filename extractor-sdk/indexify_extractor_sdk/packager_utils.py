@@ -20,13 +20,10 @@ class DockerfileTemplate:
         render: Renders the Dockerfile template with the provided configuration.
     """
 
-    def __init__(self):
-        self.template = self._load_template()
-        self.configuration_params = {}
-
     def configure(
         self,
         workdir: str,
+        base_image: str,
         extractor_path: "ExtractorPathWrapper",
         system_dependencies: List[str],
         python_dependencies: List[str],
@@ -45,7 +42,9 @@ class DockerfileTemplate:
             "additional_pip_flags": additional_pip_flags,
             "dev": dev,
             "gpu": gpu,
+            "base_image": base_image,
         }
+        self.template = self._load_template()
         return self
 
     def _load_template(self) -> Template:
@@ -54,6 +53,9 @@ class DockerfileTemplate:
         from . import dockerfiles
 
         inp_file = impresources.files(dockerfiles) / "Dockerfile.extractor"
+        if self.configuration_params["base_image"] not in ["ubuntu:22.04", "nvidia/cuda:12.4.1-base-ubuntu22.04"]:
+            inp_file = impresources.files(dockerfiles) / "Dockerfile.custom_image"
+
         try:
             with open(inp_file) as f:
                 template_content = f.read()

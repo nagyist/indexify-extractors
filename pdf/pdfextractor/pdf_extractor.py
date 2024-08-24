@@ -1,4 +1,4 @@
-from typing import List, Optional, Union
+from typing import List, Optional, Union, Literal
 
 from indexify.extractor_sdk import Content, Extractor, Feature
 from indexify.extractors.pdf_parser import Page, PageFragmentType, PDFParser
@@ -7,12 +7,13 @@ from pydantic import BaseModel, Field
 
 class PDFExtractorConfig(BaseModel):
     language: Optional[str] = "en"
+    table_format: Literal["html", "csv"] = Field(default="html")
 
 
 class PDFExtractor(Extractor):
     name = "tensorlake/pdfextractor"
     description = "PDF Extractor for Texts, Images & Tables"
-    system_dependencies = ["poppler-utils"]
+    base_image = "deepdoctection/deepdoctection:0.33"
     input_mime_types = ["application/pdf"]
 
     def __init__(self):
