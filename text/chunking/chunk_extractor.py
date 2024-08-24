@@ -34,6 +34,7 @@ class ChunkExtractor(Extractor):
         text = content.data.decode("utf-8")
         if content.content_type == "application/json":
             text = json.loads(text)
+            text = {str(index): item for index, item in enumerate(text)}
         chunks = splitter(text)
 
         chunk_contents = []
