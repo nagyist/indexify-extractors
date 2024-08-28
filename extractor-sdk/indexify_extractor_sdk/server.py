@@ -2,6 +2,7 @@ import asyncio
 from typing import Dict, List, Optional
 
 import netifaces
+import os
 import uvicorn
 from fastapi import APIRouter, FastAPI
 from indexify.extractor_sdk import Content, Feature
@@ -48,9 +49,12 @@ class ServerRouter:
                 content_type=request.content.content_type,
             )
         }
+        extractor_module_class = f"indexify_extractors.{module_class}"
+        if os.environ.get("EXTRACTOR_PATH"):
+            extractor_module_class = os.environ.get("EXTRACTOR_PATH")
 
         extractor_out = await self._extractor_worker.async_submit(
-            request.extractor_name, f"indexify_extractors.{module_class}", content_dict
+            request.extractor_name, extractor_module_class, content_dict
         )
         api_content: List[ApiContent] = []
         api_features: List[ApiFeature] = []
