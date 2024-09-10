@@ -2,31 +2,33 @@ import asyncio
 from typing import Dict, List
 
 from pydantic import BaseModel
+from .api_objects import Task
+from indexify.functions_sdk.data_objects import BaseData
 
-from .server_if import coordinator_service_pb2
 from .server_if.ingestion_api_models import ApiContent, ApiFeature
 
 
 class CompletedTask(BaseModel):
     task_id: str
     task_outcome: str
+    outputs: List[BaseData]
     new_content: List[ApiContent]
     features: List[ApiFeature]
 
 
 class TaskStore:
     def __init__(self) -> None:
-        self._tasks: Dict[str, coordinator_service_pb2.Task] = {}
-        self._running_tasks: Dict[str, coordinator_service_pb2.Task] = {}
+        self._tasks: Dict[str, Task] = {}
+        self._running_tasks: Dict[str, Task] = {}
         self._finished: Dict[str, CompletedTask] = {}
         self._retries: Dict[str, int] = {}
         self._new_task_event = asyncio.Event()
         self._finished_task_event = asyncio.Event()
 
-    def get_task(self, id) -> coordinator_service_pb2.Task:
+    def get_task(self, id) -> Task:
         return self._tasks[id]
 
-    def add_tasks(self, tasks: List[coordinator_service_pb2.Task]):
+    def add_tasks(self, tasks: List[Task]):
         for task in tasks:
             if (
                 (task.id in self._tasks)
@@ -38,7 +40,7 @@ class TaskStore:
             self._tasks[task.id] = task
             self._new_task_event.set()
 
-    async def get_runnable_tasks(self) -> Dict[str, coordinator_service_pb2.Task]:
+    async def get_runnable_tasks(self) -> Dict[str, Task]:
         while True:
             runnable_tasks = set(self._tasks) - set(self._running_tasks)
             runnable_tasks = set(runnable_tasks) - set(self._finished)

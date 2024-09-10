@@ -53,32 +53,6 @@ def join(
     metadata_store = ExtractorMetadataStore()
     extractor_worker = ExtractorWorker(workers)
     extractors: List[coordinator_service_pb2.Extractor] = []
-    extractor_metadata = metadata_store.all_extractor_metadata()
-
-    for metadata in extractor_metadata:
-        embedding_schemas = {}
-        for name, embedding_schema in metadata.embedding_schemas.items():
-            embedding_schemas[name] = embedding_schema.model_dump_json()
-
-        metadata_schemas = {}
-        for name, metadata_schema in metadata.metadata_schemas.items():
-            metadata_schemas[name] = json.dumps(metadata_schema)
-
-        input_params = (
-            json.dumps(metadata.input_params)
-            if metadata.input_params
-            else json.dumps({})
-        )
-        extractors.append(
-            coordinator_service_pb2.Extractor(
-                name=metadata.name,
-                description=metadata.description,
-                input_params=input_params,
-                input_mime_types=metadata.input_mime_types,
-                metadata_schemas=metadata_schemas,
-                embedding_schemas=embedding_schemas,
-            )
-        )
 
     id = nanoid.generate()
     print(f"executor id: {id}")

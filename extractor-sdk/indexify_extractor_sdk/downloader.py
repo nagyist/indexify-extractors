@@ -10,11 +10,44 @@ from .base_extractor import EXTRACTOR_MODULE_PATH, EXTRACTORS_PATH
 from .extractor_worker import ExtractorWrapper
 from .metadata_store import ExtractorMetadataStore
 from .utils import ExtractorIndex, log_event
+import httpx
+from .api_objects import Task
+from indexify.functions_sdk.data_objects import BaseData
+from indexify.functions_sdk.graph import Graph
 
 console = Console()
 
 VENV_PATH = os.path.join(EXTRACTORS_PATH, "ve")
 
+class Downloader:
+    def __init__(self, code_path: str, base_url: str):
+        self.code_path = code_path
+        self.base_url = base_url
+
+    async def load_graph(self, namespace: str, name: str):
+        path = os.path.join(self.code_path, namespace, f"{name}.pickle")
+        if not os.path.exists(path):
+            self.download_graph(namespace, name, path)
+        return Graph.from_path(path)
+
+    async def download_graph(self, namespace: str, name: str, path: str):
+        response = httpx.get(
+            f"{self.base_url}/internal/namespaces/{namespace}/compute_graphs/{name}/code"
+        )
+        response.raise_for_status()
+        os.makedirs(os.path.dirname(path), exist_ok=True)
+        with open(path, "wb") as f:
+            f.write(response.content)
+
+    async def download_content(self, task: Task, graph: Graph) -> BaseData:
+        if task.invocation_task:
+            url = f"{self.base_url}/namespaces/{task.namespace}/compute_graphs/{task.compute_graph}/invocations/{task.id}/payload"
+        else:
+            url = f"{self.base_url}/namespaces/{task.namespace}/compute_graphs/{task.compute_graph}/invocations/{task.id}/fn/{task.compute_fn}/{task.id}"
+        response = httpx.get(url)
+        response.raise_for_status()
+        input = graph.deserialize_input_from_json(task.compute_fn, response.json())
+        return input
 
 def print_instructions():
     message = (

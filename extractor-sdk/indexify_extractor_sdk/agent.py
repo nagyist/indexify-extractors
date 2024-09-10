@@ -4,6 +4,8 @@ import ssl
 from concurrent.futures.process import BrokenProcessPool
 from typing import Dict, List, Optional, Union
 import os
+import httpx
+from httpx_sse import aconnect_sse
 
 import grpc
 import websockets
@@ -36,6 +38,7 @@ from .server_if.ingestion_api_models import (
     MultipartContentFrame,
 )
 from .task_store import CompletedTask, TaskStore
+from .api_objects import ExecutorMetadata, Task
 
 CONTENT_FRAME_SIZE = 1024 * 1024
 
@@ -272,53 +275,6 @@ class ExtractorAgent:
         self._batch_size = batch_size
         self._extractor_worker = extractor_worker
 
-    async def ticker(self):
-        while True:
-            await asyncio.sleep(5)
-            yield coordinator_service_pb2.HeartbeatRequest(
-                executor_id=self._executor_id,
-                pending_tasks=self._task_store.num_pending_tasks(),
-                max_pending_tasks=self._batch_size * 2,
-            )
-
-    async def register(self):
-        # This needs to be here because every time we register we need to create a new channel
-        # because the old one might have been closed after hb was broken or we could never connect
-        if self._use_tls:
-            # Load the certificate and key files
-            with open(self._config["tls_config"]["cert_path"], "rb") as f:
-                cert = f.read()
-            with open(self._config["tls_config"]["key_path"], "rb") as f:
-                key = f.read()
-            with open(self._config["tls_config"]["ca_bundle_path"], "rb") as f:
-                ca_cert = f.read()
-            credentials = grpc.ssl_channel_credentials(
-                root_certificates=ca_cert, private_key=key, certificate_chain=cert
-            )
-            self._channel = grpc.aio.secure_channel(
-                self._coordinator_addr,
-                credentials=credentials,
-                options=[
-                    ("grpc.max_send_message_length", MAX_MESSAGE_LENGTH),
-                    ("grpc.max_receive_message_length", MAX_MESSAGE_LENGTH),
-                ],
-            )
-        else:
-            self._channel = grpc.aio.insecure_channel(
-                self._coordinator_addr,
-                options=[
-                    ("grpc.max_send_message_length", MAX_MESSAGE_LENGTH),
-                    ("grpc.max_receive_message_length", MAX_MESSAGE_LENGTH),
-                ],
-            )
-
-        self._stub: CoordinatorServiceStub = CoordinatorServiceStub(self._channel)
-        req = coordinator_service_pb2.RegisterExecutorRequest(
-            executor_id=self._executor_id,
-            addr=self._advertise_addr,
-            extractors=self._extractors,
-        )
-        return await self._stub.RegisterExecutor(req)
 
     async def task_completion_reporter(self):
         print("starting task completion reporter")
@@ -490,40 +446,40 @@ class ExtractorAgent:
         asyncio.get_event_loop().add_signal_handler(
             signal.SIGINT, self.shutdown, asyncio.get_event_loop()
         )
-        server_router = ServerRouter(self._extractor_worker, self._metadata_store)
-        self._http_server = http_server(server_router, port=self._listen_port)
-        asyncio.create_task(self._http_server.serve())
-        if not self._advertise_addr:
-            self._advertise_addr = await get_server_advertise_addr(self._http_server)
-        print(f"advertise addr is {self._advertise_addr}")
         asyncio.create_task(self.task_launcher())
         asyncio.create_task(self.task_completion_reporter())
         self._should_run = True
         while self._should_run:
+            self._protocol = "http"
+            url = f"{self._protocol}://{self._ingestion_addr}/internal/executors/{self._executor_id}/tasks"
+            print(url)
+            data = ExecutorMetadata(
+                id=self._executor_id,
+                address="",
+                runner_name="extractor",
+                labels={},
+            ).model_dump()
+            print(data)
             print("attempting to register")
             try:
-                await self.register()
-                self._has_registered = True
+                async with httpx.AsyncClient() as client:
+                    async with aconnect_sse(client, "POST", url, json=data, headers={"Content-Type": "application/json"}) as event_source: # type: ignore
+                        async for sse in event_source.aiter_sse():
+                            data = json.loads(sse.data)
+                            print(data)
+                            tasks = []
+                            for task_dict in data:
+                                print(task_dict)
+                                #tasks.append(Task.model_validate(task_dict))
+                            self._task_store.add_tasks(tasks)
             except Exception as e:
                 print(f"failed to register: {e}")
                 await asyncio.sleep(5)
-                continue
-            hb_ticker = self.ticker()
-            print("starting heartbeat")
-            try:
-                hb_response_it = self._stub.Heartbeat(hb_ticker)
-                resp: coordinator_service_pb2.HeartbeatResponse
-                async for resp in hb_response_it:
-                    self._task_store.add_tasks(resp.tasks)
-            except Exception as e:
-                print(f"failed to heartbeat{e}")
                 continue
 
     async def _shutdown(self, loop):
         print("shutting down agent ...")
         self._should_run = False
-        self._http_server.should_exit = True
-        await self._channel.close()
         for task in asyncio.all_tasks(loop):
             task.cancel()
 
